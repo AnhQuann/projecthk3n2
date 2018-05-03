@@ -1,0 +1,14 @@
+from mongoengine import *
+from datetime import datetime
+
+class Dissertation(Document):
+    disser_name = StringField()
+    post_day = DateTimeField()
+
+class User(Document):
+    username = StringField()
+    password = StringField()
+    name = StringField()
+    age = IntField()
+    role = IntField()
+    disser = ListField(ReferenceField(Dissertation))
