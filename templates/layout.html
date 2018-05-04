@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    {% include 'metadata.html '%}
+    {% block head %} {% endblock %}
+    <title>{% block title %} {% endblock %}</title>
+  </head>
+  <body>
+
+    {% block content %} {% endblock %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
+  <script type="text/javascript" src="../static/slick/js/jquery-3.3.1.js"></script>
+  <script type="text/javascript" src="../static/slick/js/slick.js"></script>
+  <script type="text/javascript" src="../static/css/js/bootstrap.min.js"></script>
+  <script>new WOW().init();</script>
+  </body>
+</html>
