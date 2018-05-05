@@ -73,19 +73,19 @@ def index():
 def login():
     if request.method == "GET":
         return render_template('./login/login.html')
-    elif request.method == "POST":
-        form = request.form
-        username = form["username"]
-        password = form["password"]
-        print("Chạy qua Login")
-        user = get_user(username)
-        if user is None:
-            return # 401 = Unauthorized
-        elif user.password != password:
-            return # 401 = Unauthorized
-        else:
-            login_user(user)
-            return redirect(url_for('index'))
+    # elif request.method == "POST":
+    #     form = request.form
+    #     username = form["username"]
+    #     password = form["password"]
+    #     print("Chạy qua Login")
+    #     user = get_user(username)
+    #     if user is None:
+    #         return # 401 = Unauthorized
+    #     elif user.password != password:
+    #         return # 401 = Unauthorized
+    #     else:
+    #         login_user(user)
+    #         return redirect(url_for('index'))
 #LOGOUT
 @app.route("/logout")
 @login_required
@@ -125,9 +125,11 @@ class UserProject(Resource):
 
     def post(self):
         user_post = request.get_json()
-        user = UserProjectINIT(user_post["username"], user_post["password"], user_post["name"], user_post["age"], user_post["role"], user_post["disser"])
-        new_user = User(username = user.username, password = user.password, name = user.name, age = user.age, role = user.role, disser = user.disser)
-        new_user.save()
+        username = user_post['username']
+        userpass = user_post['password']
+        print(username)
+        user = get_user(username)
+        login_user(user)
 
 class Dissertation(Resource):
     def get(self):
