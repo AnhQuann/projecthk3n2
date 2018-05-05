@@ -37,7 +37,12 @@ const ClickButton = () =>{
         }
         else{
           data_return.forEach((el,index)=>{
-            console.log(el.username);
+            if (DOMusername.value === el.username && DOMpassword.value === el.password){
+              console.log("Đúng rồi");
+            }
+            else {
+              console.log("Sai rồi!");
+            }
           })
         }
 
