@@ -13,19 +13,19 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.session_protection = "strong"
 #
-# class UserProjectINIT:
-#     def __init__(self, username, password, name, age, role, disser):
-#         self.username = username
-#         self.password = password
-#         self.name = name
-#         self.age = age
-#         self.role = role
-#         self.disser = disser
+class UserProjectINIT:
+    def __init__(self, username, password, name, age, role, disser):
+        self.username = username
+        self.password = password
+        self.name = name
+        self.age = age
+        self.role = role
+        self.disser = disser
 #
-# class DissertationProjectINIT:
-#     def __init__(self, disser_name, post_day):
-#         self.disser_name = disser_name
-#         self.post_day = post_day
+class DissertationProjectINIT:
+    def __init__(self, disser_name, post_day):
+        self.disser_name = disser_name
+        self.post_day = post_day
 
 #LOGIN______________________________
 #GETUSER
