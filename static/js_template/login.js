@@ -8,6 +8,7 @@ const ClickButton = () =>{
   let html_insert;
   let string_alert;
   document.querySelector('#button_login').addEventListener('click',async ()=>{
+    $('#html_insert').hide()
     await $.ajax({
         url: "api/login",
         type: "GET",
@@ -37,18 +38,34 @@ const ClickButton = () =>{
         }
         else{
           data_return.forEach((el,index)=>{
-            if (DOMusername.value === el.username && DOMpassword.value === el.password){
-              console.log("Đúng rồi");
+            if (DOMusername.value !== el.username){
+              string_alert = `* Tài khoản không chính xác`;
             }
-            else {
-              console.log("Sai rồi!");
+            else if (DOMpassword.value !== el.password){
+              string_alert = `* Mất khẩu không chính xác`;
+            }
+            else{
+              data_to_login = {
+                "username": DOMusername.value,
+                "password": DOMpassword.value
+              }
+             $.ajax({
+                type : "POST",
+                url: 'api/login',
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify(data_to_login),
+                success:()=>{
+                  console.log("Login_Success");
+                  window.location = `../`
+                }
+              });
             }
           })
         }
-
-        html_insert = `<p style="text-align:center;color:red;">${string_alert}</p>`;
+        html_insert = `<p id="html_insert" style="text-align:center;color:red;">${string_alert}</p>`;
         login_div.insertAdjacentHTML('afterBegin',html_insert)
-        console.log("haveData");
+        console.log("Get Data Success!!");
       }
   });
 }
