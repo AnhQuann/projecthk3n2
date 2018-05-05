@@ -99,13 +99,19 @@ class UserProject(Resource):
         raw_user_data = User.objects()
         api_user_data = []
         for data in raw_user_data:
+            data_id = []
+            for dataid in data.disser:
+                data_id.append(str(dataid.id))
             data_push_to_list = {
+                "id": str(data.id),
                 "username": data.username,
                 "password": data.password,
                 "name": data.name,
                 "age": data.age,
                 "role": data.role,
-                "disser": data.disser,
+                # "disser": [{"id" : str(dataid.id)}
+                #         for dataid in data.disser],
+                "disser": data_id
             }
             api_user_data.append(data_push_to_list)
         return api_user_data
@@ -131,11 +137,20 @@ class UserProject(Resource):
         user = get_user(username)
         login_user(user)
 
-class Dissertation(Resource):
+class Register(Resource):
+    def post(self):
+        user_post = request.get_json()
+        user = UserProjectINIT(user_post["username"], user_post["password"], user_post["name"], user_post["age"], user_post["role"], user_post["disser"])
+        new_user = User(username = user.username, password = user.password, name = user.name, age = user.age, role = user.role, disser = user.disser)
+        new_user.save()
+        return {
+            "Success": "True"
+        }
+
+class DissertationProject(Resource):
     def get(self):
         raw_disser_data = Dissertation.objects()
         api_disser_data = []
-
         for data in raw_disser_data:
             data_push_to_list = {
                 "disser_name": data.disser_name,
@@ -146,14 +161,18 @@ class Dissertation(Resource):
 
     def post(self):
         disser_post = request.get_json()
-        disser = DissertationProjectINIT(disser_post["disser_name"], disser_post["post_day"])
-
+        ID = disser_post['id_post']
+        post_day = datetime.now()
+        disser = DissertationProjectINIT(disser_post["disser_name"], post_day)
+        print(disser.disser_name)
+        print(disser.post_day)
         new_disser = Dissertation(disser_name = disser.disser_name, post_day = disser.post_day)
         new_disser.save()
-        User.objects(username = current_user.username).update(push__disser = new_disser)
+        User.objects.with_id(ID).update(push__disser = new_disser)
 
 api.add_resource(UserProject, '/api/login')
-api.add_resource(Dissertation, '/api/getdata')
+api.add_resource(DissertationProject, '/api/getdata')
+api.add_resource(Register, '/api/register')
 # API________________________________
 if __name__ == '__main__':
   app.run(debug=True)
