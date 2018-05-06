@@ -66,14 +66,14 @@ def unauthorized():
 @app.route('/', methods = ['GET', 'POST'])
 @login_required
 def index():
-    return render_template('./homepage/index.html')
+    cur_user = current_user.name
+    return render_template('./homepage/index.html',cur_user=cur_user)
 
 #LOGIN
 @app.route('/login', methods=["GET","POST"])
 def login():
     if request.method == "GET":
-        return render_template('./login/login.html')
-    # elif request.method == "POST":
+        return render_template('./login/login.html')    
     #     form = request.form
     #     username = form["username"]
     #     password = form["password"]
