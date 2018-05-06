@@ -1,14 +1,42 @@
 from flask import *
 from datetime import datetime
 from flask_login import LoginManager, login_required, login_user, UserMixin, current_user,logout_user
+
+# FLASK RESTFUL API
 from flask_restful import *
+
+# FLASK ADMIN
+import flask_admin as admin
+from flask_mongoengine import MongoEngine
+from flask_admin.form import rules
+from flask_admin.contrib.mongoengine import ModelView
+
+# MODEL
 from mlab import mlab_connect
 from models.models import User, Dissertation
 
 mlab_connect()
 app = Flask(__name__)
 api = Api(app)
+
 app.config['SECRET_KEY'] = 'c4e'
+app.config['MONGODB_SETTINGS'] = {'DB': 'mongodb://<dbuser>:<dbpassword>@ds111410.mlab.com:11410/projecthk3n2'}
+
+db = MongoEngine()
+db.init_app(app)
+
+class Dissertation(db.Document):
+    disser_name = db.StringField()
+    post_day = db.DateTimeField()
+
+class User(db.Document):
+    username = db.StringField()
+    password = db.StringField()
+    name = db.StringField()
+    age = db.IntField()
+    role = db.IntField()
+    disser = db.ListField(db.ReferenceField(Dissertation))
+
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.session_protection = "strong"
@@ -73,7 +101,7 @@ def index():
 @app.route('/login', methods=["GET","POST"])
 def login():
     if request.method == "GET":
-        return render_template('./login/login.html')    
+        return render_template('./login/login.html')
     #     form = request.form
     #     username = form["username"]
     #     password = form["password"]
@@ -154,7 +182,7 @@ class DissertationProject(Resource):
         for data in raw_disser_data:
             data_push_to_list = {
                 "disser_name": data.disser_name,
-                "post_day": data.post_day
+                "post_day": str(data.post_day)
             }
             api_disser_data.append(data_push_to_list)
         return api_disser_data
@@ -174,5 +202,19 @@ api.add_resource(UserProject, '/api/login')
 api.add_resource(DissertationProject, '/api/getdata')
 api.add_resource(Register, '/api/register')
 # API________________________________
+
+class DissertationView(ModelView):
+    columnFilter = ['disser_name']
+    columnList = ('disser_name', 'post_day')
+
+class UserView(ModelView):
+    columnFilter = ['username']
+    columnList = ('username', 'password', 'name', 'age', 'role', 'disser')
+
 if __name__ == '__main__':
-  app.run(debug=True)
+    admin = admin.Admin(app, 'Project HK3N2')
+
+    admin.add_view(UserView(User))
+    admin.add_view(DissertationView(Dissertation))
+
+    app.run(debug=True)
