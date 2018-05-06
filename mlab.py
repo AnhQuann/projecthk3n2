@@ -8,8 +8,8 @@ import mongoengine
 # user_name = "admin"
 # password = "admin"
 
-host = "localhost"
-port = 27017
+host = "ds111410.mlab.com"
+port = 11410
 db_name = "projecthk3n2"
 user_name = "admin"
 password = "admin"

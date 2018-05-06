@@ -139,7 +139,7 @@ const PressEnt = async (event) =>{
                 "username": DOMusername.value,
                 "password": DOMpassword.value
               }
-              await $.ajax({
+               $.ajax({
                  type : "POST",
                  url: 'api/login',
                  dataType: 'json',
