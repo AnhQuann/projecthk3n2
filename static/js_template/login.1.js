@@ -1,6 +1,6 @@
 $(document).ready(()=>{
+  // PressEnter();
   ClickButton();
-  PressEnter();
 });
 
 const check_validate = (user,pass,user_server,pass_server) => {
@@ -13,11 +13,11 @@ const check_validate = (user,pass,user_server,pass_server) => {
 }
 
 const ClickButton = () =>{
+  let data_return;
+  let login_div = document.querySelector('#button_login_div');
+  let html_insert;
+  let string_alert;
   document.querySelector('#button_login').addEventListener('click',async ()=>{
-    let data_return;
-    let login_div = document.querySelector('#button_login_div');
-    let html_insert;
-    let string_alert;
     $('#html_insert').hide()
     $("#clear").empty();
     $("#clear").html(`<div class="m-2" id="button_login_div"></div>`);
