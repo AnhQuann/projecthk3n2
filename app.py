@@ -199,8 +199,21 @@ class DissertationProject(Resource):
         new_disser.save()
         User.objects.with_id(ID).update(push__disser = new_disser)
 
+    def delete(self):
+        disser_post = request.get_json()
+        ID = disser_post['id_post']
+        disser = DissertationProjectINIT(disser_post["disser_name"], disser_post["post_day"])
+
+        del_disser = Dissertation.objects(disser_name = disser.disser_name, post_day = disser.post_day)
+
+        for i in del_disser:
+            User.objects.with_id(ID).update(pull__disser = i)
+        del_disser.delete()
+
+        # print(User.objects.with_id(ID).username)
+
 api.add_resource(UserProject, '/api/login')
-api.add_resource(DissertationProject, '/api/getdata')
+api.add_resource(DissertationProject, '/api/disser')
 api.add_resource(Register, '/api/register')
 # API________________________________
 
