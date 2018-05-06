@@ -102,6 +102,7 @@ def index():
 def login():
     if request.method == "GET":
         return render_template('./login/login.html')
+    # elif request.method == "POST":
     #     form = request.form
     #     username = form["username"]
     #     password = form["password"]

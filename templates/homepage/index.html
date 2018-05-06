@@ -1,14 +1,38 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<div class="container-fluid bg-dark text-light d-flex flex-row-reverse align-items-center py-2">
-  <a href="{{url_for('logout')}}" class="px-2"> Đăng xuất</a>
-  <p style="margin:0">Hello {{cur_user}}</p>
+<!-- header -->
+<div class="container-fluid bg-dark text-light py-2 fixed-top border border-top-0 border-left-0 border-right-0">
+  <div class="row">
+    <div class="col-md-4 d-flex align-items-center">
+      <p style="margin:0"><a class="text-light" href=".."> Quản lý Khóa Luận Tốt Nghiệp  </a> </p>
+    </div>
+    <div class="col-md-8 d-flex flex-row-reverse align-items-center">
+      <a href="{{url_for('logout')}}" class="px-2"> Đăng xuất</a>
+      <p style="margin:0">Hello {{cur_user}}</p>
+    </div>
+  </div>
 </div>
-<div class="container-fluid relative" style="min-height:100%;height:900px;background-color: rgb(238, 238, 238);padding:0;">
+
+<div class="relative mt-3  content_after_fixed" style="height:900px;padding:0;">
+ <!-- Content -->
+  <div class="row">
+    <div class="col-md-3 div_right">
+      <a href=""><button type="button" class="btn btn-outline-dark btn-block">Site Home</button></a>
+      <a href=""><button type="button" class="btn btn-outline-dark btn-block">Các đợt bảo vệ</button></a>
+      <a href=""><button type="button" class="btn btn-outline-dark btn-block">Khóa luận của bạn</button></a>
+      <a href=""><button type="button" class="btn btn-outline-dark btn-block">Site Home</button></a>
+    </div>
+    <div class="cold-md-8 offset-md-1 div_left border rounded" style="height:600px;background-color: white;">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Iste a illum esse harum excepturi aliquam voluptates est odit cum blanditiis asperiores doloremque veritatis, voluptate sed ex laudantium, nostrum neque at.</div>
+  </div>
+ <!-- endContent -->
+
+
+  <!-- footer -->
   <div class="index-footer d-flex justify-content-center align-items-center">
     <p class="text-light m-0 p-2">Đây là Footer</p>
   </div>
+  <!-- endfooter -->
 </div>
 
 {% endblock %}
