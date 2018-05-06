@@ -73,7 +73,7 @@ def index():
 @app.route('/login', methods=["GET","POST"])
 def login():
     if request.method == "GET":
-        return render_template('./login/login.html')    
+        return render_template('./login/login.html')
     #     form = request.form
     #     username = form["username"]
     #     password = form["password"]
