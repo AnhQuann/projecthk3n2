@@ -23,17 +23,19 @@ body{
   </div>
 
   <!-- form -->
-  <form method="post">
+  <form id="login_form" method='POST'>
     <div class="d-flex flex-column justify-content-center">
       <label class="font-weight-bold" for="usr">Username: </label>
       <input id="usr" class="form-control" type="text" name="username" value="" placeholder="Tên tài khoản">
       <label class="font-weight-bold" for="psw">Password: </label>
       <input id="psw" class="form-control" type="password" name="password" value="" placeholder="Mật khẩu">
     </div>
-    <div class="m-2" id="button_login_div">
+    <div id="clear">
+        <div class="m-2" id="button_login_div">
+        </div>
     </div>
-    <div class="d-flex justify-content-center mt-4 pb-4">
-      <button id="button_login" class="btn btn-primary button_effect" type="button" name="button"> Đăng nhập </button>
+    <div id="loading-button" class="d-flex justify-content-center mt-4 pb-4">
+      <button id="button_login" class="btn btn-primary button_effect" type="button" name="button">  Đăng nhập </button>
     </div>
   </form>
 </div>

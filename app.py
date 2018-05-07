@@ -94,14 +94,32 @@ def unauthorized():
 @app.route('/', methods = ['GET', 'POST'])
 @login_required
 def index():
-    cur_user = current_user.name
-    return render_template('./homepage/index.html',cur_user=cur_user)
+    cur_id = current_user.id_user
+    cur_username = current_user.username
+    cur_name = current_user.name
+    cur_age = current_user.age
+    if current_user.role == 0:
+        cur_role = "Thư ký"
+    elif current_user.role == 1:
+        cur_role = "Hội đồng chấm thi"
+    elif current_user.role == 2:
+        cur_role = "Giáo viên"
+    elif current_user.role == 3:
+        cur_role = "Sinh viên"
+    cur_disser = current_user.disser
+    return render_template('./homepage/index.html', cur_id = cur_id,
+                                                    cur_username = cur_username,
+                                                    cur_name = cur_name,
+                                                    cur_age = cur_age,
+                                                    cur_role = cur_role,
+                                                    cur_disser = cur_disser)
 
 #LOGIN
 @app.route('/login', methods=["GET","POST"])
 def login():
     if request.method == "GET":
         return render_template('./login/login.html')
+    # elif request.method == "POST":
     #     form = request.form
     #     username = form["username"]
     #     password = form["password"]
@@ -218,11 +236,11 @@ api.add_resource(Register, '/api/register')
 
 class DissertationView(ModelView):
     column_filters = ['disser_name']
-    column_searchable_list  = ('disser_name', 'post_day')
+    columnList  = ('disser_name', 'post_day')
 
 class UserView(ModelView):
     column_filters = ['username']
-    column_searchable_list  = ('username', 'password', 'name', 'age', 'role', 'disser')
+    columnList  = ('username', 'password', 'name', 'age', 'role', 'disser')
 
 if __name__ == '__main__':
     admin = admin.Admin(app, 'Project HK3N2')
