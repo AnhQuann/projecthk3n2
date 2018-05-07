@@ -217,12 +217,12 @@ api.add_resource(Register, '/api/register')
 # API________________________________
 
 class DissertationView(ModelView):
-    columnFilter = ['disser_name']
-    columnList = ('disser_name', 'post_day')
+    column_filters = ['disser_name']
+    column_searchable_list  = ('disser_name', 'post_day')
 
 class UserView(ModelView):
-    columnFilter = ['username']
-    columnList = ('username', 'password', 'name', 'age', 'role', 'disser')
+    column_filters = ['username']
+    column_searchable_list  = ('username', 'password', 'name', 'age', 'role', 'disser')
 
 if __name__ == '__main__':
     admin = admin.Admin(app, 'Project HK3N2')

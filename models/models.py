@@ -12,3 +12,10 @@ class User(Document):
     age = IntField()
     role = IntField()
     disser = ListField(ReferenceField(Dissertation))
+
+class Exarminer(Document):
+    username = StringField()
+    password = StringField()
+    name = StringField()
+    age = IntField()
+    role = IntField()
