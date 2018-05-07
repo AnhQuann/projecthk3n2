@@ -98,21 +98,40 @@ def index():
     cur_username = current_user.username
     cur_name = current_user.name
     cur_age = current_user.age
+    cur_disser = current_user.disser
     if current_user.role == 0:
         cur_role = "Thư ký"
-    elif current_user.role == 1:
-        cur_role = "Hội đồng chấm thi"
-    elif current_user.role == 2:
-        cur_role = "Giáo viên"
-    elif current_user.role == 3:
-        cur_role = "Sinh viên"
-    cur_disser = current_user.disser
-    return render_template('./homepage/index.html', cur_id = cur_id,
+        return render_template('./homepage/role0.html', cur_id = cur_id,
                                                     cur_username = cur_username,
                                                     cur_name = cur_name,
                                                     cur_age = cur_age,
                                                     cur_role = cur_role,
                                                     cur_disser = cur_disser)
+    elif current_user.role == 1:
+        cur_role = "Hội đồng chấm thi"
+        return render_template('./homepage/index.html', cur_id = cur_id,
+                                                    cur_username = cur_username,
+                                                    cur_name = cur_name,
+                                                    cur_age = cur_age,
+                                                    cur_role = cur_role,
+                                                    cur_disser = cur_disser)
+    elif current_user.role == 2:
+        cur_role = "Giáo viên"
+        return render_template('./homepage/index.html', cur_id = cur_id,
+                                                    cur_username = cur_username,
+                                                    cur_name = cur_name,
+                                                    cur_age = cur_age,
+                                                    cur_role = cur_role,
+                                                    cur_disser = cur_disser)
+    elif current_user.role == 3:
+        cur_role = "Sinh viên"
+        return render_template('./homepage/index.html', cur_id = cur_id,
+                                                    cur_username = cur_username,
+                                                    cur_name = cur_name,
+                                                    cur_age = cur_age,
+                                                    cur_role = cur_role,
+                                                    cur_disser = cur_disser)
+    
 
 #LOGIN
 @app.route('/login', methods=["GET","POST"])
@@ -222,7 +241,6 @@ class DissertationProject(Resource):
         disser = DissertationProjectINIT(disser_post["disser_name"], disser_post["post_day"])
 
         del_disser = Dissertation.objects(disser_name = disser.disser_name, post_day = disser.post_day)
-
         for i in del_disser:
             User.objects.with_id(ID).update(pull__disser = i)
         del_disser.delete()
