@@ -105,3 +105,17 @@ input{
   background-color: rgb(236,238,239);
 
 }
+input[type=text]{
+  padding: 1%;
+  border: 1px solid #ccc;
+  width: 79%;
+  border-radius: 4px;
+  margin-left: 12%; 
+}
+input[type=number], select{
+  padding: 1%;
+  border: 1px solid #ccc;
+  width: 25%;
+  border-radius: 4px;
+  margin-left: 12%; 
+}

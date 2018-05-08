@@ -7,7 +7,80 @@ const run = ()=>{
     document.querySelector("#tag3").addEventListener('click',QLSV);
 }
 // HTML_______________________________________________
-const html_QLKL = `  
+const modal_html_KL = `
+<button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target="#exampleModalLong">
+    Thêm mới
+  </button>
+  <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Thêm mới Khóa luận</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div >
+            <form class="d-flex flex-column" action="">
+                <label for="editNameDisser"> Tên Khóa Luận: </label>
+                <input id="editNameDisser" name="editNameDisser" type="text" value="">
+                <label for="editTopic"> Đề tài: </label>
+                <input id="editTopic" name="editTopic" type="text" value="">
+              </form>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+          <button type="button" class="btn btn-primary">Lưu</button>
+        </div>
+      </div>
+    </div>
+  </div>`;
+
+const modal_html_SV = `
+<button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target="#exampleModalLong">
+    Thêm mới
+  </button>
+  <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Thêm mới học sinh</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div >
+            <form class="d-flex flex-column" action="">
+                <label for="editUsername"> Username: </label>
+                <input id="editUsername" name="editUsername" type="text" value="">
+                <label for="editPassword">Password: </label>
+                <input id="editPassword" name="editPassword" type="text" value="">
+                <label for="editName">Tên: </label>
+                <input id="editName" name="editName" type="text" value="">
+                <label for="editAge">Tuổi: </label>
+                <input id="editAge" name="editAge" type="number" value="">
+                <label for="editRole">Role: </label>
+                <select name="editRole" id="editRole" >
+                    <option value="0">Thư ký</option>
+                    <option value="1">Hội đồng chấm thi</option>
+                    <option value="2">Giáo Viên</option>
+                    <option value="3">Học Viên</option>
+                </select>
+              </form>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+          <button type="button" class="btn btn-primary">Lưu</button>
+        </div>
+      </div>
+    </div>
+  </div>`;
+
+const html_QLKL = `
 <table id="table_KL" class="table">
 <thead>
     <th>STT</th>
@@ -20,7 +93,7 @@ const html_QLKL = `
 </table>`
 
 const html_QLSV = `  
-<table id="table_KL" class="table">
+<table id="table_SV" class="table">
 <thead>
     <th>STT</th>
     <th>Tên Sinh Viên</th>
@@ -60,6 +133,7 @@ const QLKL = async (event) =>{
     data.then((result)=>{
         let stt = 0;
         $("#div_left").html(html_QLKL);
+        document.querySelector('#table_KL').insertAdjacentHTML('beforebegin',modal_html_KL)
         result.forEach((el,index) => {
             stt = stt + 1;
             $("#tbody_data").append(`
@@ -80,6 +154,7 @@ const QLSV = async (event) =>{
     $("#div_left").html(loading_gif)
     data.then((result)=>{
         $("#div_left").html(html_QLSV);
+        document.querySelector('#table_SV').insertAdjacentHTML('beforebegin',modal_html_SV)
         let stt = 0;
         result.forEach((el,index) =>{
             if (el.role > 0){
