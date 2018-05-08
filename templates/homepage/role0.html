@@ -18,33 +18,22 @@
  <!-- Content -->
   <div class="row">
     <div class="col-md-3 div_right">
-      <a id="tag1" href=""><button type="button" class="btn btn-outline-dark btn-block">Site Home</button></a>
-      <a id="tag2" href=""><button type="button" class="btn btn-outline-dark btn-block">Quản lý Khóa Luận</button></a>
-      <a id="tag3" href=""><button type="button" class="btn btn-outline-dark btn-block">Quản lý Sinh viên</button></a>
+        <nav class="nav flex-column">
+             <a class="nav-link" id="tag1" href=".."><button type="button" class="btn btn-outline-dark btn-block">Trang chủ</button></a>
+             <a class="nav-link" id="tag2" href="#"><button type="button" class="btn btn-outline-dark btn-block">Quản lý Khóa Luận</button></a>
+             <a class="nav-link" id="tag3" href="#"><button type="button" class="btn btn-outline-dark btn-block">Quản lý Sinh viên</button></a>
+          </nav>
     </div>
-    <div id="div_left" class="cold-md-8 offset-md-1 div_left border rounded" style="height:600px;background-color: white;">
-      <!-- <b>ID:</b> {{cur_id}} <br>
-      <b>USERNAME:</b> {{cur_username}} <br>
-      <b>NAME:</b> {{cur_name}} <br>
-      <b>AGE:</b> {{cur_age}} <br>
-      <b>ROLE:</b> {{cur_role}} <br>
-      <b>DISSERTATION:</b>
-
-      {% for i in cur_disser %}
-        {{i.disser_name}} ({{i.post_day.day}}-{{i.post_day.month}}-{{i.post_day.year}})
-      {% endfor %} -->
-      <table class="table">
-          <thead>
-              <th>ID_KL</th>
-              <th>Tên Khóa Luận</th>
-              <th>Ngày Gửi</th>
-          </thead>
-          <tbody>
-              <td>1</td>
-              <td>2</td>
-              <td>3</td>
-          </tbody>
-      </table>
+    <div id="div_left" class="cold-md-8 offset-md-1 div_left border border-secondary rounded" style="height:600px;background-color: white;">
+        <div class="row">
+          <div class="col-md-4">
+            <img src="https://via.placeholder.com/200x200" alt="">
+          </div>
+          <div class="col-md-8">
+            <h1>Bảng điều khiển : Thư ký</h1>
+            <h2>Xin chào admin</h2>
+          </div>
+        </div>
     </div>
   </div>
  <!-- endContent -->
@@ -54,6 +43,7 @@
   <div class="index-footer d-flex justify-content-center align-items-center">
     <p class="text-light m-0 p-2">Đây là Footer</p>
   </div>
+  
   <!-- endfooter -->
 </div>
 <script type="text/javascript" src="./static/js_template/role0.js"></script>

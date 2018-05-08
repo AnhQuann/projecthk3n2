@@ -109,7 +109,7 @@ def index():
                                                     cur_disser = cur_disser)
     elif current_user.role == 1:
         cur_role = "Hội đồng chấm thi"
-        return render_template('./homepage/index.html', cur_id = cur_id,
+        return render_template('./homepage/role1.html', cur_id = cur_id,
                                                     cur_username = cur_username,
                                                     cur_name = cur_name,
                                                     cur_age = cur_age,
@@ -117,7 +117,7 @@ def index():
                                                     cur_disser = cur_disser)
     elif current_user.role == 2:
         cur_role = "Giáo viên"
-        return render_template('./homepage/index.html', cur_id = cur_id,
+        return render_template('./homepage/role2.html', cur_id = cur_id,
                                                     cur_username = cur_username,
                                                     cur_name = cur_name,
                                                     cur_age = cur_age,
@@ -125,7 +125,7 @@ def index():
                                                     cur_disser = cur_disser)
     elif current_user.role == 3:
         cur_role = "Sinh viên"
-        return render_template('./homepage/index.html', cur_id = cur_id,
+        return render_template('./homepage/role3.html', cur_id = cur_id,
                                                     cur_username = cur_username,
                                                     cur_name = cur_name,
                                                     cur_age = cur_age,
@@ -218,6 +218,7 @@ class DissertationProject(Resource):
         api_disser_data = []
         for data in raw_disser_data:
             data_push_to_list = {
+                "id_disser" : str(data.id),
                 "disser_name": data.disser_name,
                 "post_day": str(data.post_day)
             }

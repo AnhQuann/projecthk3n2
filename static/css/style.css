@@ -80,8 +80,8 @@ input{
 .div_right{
   padding: 20px;
   margin-left: 1%;
-  position: fixed;
   line-height: 10px;
+  position: fixed;
 }
 .div_right a{
   color: rgb(52,58,64);
