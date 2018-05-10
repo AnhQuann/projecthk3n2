@@ -139,7 +139,7 @@ const PressEnt = async (event) =>{
                 "username": DOMusername.value,
                 "password": DOMpassword.value
               }
-               $.ajax({
+              await $.ajax({
                  type : "POST",
                  url: 'api/login',
                  dataType: 'json',
@@ -153,11 +153,11 @@ const PressEnt = async (event) =>{
             }
             else {
               string_alert = `* Tài khoản / Mật khẩu không chính xác`;
+              html_insert = `<p id="html_insert" style="text-align:center;color:red;">${string_alert}</p>`;
+              login_div.insertAdjacentHTML('afterBegin',html_insert)
+              $("#loading-button").html(`<button id="button_login" class="btn btn-primary button_effect" type="button" name="button">  Đăng nhập </button>`)
             }
           };
-          html_insert = `<p id="html_insert" style="text-align:center;color:red;">${string_alert}</p>`;
-          login_div.insertAdjacentHTML('afterBegin',html_insert)
-          $("#loading-button").html(`<button id="button_login" class="btn btn-primary button_effect" type="button" name="button">  Đăng nhập </button>`)
           console.log("Get Data Success!!");
       }
   }

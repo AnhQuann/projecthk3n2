@@ -5,6 +5,7 @@ $(document).ready(()=>{
 const run = ()=>{
     document.querySelector("#tag2").addEventListener('click',QLKL);
     document.querySelector("#tag3").addEventListener('click',QLSV);
+    document.querySelector("#tag4").addEventListener('click',HDCT);
 }
 // HTML_______________________________________________
 const modal_html_KL = `
@@ -122,9 +123,27 @@ const getDataKL = async () =>{
         type: 'GET',
         url: 'api/disser',
     });
+    return _data; 
+}
+
+const getDataHDCT = async ()=>{
+    const _data = await $.ajax({
+        type: 'GET',
+        url: 'api/getHDCT',
+    });
     return _data;
+}
+
+// __________________________________________________________
+
+
+const HDCT = async(event) =>{
+    event.preventDefault();
+    console.log("RUN!");
     
 }
+
+
 const QLKL = async (event) =>{
     event.preventDefault();
     $("#div_left").empty();
