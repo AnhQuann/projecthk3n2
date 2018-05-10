@@ -206,12 +206,14 @@ class UserProject(Resource):
     #     User.objects().with_id(id).delete()
 
 class UserDel(Resource):
-    def delete(self, id):
+    def post(self, id):
         User.objects().with_id(id).delete()
 
-# class UserEdit(Resource):
-#     def put(self, id):
-#         user_info =
+class UserEdit(Resource):
+    def post(self, id):
+        userEdit = User.objects().with_id(id)
+        user = request.get_json()
+        userEdit.update(set__name = user["name"], set__age = user["age"], set__role = user["role"])
 
 class Register(Resource):
     def post(self):
@@ -224,17 +226,22 @@ class Register(Resource):
         }
 
 class DisserDel(Resource):
-    def delete(self, id):
-        Dissertation().with_id(id).delete()
-        # disser_post = request.get_json()
-        # ID = disser_post['id_post']
-        # disser = DissertationProjectINIT(disser_post["disser_name"], disser_post["post_day"])
-        #
-        # del_disser = Dissertation.objects(disser_name = disser.disser_name, post_day = disser.post_day)
+    def post(self, id):
+        user = User.objects.filter(disser__contains = id)
+        for data in user:
+            id_user = data.id
+        disser = Dissertation.objects().with_id(id)
+        User.objects.with_id(id_user).update(pull__disser = disser)
+        disser.delete()
+
         # for i in del_disser:
         #     User.objects.with_id(ID).update(pull__disser = i)
-        del_disser.delete()
-
+        # del_disser.delete()
+class DisserEdit(Resource):
+    def post(self, id):
+        disserEdit = Dissertation.objects().with_id(id)
+        disser = request.get_json()
+        disserEdit.update(set__disser_name = disser['disser_name'])
 
 class DissertationProject(Resource):
     def get(self):
@@ -274,11 +281,11 @@ class DissertationProject(Resource):
 
 api.add_resource(UserProject, '/api/login/')
 api.add_resource(UserDel, '/api/login/delete/<id>')
-# api.add_resource(UserEdit, '/api/login/edit/<id>')
+api.add_resource(UserEdit, '/api/login/edit/<id>')
 
 api.add_resource(DissertationProject, '/api/disser')
 api.add_resource(DisserDel, '/api/disser/delete/<id>')
-# api.add_resource(DisserEdit, '/api/disser/edit/<id>')
+api.add_resource(DisserEdit, '/api/disser/edit/<id>')
 
 api.add_resource(Register, '/api/register')
 # API________________________________
