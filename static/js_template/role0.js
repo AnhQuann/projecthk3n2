@@ -40,7 +40,8 @@ const modal_html_KL = `
         </div>
       </div>
     </div>
-  </div>`;
+  </div>
+  <input id="search_box" class="mr-2" type="search" placeholder="Search" onkeyup="search_func()" aria-label="Search">`;
 
 const modal_html_SV = `
 <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target="#exampleModalLong">
@@ -56,7 +57,7 @@ const modal_html_SV = `
           </button>
         </div>
         <div class="modal-body">
-          <div >
+          <div>
             <form class="d-flex flex-column" action="">
                 <label for="editUsername"> Username: </label>
                 <input id="editUsername" name="editUsername" type="text" value="">
@@ -77,12 +78,13 @@ const modal_html_SV = `
             </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-          <button type="button" class="btn btn-primary">Lưu</button>
+          <button id="close" type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+          <button id="add_new_student" type="button" onclick="add_new_student()" class="btn btn-primary">Lưu</button>
         </div>
       </div>
     </div>
-  </div>`;
+  </div>
+  <input id="search_box" class="mr-2" type="search" placeholder="Search" onkeyup="search_func()" aria-label="Search">`;
 
 const html_QLKL = `
 <table id="table_KL" class="table">
@@ -116,7 +118,7 @@ const loading_gif = `<img style="display: block;margin-left: auto;margin-right: 
 const getDataSV = async ()=>{
     const _data = await $.ajax({
         type: 'GET',
-        url: 'api/login',
+        url: '/api/login/',
     });
     return _data;
 }
@@ -124,7 +126,7 @@ const getDataSV = async ()=>{
 const getDataKL = async () =>{
     const _data = await $.ajax({
         type: 'GET',
-        url: 'api/disser',
+        url: '/api/disser/',
     });
     return _data; 
 }
@@ -132,7 +134,7 @@ const getDataKL = async () =>{
 const getDataHDCT = async ()=>{
     const _data = await $.ajax({
         type: 'GET',
-        url: 'api/getHDCT',
+        url: '/api/getHDCT/',
     });
     return _data;
 }
@@ -166,8 +168,8 @@ const QLKL = async (event) =>{
 
 
 // SinhVien__________________________
-const QLSV = async (event) =>{
-    event.preventDefault();
+const QLSV = async () =>{
+  
     $("#div_left").empty();
     data = getDataSV();
     $("#div_left").html(loading_gif)
@@ -192,7 +194,7 @@ const QLSV = async (event) =>{
                 <td>${el.username}</td>
                 <td>${el.age}</td>
                 <td>${arr_kl}</td>
-                <td><a href="api/editsv/${el.id}">Sửa</a> / <a href="api/deletesv/${el.id}">Xóa</a> </td>
+                <td><a href="api/editsv/${el.id}">Sửa</a> /<a href="api/login/delete/${el.id}" onclick="Delete_User()">Xóa</a> </td>
                 </tr>`);
             };
         });
@@ -202,19 +204,58 @@ const QLSV = async (event) =>{
 const HDCT = async(event) =>{
     event.preventDefault();
     console.log("RUN!");
-    
 }
 
 // SEARCH__________________
 const search_func = ()=>{
     let input_value,tbody_data;
-    input_value = $("#search_box").val();
-    tbody_data = $("#tbody_data")
-    console.log(tbody_data);
-    td = tbody_data.find("td");
-    console.log(td);
-    
-    
-    
+    console.log("______________________________");
+    input_value = $("#search_box").val().toLowerCase();
+    console.log(input_value);
+    $("#tbody_data tr").filter(function(){
+        $(this).toggle($(this).text().toLowerCase().indexOf(input_value) > -1)
+      });
 }
 
+//Add New User Function:
+const add_new_student = async () =>{
+    DOMusername = document.getElementById("editUsername");
+    DOMpassword = document.getElementById("editUsername");
+    DOMname = document.getElementById("editName");
+    DOMage = document.getElementById("editAge");
+    DOMrole = document.getElementById("editRole");
+    let i = DOMrole.selectedIndex;
+    // console.log(DOMusername.value);
+    // console.log(DOMpassword.value);
+    // console.log(DOMname.value);
+    // console.log(DOMage.value);
+    // console.log(DOMrole.options[i].value);
+    data_push = {
+        "username" : DOMusername.value,
+        "password" : DOMpassword.value,
+        "name" : DOMname.value,
+        "age" : DOMage.value,
+        "role" : DOMrole.value,
+        "disser": "",
+    }
+    await $.ajax({
+        type: "POST",
+        contentType: "application/json",
+        dataType:'json',
+        url: "/api/register",
+        data: JSON.stringify(data_push),
+        success: ()=>{
+            console.log("Create Success!");
+            $('#close').click();
+        }
+    });
+    setTimeout(function(){ 
+        $('#tag3').click(); 
+        console.log("chạy");
+     }, 1000);
+   
+}
+//Delete User Function:
+const Delete_User = (event) =>{
+    event.preventDefault();
+};

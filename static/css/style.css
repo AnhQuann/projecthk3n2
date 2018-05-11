@@ -8,6 +8,7 @@ html{
 }
 body{
   min-height: 100%;
+  background-color: rgb(236,238,239);
 }
 .relative{
   position: relative;
@@ -72,7 +73,6 @@ input{
 }
 .index-footer{
   position: relative;
-  top:100%;
   width: 100%;
   height: 8%;
   background-color: black;
@@ -102,8 +102,6 @@ input{
 }
 .content_after_fixed{
   top:20px;
-  background-color: rgb(236,238,239);
-
 }
 input[type=text]{
   padding: 1%;
@@ -126,4 +124,7 @@ input[type=search] {
   width: 20%;
   border-radius: 4px;
 }
-
+#wrap {
+  min-height: 100%;
+  height: auto;
+}

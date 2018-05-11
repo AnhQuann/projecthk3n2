@@ -131,7 +131,7 @@ def index():
                                                     cur_age = cur_age,
                                                     cur_role = cur_role,
                                                     cur_disser = cur_disser)
-    
+
 
 #LOGIN
 @app.route('/login', methods=["GET","POST"])
@@ -193,7 +193,6 @@ class UserProject(Resource):
         # }
         # api_user_data.append(data_push_to_list)
         # return api_user_data
-
     def post(self):
         user_post = request.get_json()
         username = user_post['username']
@@ -202,15 +201,46 @@ class UserProject(Resource):
         user = get_user(username)
         login_user(user)
 
+    # def delete(self, id):
+    #     User.objects().with_id(id).delete()
+
+class UserDel(Resource):
+    def get(self, id):
+        User.objects().with_id(id).delete()
+
+class UserEdit(Resource):
+    def post(self, id):
+        userEdit = User.objects().with_id(id)
+        user = request.get_json()
+        userEdit.update(set__name = user["name"], set__age = user["age"], set__role = user["role"])
+
 class Register(Resource):
     def post(self):
         user_post = request.get_json()
-        user = UserProjectINIT(user_post["username"], user_post["password"], user_post["name"], user_post["age"], user_post["role"], user_post["disser"])
+        user = UserProjectINIT(user_post["username"], user_post["password"], user_post["name"], int(user_post["age"]), int(user_post["role"]), user_post["disser"])
         new_user = User(username = user.username, password = user.password, name = user.name, age = user.age, role = user.role, disser = [])
         new_user.save()
         return {
             "Success": "True"
         }
+
+class DisserDel(Resource):
+    def post(self, id):
+        user = User.objects.filter(disser__contains = id)
+        for data in user:
+            id_user = data.id
+        disser = Dissertation.objects().with_id(id)
+        User.objects.with_id(id_user).update(pull__disser = disser)
+        disser.delete()
+
+        # for i in del_disser:
+        #     User.objects.with_id(ID).update(pull__disser = i)
+        # del_disser.delete()
+class DisserEdit(Resource):
+    def post(self, id):
+        disserEdit = Dissertation.objects().with_id(id)
+        disser = request.get_json()
+        disserEdit.update(set__disser_name = disser['disser_name'])
 
 class DissertationProject(Resource):
     def get(self):
@@ -236,20 +266,26 @@ class DissertationProject(Resource):
         new_disser.save()
         User.objects.with_id(ID).update(push__disser = new_disser)
 
-    def delete(self):
-        disser_post = request.get_json()
-        ID = disser_post['id_post']
-        disser = DissertationProjectINIT(disser_post["disser_name"], disser_post["post_day"])
-
-        del_disser = Dissertation.objects(disser_name = disser.disser_name, post_day = disser.post_day)
-        for i in del_disser:
-            User.objects.with_id(ID).update(pull__disser = i)
-        del_disser.delete()
+    # def delete(self):
+    #     disser_post = request.get_json()
+    #     ID = disser_post['id_post']
+    #     disser = DissertationProjectINIT(disser_post["disser_name"], disser_post["post_day"])
+    #
+    #     del_disser = Dissertation.objects(disser_name = disser.disser_name, post_day = disser.post_day)
+    #     for i in del_disser:
+    #         User.objects.with_id(ID).update(pull__disser = i)
+    #     del_disser.delete()
 
         # print(User.objects.with_id(ID).username)
 
-api.add_resource(UserProject, '/api/login')
-api.add_resource(DissertationProject, '/api/disser')
+api.add_resource(UserProject, '/api/login/')
+api.add_resource(UserDel, '/api/login/delete/<id>')
+api.add_resource(UserEdit, '/api/login/edit/<id>')
+
+api.add_resource(DissertationProject, '/api/disser/')
+api.add_resource(DisserDel, '/api/disser/delete/<id>')
+api.add_resource(DisserEdit, '/api/disser/edit/<id>')
+
 api.add_resource(Register, '/api/register')
 # API________________________________
 

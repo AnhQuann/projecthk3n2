@@ -103,6 +103,8 @@ const PressEnt = async (event) =>{
           url: "api/login",
           type: "GET",
           success: (data)=>{
+            console.log(data);
+            
              data_return = data;
           }
       });
@@ -139,9 +141,9 @@ const PressEnt = async (event) =>{
                 "username": DOMusername.value,
                 "password": DOMpassword.value
               }
-              await $.ajax({
+              $.ajax({
                  type : "POST",
-                 url: 'api/login',
+                 url: 'api/login/',
                  dataType: 'json',
                  contentType: 'application/json',
                  data: JSON.stringify(data_to_login),
