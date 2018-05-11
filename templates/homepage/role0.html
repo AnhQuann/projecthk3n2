@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-<!-- header -->
+<!-- Header -->
 <div class="container-fluid bg-dark text-light py-2 fixed-top border border-top-0 border-left-0 border-right-0">
   <div class="row">
     <div class="col-md-4 d-flex align-items-center">
@@ -17,11 +17,14 @@
     </div>
   </div>
 </div>
+<!-- EndHeader -->
+
+<!-- ConTent -->
 <div class="relative" id="wrap">
-  <div class="relative mt-3 content_after_fixed" style="height:900px;padding:0;">
+  <div class="relative mt-3 content_after_fixed" style="padding:0;">
  <!-- Content -->
   <div class="row">
-    <div class="col-md-3 div_right">
+    <div class="col-md-3 fixed div_right">
         <nav class="nav flex-column">
              <a href=".."><button id="tag1" type="button" class="btn btn-outline-dark btn-block">Trang chủ</button></a>
              <a href="#"><button id="tag2" type="button" class="btn btn-outline-dark btn-block">Quản lý Khóa Luận</button></a>
@@ -29,7 +32,7 @@
              <a href="#"><button id="tag4" type="button" class="btn btn-outline-dark btn-block">Quản lý Hội đồng</button></a>
           </nav>
     </div>
-    <div id="div_left" class="cold-md-8 offset-md-1 div_left border border-secondary rounded" style="min-height:100%;height:auto;background-color: white;">
+    <div id="div_left" class="absolute cold-md-8 offset-md-1 div_left border border-secondary rounded" style="min-height:100%;height:auto;background-color: white;">
       <!-- Test -->
       <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target="#exampleModalLong">
         Thêm mới
@@ -107,20 +110,20 @@
                 
               </tbody>
               </table>
-
-            <!--  -->
       </div>
   </div>
- <!-- endContent -->
+</div>
 
 
-  <!-- Footer -->
-  <div class="index-footer d-flex justify-content-center align-items-center">
+
+
+</div>
+ <!-- EndContent -->
+<!-- Footer -->
+<!-- <footer class="index-footer mt-5 d-flex justify-content-center align-items-center">
     <p class="text-light m-0 p-2">Đây là Footer</p>
-  </div>
-</div>
-</div>
-  <!-- Endfooter -->
+</footer> -->
+   <!-- Endfooter -->
 
 <script type="text/javascript" src="./static/js_template/role0.js"></script>
 {% endblock %}

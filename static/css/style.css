@@ -72,7 +72,8 @@ input{
   height:80%;
 }
 .index-footer{
-  position: relative;
+  position: absolute;
+  bottom: 0;
   width: 100%;
   height: 8%;
   background-color: black;
@@ -81,7 +82,12 @@ input{
   padding: 20px;
   margin-left: 1%;
   line-height: 10px;
+}
+.fixed {
   position: fixed;
+}
+.absolute{
+  position: absolute;
 }
 .div_right a{
   color: rgb(52,58,64);
@@ -90,14 +96,12 @@ input{
 .div_right a button:hover {
   color: white;
 }
-
 .div_left{
   padding: 0;
   left:18%;
   right: 7px;
   top:20px;
   padding:1%;
-  position: absolute;
   word-wrap: break-word;
 }
 .content_after_fixed{
@@ -126,5 +130,7 @@ input[type=search] {
 }
 #wrap {
   min-height: 100%;
+  display: block;
   height: auto;
+  padding-bottom: 100px;
 }
