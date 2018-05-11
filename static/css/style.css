@@ -119,3 +119,11 @@ input[type=number], select{
   border-radius: 4px;
   margin-left: 12%; 
 }
+
+input[type=search] {
+  padding: 1%;
+  border: 1px solid #ccc;
+  width: 20%;
+  border-radius: 4px;
+}
+

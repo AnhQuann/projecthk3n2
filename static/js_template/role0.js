@@ -7,6 +7,9 @@ const run = ()=>{
     document.querySelector("#tag3").addEventListener('click',QLSV);
     document.querySelector("#tag4").addEventListener('click',HDCT);
 }
+
+
+
 // HTML_______________________________________________
 const modal_html_KL = `
 <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target="#exampleModalLong">
@@ -137,13 +140,7 @@ const getDataHDCT = async ()=>{
 // __________________________________________________________
 
 
-const HDCT = async(event) =>{
-    event.preventDefault();
-    console.log("RUN!");
-    
-}
-
-
+// Khoa Luan_______________________________---
 const QLKL = async (event) =>{
     event.preventDefault();
     $("#div_left").empty();
@@ -165,7 +162,10 @@ const QLKL = async (event) =>{
         });
     });
 }
+// ____________________________________
 
+
+// SinhVien__________________________
 const QLSV = async (event) =>{
     event.preventDefault();
     $("#div_left").empty();
@@ -198,5 +198,23 @@ const QLSV = async (event) =>{
         });
     });
 }
-
+// KhoaLuan___________________
+const HDCT = async(event) =>{
+    event.preventDefault();
+    console.log("RUN!");
     
+}
+
+// SEARCH__________________
+const search_func = ()=>{
+    let input_value,tbody_data;
+    input_value = $("#search_box").val();
+    tbody_data = $("#tbody_data")
+    console.log(tbody_data);
+    td = tbody_data.find("td");
+    console.log(td);
+    
+    
+    
+}
+
