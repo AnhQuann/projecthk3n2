@@ -33,83 +33,14 @@
           </nav>
     </div>
     <div id="div_left" class="absolute cold-md-8 offset-md-1 div_left border border-secondary rounded" style="min-height:100%;height:auto;background-color: white;">
-      <!-- Test -->
-      <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target="#exampleModalLong">
-        Thêm mới
-      </button>
-      <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLongTitle">Thêm mới học sinh</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <div >
-                <form class="d-flex flex-column" action="">
-                    <label for="editUsername"> Username: </label>
-                    <input id="editUsername" name="editUsername" type="text" value="">
-                    <label for="editPassword">Password: </label>
-                    <input id="editPassword" name="editPassword" type="text" value="">
-                    <label for="editName">Tên: </label>
-                    <input id="editName" name="editName" type="text" value="">
-                    <label for="editAge">Tuổi: </label>
-                    <input id="editAge" name="editAge" type="number" value="">
-                    <label for="editRole">Role: </label>
-                    <select name="editRole" id="editRole" >
-                        <option value="0">Thư ký</option>
-                        <option value="1">Hội đồng chấm thi</option>
-                        <option value="2">Giáo Viên</option>
-                        <option value="3">Học Viên</option>
-                    </select>
-                  </form>
-                </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-              <button type="button" class="btn btn-primary">Lưu</button>
-            </div>
-          </div>
+        
+        <div class="d-flex ">
+          <div><img src="https://via.placeholder.com/200x200" alt=""></div>
+          <div class="pl-3"><h1> Xin Chào {{cur_name}} </h1></div>
         </div>
-      </div>
-            <!-- Test -->
-        <input id="search_box" class="mr-2" type="search" placeholder="Search" onkeyup="search_func()" aria-label="Search">
-            <!--  -->
-            <table id="table_KL" class="table">
-              <thead>
-                  <th>STT</th>
-                  <th>Mã Hội Đồng</th>
-                  <th>Ngày Thành Lập</th>
-                  <th>Thành Viên</th>
-                  <th>Chức năng</th>
-              </thead>
-              <tbody id="tbody_data">
-                <tr>
-                    <td>1</td>
-                    <td>a</td>
-                    <td>b</td>
-                    <td>B</td>
-                    <td>5</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>ahihi</td>
-                    <td>c</td>
-                    <td>B</td>
-                    <td>5</td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>aaaa</td>
-                    <td>c</td>
-                    <td>Baa</td>
-                    <td>5</td>
-                </tr>
-                
-              </tbody>
-              </table>
+      
+      
+      
       </div>
   </div>
 </div>
@@ -125,8 +56,25 @@
 </footer> -->
    <!-- Endfooter -->
 
-<script type="text/javascript" src="./static/js_template/role0.js"></script>
+<script type="text/javascript" src="./static/js_template/homepage/role0.js"></script>
 {% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

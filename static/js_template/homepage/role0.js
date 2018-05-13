@@ -1,21 +1,9 @@
-$(document).ready(()=>{
-    run();
-});
-
-const run = ()=>{
-    document.querySelector("#tag2").addEventListener('click',QLKL);
-    document.querySelector("#tag3").addEventListener('click',QLSV);
-    document.querySelector("#tag4").addEventListener('click',HDCT);
-}
-
-
-
 // HTML_______________________________________________
 const modal_html_KL = `
-<button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target="#exampleModalLong">
+<button id="button_modal" type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target="#exampleModalLong">
     Thêm mới
   </button>
-  <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div id="modal_id"  class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -44,7 +32,7 @@ const modal_html_KL = `
   <input id="search_box" class="mr-2" type="search" placeholder="Search" onkeyup="search_func()" aria-label="Search">`;
 
 const modal_html_SV = `
-<button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target="#exampleModalLong">
+<button  type="button" class="btn btn-primary mb-2 button_modal" data-toggle="modal" data-target="#exampleModalLong">
     Thêm mới
   </button>
   <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
@@ -111,7 +99,17 @@ const html_QLSV = `
 <tbody id="tbody_data">
 </tbody>
 </table>`
-const loading_gif = `<img style="display: block;margin-left: auto;margin-right: auto;width:10%" src="../static/images/ajax-loader.gif" alt="">`;
+const loading_gif = `<img style="display: block;margin-left: auto;margin-right: auto;width:5%" src="../static/images/ajax-loader.gif" alt="">`;
+// ________________________________
+$(document).ready(()=>{
+    run();
+});
+
+const run = ()=>{
+    document.querySelector("#tag2").addEventListener('click',QLKL);
+    document.querySelector("#tag3").addEventListener('click',QLSV);
+    document.querySelector("#tag4").addEventListener('click',HDCT);
+}
 
 // _____________________________________________________
 
@@ -140,36 +138,20 @@ const getDataHDCT = async ()=>{
 }
 
 // __________________________________________________________
-
-
-// Khoa Luan_______________________________---
-const QLKL = async (event) =>{
-    event.preventDefault();
-    $("#div_left").empty();
-    data = getDataKL();
-    $("#div_left").html(loading_gif)
-    data.then((result)=>{
-        let stt = 0;
-        $("#div_left").html(html_QLKL);
-        document.querySelector('#table_KL').insertAdjacentHTML('beforebegin',modal_html_KL)
-        result.forEach((el,index) => {
-            stt = stt + 1;
-            $("#tbody_data").append(`
-            <tr>
-            <td>${stt}</td>
-            <td>${el.disser_name}</td>
-            <td>${el.post_day}</td>
-            <td><a href="api/editkl/${el.id_disser}">Sửa</a> / <a href="api/deletekl/${el.id_disser}">Xóa</a> </td>
-            </tr>`)
-        });
-    });
+// SEARCH
+const search_func = ()=>{
+    let input_value,tbody_data;
+    console.log("______________________________");
+    input_value = $("#search_box").val().toLowerCase();
+    console.log(input_value);
+    $("#tbody_data tr").filter(function(){
+        $(this).toggle($(this).text().toLowerCase().indexOf(input_value) > -1)
+      });
 }
-// ____________________________________
 
-
-// SinhVien__________________________
+// _User
+//Get Data User
 const QLSV = async () =>{
-  
     $("#div_left").empty();
     data = getDataSV();
     $("#div_left").html(loading_gif)
@@ -194,27 +176,11 @@ const QLSV = async () =>{
                 <td>${el.username}</td>
                 <td>${el.age}</td>
                 <td>${arr_kl}</td>
-                <td><a href="api/editsv/${el.id}">Sửa</a> /<a href="api/login/delete/${el.id}" onclick="Delete_User()">Xóa</a> </td>
+                <td><a href="#" onclick="Edit_User('${el.id}','${el.username}', '${el.name}', '${el.age}','${el.role}')">Sửa</a> / <a href="#" onclick="Delete_User('${el.id}')">Xóa</a> </td>
                 </tr>`);
             };
         });
     });
-}
-// KhoaLuan___________________
-const HDCT = async(event) =>{
-    event.preventDefault();
-    console.log("RUN!");
-}
-
-// SEARCH__________________
-const search_func = ()=>{
-    let input_value,tbody_data;
-    console.log("______________________________");
-    input_value = $("#search_box").val().toLowerCase();
-    console.log(input_value);
-    $("#tbody_data tr").filter(function(){
-        $(this).toggle($(this).text().toLowerCase().indexOf(input_value) > -1)
-      });
 }
 
 //Add New User Function:
@@ -223,6 +189,7 @@ const add_new_student = async () =>{
     DOMpassword = document.getElementById("editUsername");
     DOMname = document.getElementById("editName");
     DOMage = document.getElementById("editAge");
+    // selected Role:
     DOMrole = document.getElementById("editRole");
     let i = DOMrole.selectedIndex;
     // console.log(DOMusername.value);
@@ -251,11 +218,94 @@ const add_new_student = async () =>{
     });
     setTimeout(function(){ 
         $('#tag3').click(); 
-        console.log("chạy");
-     }, 1000);
+        console.log("chạy Timeout!");
+     }, 200);
    
 }
 //Delete User Function:
-const Delete_User = (event) =>{
-    event.preventDefault();
+const Delete_User = (par_id) =>{
+    let ID_post = {"id": par_id};
+    console.log(ID_post);
+    $("#div_left").html(loading_gif)
+    $.ajax({
+        type:"POST",
+        url: "/api/login/delete/",
+        contentType:"application/json",
+        dataType:"json",
+        data: JSON.stringify(ID_post),
+        success: ()=>{
+            $('#tag3').click();
+        }
+    });
 };
+
+//Edit User Function:
+const Editing = async (id)=>{
+    console.log(`Vao Editing`);
+    data_push = {
+        "id" : id,
+        "name": $("#editName").val(),
+        "age": $("#editAge").val(),
+        "role": $("#editRole").val()
+    }
+    await $.ajax({
+        type: "POST",
+        url: "/api/login/edit/",
+        contentType: "application/json",
+        dataType: "json",
+        data: JSON.stringify(data_push),
+        success:()=>{
+            console.log("Edit Success!");
+            $('#close').click();
+        }
+    });
+    setTimeout(function(){ 
+        $('#tag3').click(); 
+        console.log("chạy Timeout!");
+     }, 200);
+}
+const Edit_User = (id,username,name,age,role) =>{
+    $('.button_modal').click();
+    $(".modal-title").html(`Sửa ${name}`);
+    $('#editName').val(name);
+    $('#editAge').val(age);
+    $("select#editRole").val(role);
+    $("#editPassword").hide();
+    $("label[for='editPassword']").hide();
+    $('#editUsername').hide();
+    $("label[for='editUsername']").hide();
+    $("#add_new_student").attr("onclick",`Editing('${id}')`)
+}
+
+
+// _Disser
+// Get Data Disser
+const QLKL = async (event) =>{
+    event.preventDefault();
+    $("#div_left").empty();
+    data = getDataKL();
+    $("#div_left").html(loading_gif)
+    data.then((result)=>{
+        let stt = 0;
+        $("#div_left").html(html_QLKL);
+        document.querySelector('#table_KL').insertAdjacentHTML('beforebegin',modal_html_KL)
+        result.forEach((el,index) => {
+            stt = stt + 1;
+            $("#tbody_data").append(`
+            <tr>
+            <td>${stt}</td>
+            <td>${el.disser_name}</td>
+            <td>${el.post_day}</td>
+            <td><a href="api/editkl/${el.id_disser}">Sửa</a> / <a href="api/deletekl/${el.id_disser}">Xóa</a> </td>
+            </tr>`)
+        });
+    });
+}
+
+
+
+//_HDCT
+const HDCT = async(event) =>{
+    event.preventDefault();
+    console.log("RUN!");
+}
