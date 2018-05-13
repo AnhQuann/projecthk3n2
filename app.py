@@ -304,3 +304,4 @@ if __name__ == '__main__':
     admin.add_view(DissertationView(Dissertation))
 
     app.run(debug=True)
+# Ver2
