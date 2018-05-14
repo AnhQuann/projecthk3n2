@@ -159,6 +159,12 @@ def logout():
     return redirect(url_for('login'))
 
 #API________________________________
+class GetCurrentID(Resource):
+    def get(self):
+        cur_id = str(current_user.id_user)
+        data = {"cur_id" : cur_id}
+        return data
+
 class UserProject(Resource):
     def get(self):
         raw_user_data = User.objects()
@@ -228,13 +234,18 @@ class Register(Resource):
 
 class DisserDel(Resource):
     def post(self):
-        disser = request.get_json()
-        user = User.objects.filter(disser__contains = disser['id'])
-        for data in user:
-            id_user = data.id
-        disser = Dissertation.objects().with_id(disser['id'])
-        User.objects.with_id(id_user).update(pull__disser = disser)
-        disser.delete()
+        disser_get = request.get_json()
+        user = User.objects.filter(disser__contains = disser_get['id'])
+        print(user)
+        if user == []:
+            _disser = Dissertation.objects().with_id(disser_get['id'])
+            _disser.delete()
+        else:
+            for data in user:
+                id_user = data.id
+            disser = Dissertation.objects().with_id(disser_get['id'])
+            User.objects.with_id(id_user).update(pull__disser = disser)
+            disser.delete()
 
         # for i in del_disser:
         #     User.objects.with_id(ID).update(pull__disser = i)
@@ -290,6 +301,7 @@ api.add_resource(DisserDel, '/api/disser/delete/')
 api.add_resource(DisserEdit, '/api/disser/edit/')
 
 api.add_resource(Register, '/api/register')
+api.add_resource(GetCurrentID,'/api/getcurid/')
 # API________________________________
 
 class DissertationView(ModelView):

@@ -1,9 +1,9 @@
 // HTML_______________________________________________
 const modal_html_KL = `
-<button id="button_modal" type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target="#exampleModalLong">
+<button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target="#exampleModalLong">
     Thêm mới
   </button>
-  <div id="modal_id"  class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -23,8 +23,8 @@ const modal_html_KL = `
             </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-          <button type="button" class="btn btn-primary">Lưu</button>
+          <button id="close" type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+          <button id="add_new_disser" type="button" onclick="add_new_disser()" class="btn btn-primary">Lưu</button>
         </div>
       </div>
     </div>
@@ -137,6 +137,14 @@ const getDataHDCT = async ()=>{
     return _data;
 }
 
+const getCurID = async ()=>{
+    const _data = await $.ajax({
+        type: 'GET',
+        url: '/api/getcurid/',
+    });
+    return _data
+}
+
 // __________________________________________________________
 // SEARCH
 const search_func = ()=>{
@@ -220,7 +228,6 @@ const add_new_student = async () =>{
         $('#tag3').click(); 
         console.log("chạy Timeout!");
      }, 200);
-   
 }
 //Delete User Function:
 const Delete_User = (par_id) =>{
@@ -296,9 +303,57 @@ const QLKL = async (event) =>{
             <td>${stt}</td>
             <td>${el.disser_name}</td>
             <td>${el.post_day}</td>
-            <td><a href="api/editkl/${el.id_disser}">Sửa</a> / <a href="api/deletekl/${el.id_disser}">Xóa</a> </td>
+            <td><a href="#">Sửa</a> / <a href="#" onclick="Delete_Disser('${el.id_disser}')">Xóa</a> </td>
             </tr>`)
         });
+    });
+}
+//Add disser
+const add_new_disser = async () =>{
+    const getid = getCurID();
+    let id;
+    DOMnamedisser = document.getElementById("editNameDisser");
+    DOMtopic = document.getElementById("editTopic");
+    await getid.then((result)=>{
+        id = result.cur_id;
+    })
+    console.log(id);
+    
+    data_push = {
+        "id_post" :id,
+        "disser_name" : DOMnamedisser.value,
+        // "password" : DOMtopic.value
+    }
+    await $.ajax({
+        type: "POST",
+        contentType: "application/json",
+        dataType:'json',
+        url: "/api/disser/",
+        data: JSON.stringify(data_push),
+        success: ()=>{
+            console.log("Create Success!");
+            $('#close').click();
+        }
+    });
+    setTimeout(function(){ 
+        $('#tag2').click(); 
+        console.log("chạy Timeout!");
+     }, 200);
+}
+
+//Delete Disser Function
+const Delete_Disser = (par_id)=>{
+    $("#div_left").html(loading_gif)
+    data_push = {"id": par_id}
+    $.ajax({
+        type:"POST",
+        contentType:"application/json",
+        dataType: "json",
+        url: "/api/disser/delete/",
+        data: JSON.stringify(data_push),
+        success: ()=>{
+            $('#tag2').click();
+        }
     });
 }
 
