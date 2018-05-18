@@ -13,7 +13,7 @@ from flask_admin.contrib.mongoengine import ModelView
 
 # MODEL
 from mlab import mlab_connect
-from models.models import User, Dissertation
+from models.models import User, Dissertation, Exarminer
 
 mlab_connect()
 app = Flask(__name__)
@@ -37,6 +37,16 @@ class User(db.Document):
     role = db.IntField()
     disser = db.ListField(db.ReferenceField(Dissertation))
 
+class Exarminer(db.Document):
+    username = db.StringField()
+    password = db.StringField()
+    name = db.StringField()
+    age = db.IntField()
+    role = db.IntField()
+    last_point_sys = db.FloatField()
+    cur_point_sys = db.FloatField()
+    point = db.IntField()
+
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.session_protection = "strong"
@@ -54,6 +64,17 @@ class DissertationProjectINIT:
     def __init__(self, disser_name, post_day):
         self.disser_name = disser_name
         self.post_day = post_day
+
+class ExarminerINIT:
+    def __init__(self, username, password, name, age, role, last_point_sys, cur_point_sys, point):
+        self.username = username
+        self.password = password
+        self.name = name
+        self.age = age
+        self.role = role
+        self.last_point_sys = last_point_sys
+        self.cur_point_sys = cur_point_sys
+        self.point = point
 
 #LOGIN______________________________
 #GETUSER
@@ -159,6 +180,12 @@ def logout():
     return redirect(url_for('login'))
 
 #API________________________________
+class GetCurrentID(Resource):
+    def get(self):
+        cur_id = str(current_user.id_user)
+        data = {"cur_id" : cur_id}
+        return data
+
 class UserProject(Resource):
     def get(self):
         raw_user_data = User.objects()
@@ -205,41 +232,86 @@ class UserProject(Resource):
     #     User.objects().with_id(id).delete()
 
 class UserDel(Resource):
-    def get(self, id):
-        User.objects().with_id(id).delete()
+    def post(self):
+        user = request.get_json()
+        User.objects().with_id(user["id"]).delete()
 
 class UserEdit(Resource):
-    def post(self, id):
-        userEdit = User.objects().with_id(id)
+    def post(self):
         user = request.get_json()
-        userEdit.update(set__name = user["name"], set__age = user["age"], set__role = user["role"])
+        print(user['role'])
+        userEdit = User.objects().with_id(user["id"])
+        userEdit.update(set__name = user["name"], set__age = user["age"], set__role = int(user["role"]))
 
 class Register(Resource):
     def post(self):
         user_post = request.get_json()
-        user = UserProjectINIT(user_post["username"], user_post["password"], user_post["name"], int(user_post["age"]), int(user_post["role"]), user_post["disser"])
-        new_user = User(username = user.username, password = user.password, name = user.name, age = user.age, role = user.role, disser = [])
+        user = UserProjectINIT( user_post["username"],
+                                user_post["password"],
+                                user_post["name"],
+                                int(user_post["age"]),
+                                int(user_post["role"]),
+                                user_post["disser"])
+
+        new_user = User(username = user.username,
+                        password = user.password,
+                        name = user.name,
+                        age = user.age,
+                        role = user.role,
+                        disser = [])
         new_user.save()
         return {
             "Success": "True"
         }
 
+class RegisterExamine(Resource):
+    def post(self):
+        examine_post = request.get_json()
+        print(examine_post)
+        examine = ExarminerINIT(examine_post["username"],
+                                examine_post["password"],
+                                examine_post["name"],
+                                int(examine_post["age"]),
+                                int(examine_post["role"]),
+                                float(examine_post["last_point_sys"]),
+                                float(examine_post["cur_point_sys"]),
+                                int(examine_post["point"]))
+        #
+        new_examine = Exarminer(username = examine.username,
+                                password = examine.password,
+                                name = examine.name,
+                                age = examine.age,
+                                role = examine.role,
+                                last_point_sys = 0,
+                                cur_point_sys = 0,
+                                point = 0)
+        new_examine.save()
+        return {
+            "Success": "True"
+        }
+
 class DisserDel(Resource):
-    def post(self, id):
-        user = User.objects.filter(disser__contains = id)
-        for data in user:
-            id_user = data.id
-        disser = Dissertation.objects().with_id(id)
-        User.objects.with_id(id_user).update(pull__disser = disser)
-        disser.delete()
+    def post(self):
+        disser_get = request.get_json()
+        user = User.objects.filter(disser__contains = disser_get['id'])
+        print(user)
+        if user == []:
+            _disser = Dissertation.objects().with_id(disser_get['id'])
+            _disser.delete()
+        else:
+            for data in user:
+                id_user = data.id
+            disser = Dissertation.objects().with_id(disser_get['id'])
+            User.objects.with_id(id_user).update(pull__disser = disser)
+            disser.delete()
 
         # for i in del_disser:
         #     User.objects.with_id(ID).update(pull__disser = i)
         # del_disser.delete()
 class DisserEdit(Resource):
-    def post(self, id):
-        disserEdit = Dissertation.objects().with_id(id)
+    def post(self):
         disser = request.get_json()
+        disserEdit = Dissertation.objects().with_id(disser['id'])
         disserEdit.update(set__disser_name = disser['disser_name'])
 
 class DissertationProject(Resource):
@@ -278,15 +350,47 @@ class DissertationProject(Resource):
 
         # print(User.objects.with_id(ID).username)
 
+class Exarminer(Resource):
+    def get(self):
+        raw_examine_data = Exarminer.objects()
+        api_examine_data = []
+        for data in raw_examine_data:
+            data_push_to_list = {
+                "id": str(data.id),
+                "username": data.username,
+                "password": data.password,
+                "name": data.name,
+                "age": data.age,
+                "role": data.role,
+                "last_point_sys": data.last_point_sys,
+                "cur_point_sys": data.cur_point_sys,
+                "point": data.point
+            }
+            api_examine_data.append(data_push_to_list)
+        return api_examine_data
+
+    def post(self):
+        examine_post = request.get_json()
+        username = examine_post['username']
+        userpass = examine_post['password']
+        print(username)
+        user = get_user(username)
+        login_user(user)
+
+
 api.add_resource(UserProject, '/api/login/')
-api.add_resource(UserDel, '/api/login/delete/<id>')
-api.add_resource(UserEdit, '/api/login/edit/<id>')
+api.add_resource(UserDel, '/api/login/delete/')
+api.add_resource(UserEdit, '/api/login/edit/')
 
 api.add_resource(DissertationProject, '/api/disser/')
-api.add_resource(DisserDel, '/api/disser/delete/<id>')
-api.add_resource(DisserEdit, '/api/disser/edit/<id>')
+api.add_resource(DisserDel, '/api/disser/delete/')
+api.add_resource(DisserEdit, '/api/disser/edit/')
 
 api.add_resource(Register, '/api/register')
+api.add_resource(RegisterExamine, '/api/registerexamine')
+api.add_resource(GetCurrentID,'/api/getcurid/')
+
+api.add_resource(Exarminer, '/api/exarminer')
 # API________________________________
 
 class DissertationView(ModelView):
@@ -304,3 +408,4 @@ if __name__ == '__main__':
     admin.add_view(DissertationView(Dissertation))
 
     app.run(debug=True)
+# Ver2

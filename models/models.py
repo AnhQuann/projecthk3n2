@@ -19,3 +19,6 @@ class Exarminer(Document):
     name = StringField()
     age = IntField()
     role = IntField()
+    last_point_sys = FloatField()
+    cur_point_sys = FloatField()
+    point = IntField()
