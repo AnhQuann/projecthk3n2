@@ -4,21 +4,28 @@ from datetime import datetime
 class Dissertation(Document):
     disser_name = StringField()
     post_day = DateTimeField()
+    status = BooleanField()
 
 class User(Document):
     username = StringField()
     password = StringField()
     name = StringField()
-    age = IntField()
+    yob = IntField()
     role = IntField()
+    email = EmailField()
     disser = ListField(ReferenceField(Dissertation))
 
+class Course(Document):
+    course_name = StringField()
+    students = ListField(ReferenceField(User))
+    teacher = ListField(ReferenceField(User))
+
 class Exarminer(Document):
-    username = StringField()
-    password = StringField()
     name = StringField()
-    age = IntField()
+    yob = IntField()
     role = IntField()
-    last_point_sys = FloatField()
-    cur_point_sys = FloatField()
     point = IntField()
+
+class Examine(Document):
+    ID = StringField()
+    members = ListField(ReferenceField(Exarminer))

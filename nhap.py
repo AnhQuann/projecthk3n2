@@ -26,12 +26,5 @@ class Exarminer(Document):
     cur_point_sys = FloatField()
     point = IntField()
 
-new_examine = Exarminer(username = "quan",
-                        password = "123",
-                        name = "Quan",
-                        age = 20,
-                        role = 3,
-                        last_point_sys = 0,
-                        cur_point_sys = 0,
-                        point = 0)
-new_examine.save()
+print(Exarminer.objects())
+# new_examine.save()
