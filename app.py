@@ -413,9 +413,9 @@ class CourseAPI(Resource):
                             teachers = [])
         new_course.save()
 
-api.add_resource(UserAPI, '/api/user/') # post
-api.add_resource(UserDelete, '/api/user/delete/') #post
-api.add_resource(UserEdit, '/api/user/edit/') #post
+api.add_resource(UserAPI, '/api/user/')
+api.add_resource(UserDelete, '/api/user/delete/')
+api.add_resource(UserEdit, '/api/user/edit/') 
 
 api.add_resource(DissertationAPI, '/api/dissertation/')
 api.add_resource(DissertationDelete, '/api/dissertation/delete/')
