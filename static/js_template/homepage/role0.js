@@ -100,6 +100,21 @@ const html_QLSV = `
 <tbody id="tbody_data">
 </tbody>
 </table>`
+
+const html_QLGV = `  
+<table id="table_SV" class="table">
+<thead>
+    <th>STT</th>
+    <th>Tên Giáo viên</th>
+    <th>Username</th>
+    <th>Email</th>
+    <th>Năm Sinh</th>
+    <th>Khoa</th>
+    <th>Chức năng</th>
+</thead>
+<tbody id="tbody_data">
+</tbody>
+</table>`
 const loading_gif = `<img style="display: block;margin-left: auto;margin-right: auto;width:5%" src="../static/images/ajax-loader.gif" alt="">`;
 // ________________________________
 $(document).ready(()=>{
@@ -110,6 +125,7 @@ const run = ()=>{
     document.querySelector("#tag2").addEventListener('click',QLKL);
     document.querySelector("#tag3").addEventListener('click',QLSV);
     document.querySelector("#tag4").addEventListener('click',HDCT);
+    document.querySelector("#tag5").addEventListener('click',QLGV)
 }
 
 // _____________________________________________________
@@ -120,8 +136,6 @@ const getCourse = async () =>{
     });
     return _data;
 }
-
-
 const getDataSV = async ()=>{
     const _data = await $.ajax({
         type: 'GET',
@@ -190,14 +204,42 @@ const QLSV = async () =>{
                     <td>${el.username}</td>
                     <td>${el.email}</td>
                     <td>${el.yob}</td>
-                    <td>Toán Tin</td>
+                    <td>${el.course}</td>
                     <td><a href="#" onclick="Edit_User('${el.id}','${el.username}', '${el.name}', '${el.age}','${el.role}')">Sửa</a> / <a href="#" onclick="Delete_User('${el.id}')">Xóa</a> </td>
                     </tr>`);
                 };
         });
     });
 }
-
+const QLGV = async ()=>{
+    $("#div_left").empty();
+    data = getDataSV();
+    $("#div_left").html(loading_gif)
+    data_course = await getCourse()
+    course_list = []
+    console.log(course_list);
+    data.then((result)=>{
+        $("#div_left").html(html_QLSV);
+        document.querySelector('#table_SV').insertAdjacentHTML('beforebegin',modal_html_SV)
+        let stt = 0;
+        result.forEach((el,index) =>{
+                if (el.role === 1){
+                    let arr_kl;
+                    stt = stt + 1;
+                    $("#tbody_data").append(`
+                    <tr>
+                    <td>${stt}</td>
+                    <td>${el.name}</td>
+                    <td>${el.username}</td>
+                    <td>${el.email}</td>
+                    <td>${el.yob}</td>
+                    <td>${el.course}</td>
+                    <td><a href="#" onclick="Edit_User('${el.id}','${el.username}', '${el.name}', '${el.age}','${el.role}')">Sửa</a> / <a href="#" onclick="Delete_User('${el.id}')">Xóa</a> </td>
+                    </tr>`);
+                };
+        });
+    });
+}
 //Add New User Function:
 const add_new_student = async () =>{
     DOMusername = document.getElementById("editUsername");

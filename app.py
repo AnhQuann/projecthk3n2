@@ -90,7 +90,7 @@ class ExamineINIT(db.Document):
 #LOGIN______________________________
 #GETUSER
 class UserMixin:
-    def __init__(self, id_user, username, password, role, name, yob, email, disser):
+    def __init__(self, id_user, username, password, role, name, yob, email, disser,course):
         self.id_user = id_user
         self.username = username
         self.password = password
@@ -99,6 +99,7 @@ class UserMixin:
         self.yob = yob
         self.email = email
         self.disser = disser
+        self.course = course
         #______________________
         self.is_active = True
         self.is_authenticated = True
@@ -107,6 +108,8 @@ class UserMixin:
 
     def get_id(self):
         return self.id
+    def Print(self):
+        print("[ {0}-{1}-{2}-{3} ]".format(self.username,self.password,self.role,self.course))
 
 #LOADUSER
 @login_manager.user_loader
@@ -115,7 +118,7 @@ def get_user(username):
     print('Chạy qua loader')
     for user in all_user:
         if user.username == username:
-            return UserMixin(user.id,user.username,user.password,user.role,user.name,user.yob,user.email,user.disser)
+            return UserMixin(user.id,user.username,user.password,user.role,user.name,user.yob,user.email,user.disser,"")
     return None
 
 #UNAUTHORIZED
@@ -133,15 +136,18 @@ def index():
     cur_yob = current_user.yob
     cur_email = current_user.email
     cur_disser = current_user.disser
+    cur_course = current_user.Print()
     if current_user.role == 0:
         cur_role = "Thư ký"
+        print(cur_course,'------')
         return render_template('./homepage/role0.html', cur_id = cur_id,
                                                     cur_username = cur_username,
                                                     cur_name = cur_name,
                                                     cur_yob = cur_yob,
                                                     cur_role = cur_role,
                                                     cur_email = cur_email,
-                                                    cur_disser = cur_disser)
+                                                    cur_disser = cur_disser,
+                                                    cur_course = cur_course)
     elif current_user.role == 1:
         cur_role = "Hội đồng chấm thi"
         return render_template('./homepage/role1.html', cur_id = cur_id,
@@ -235,8 +241,10 @@ class UserAPI(Resource):
         user_post = request.get_json()
         username = user_post['username']
         userpass = user_post['password']
+        course = user_post['cur_course']
         user = get_user(username)
-        login_user(user)
+        user.course = course
+        login_user(user,force = True)
 
 class UserDelete(Resource):
     def post(self):
@@ -419,6 +427,9 @@ class CourseAPI(Resource):
                             students = [],
                             teachers = [])
         new_course.save()
+class GetCurrentCourse(Resource):
+    def get():
+        return "ahhihi"
 
 api.add_resource(UserAPI, '/api/user/')
 api.add_resource(UserDelete, '/api/user/delete/')
@@ -432,6 +443,7 @@ api.add_resource(RegisterUser, '/api/registeruser')
 api.add_resource(RegisterExarminer, '/api/registerexaminer')
 api.add_resource(RegisterExarmine, '/api/registerexamine')
 api.add_resource(GetCurrentID,'/api/getcurid/')
+api.add_resource(GetCurrentCourse,'/api/getcurcourse/')
 
 api.add_resource(ExarminerAPI, '/api/exarminer')
 api.add_resource(ExarmineAPI, '/api/exarmine')

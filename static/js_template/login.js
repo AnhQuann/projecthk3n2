@@ -32,6 +32,7 @@ const login = ()=>{
     let login_div = document.querySelector('#button_login_div');
     let html_insert;
     let string_alert;
+    let current_course;
     let data = await getData();
     if (data.length < 1){
       string_alert = `* Không có dữ liệu`
@@ -49,19 +50,22 @@ const login = ()=>{
       $("#loading-button").html(`<button id="button_login" form="login_form" class="btn btn-primary button_effect" type="submit" name="button">  Đăng nhập </button>`)
     }
     else {
-            data.forEach((el,index)=>{
+          await data.forEach((el,index)=>{
               if (check_validate(DOMusername,DOMpassword,el.username,el.password)){
                 _flag = true;
+                current_course = el.course;
               }
               else{
                 count += 1;
               }
             });
-          
+      
           if (_flag){
+                console.log(current_course);
                 data_to_login = {
                       "username": DOMusername,
-                      "password": DOMpassword
+                      "password": DOMpassword,
+                      "cur_course": current_course
                 }
                 await $.ajax({
                 type : "POST",
