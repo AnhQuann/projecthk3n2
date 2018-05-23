@@ -72,7 +72,7 @@ class UserINIT:
 class CourseINIT(db.Document):
     def __init__(self, course_name, students, teachers):
         self.course_name = course_name
-        self.students = studens
+        self.students = students
         self.teachers = teachers
 
 class ExarminerINIT:
@@ -265,11 +265,11 @@ class RegisterUser(Resource):
                         email = user.email,
                         disser = [])
         new_user.save()
-
+        # print(user.role)
         if user.role == 3:
-            Course.objects.with_id(ID).update(pull__students = new_user)
+            Course.objects.with_id(ID).update(push__students = new_user)
         elif user.role == 2:
-            Course.objects.with_id(ID).update(pull__teachers = new_user)
+            Course.objects.with_id(ID).update(push__teachers = new_user)
 
         return {
             "Success": "True"
