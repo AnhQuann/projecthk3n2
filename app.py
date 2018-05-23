@@ -14,7 +14,7 @@ from models.models import *
 mlab_connect()
 app = Flask(__name__)
 api = Api(app)
-
+app.config['SECRET_KEY'] = 'c4e'
 db = MongoEngine()
 db.init_app(app)
 
