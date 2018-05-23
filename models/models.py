@@ -18,7 +18,7 @@ class User(Document):
 class Course(Document):
     course_name = StringField()
     students = ListField(ReferenceField(User))
-    teacher = ListField(ReferenceField(User))
+    teachers = ListField(ReferenceField(User))
 
 class Exarminer(Document):
     name = StringField()

@@ -35,7 +35,7 @@ class User(db.Document):
 class Course(db.Document):
     course_name = db.StringField()
     students = db.ListField(db.ReferenceField(User))
-    teacher = db.ListField(db.ReferenceField(User))
+    teachers = db.ListField(db.ReferenceField(User))
 
 class Exarminer(db.Document):
     name = db.StringField()
@@ -70,10 +70,10 @@ class UserINIT:
 #
 
 class CourseINIT(db.Document):
-    def __init__(self, course_name, students, teacher):
+    def __init__(self, course_name, students, teachers):
         self.course_name = course_name
         self.students = studens
-        self.teacher = teacher
+        self.teachers = teachers
 
 class ExarminerINIT:
     def __init__(self, name, yob, role, point):
@@ -248,6 +248,7 @@ class UserEdit(Resource):
 class RegisterUser(Resource):
     def post(self):
         user_post = request.get_json()
+        ID = user_post["id_course"]
         user = UserINIT(user_post["username"],
                         user_post["password"],
                         user_post["name"],
@@ -264,6 +265,12 @@ class RegisterUser(Resource):
                         email = user.email,
                         disser = [])
         new_user.save()
+
+        if user.role == 3:
+            Course.objects.with_id(ID).update(pull__students = new_user)
+        elif user.role == 2:
+            Course.objects.with_id(ID).update(pull__teachers = new_user)
+
         return {
             "Success": "True"
         }
@@ -375,6 +382,37 @@ class ExarmineAPI(Resource):
             api_examine_data.append(data_push_to_list)
         return api_examine_data
 
+class CourseAPI(Resource):
+    def get(self):
+        raw_course_data = Course.objects()
+        api_course_data = []
+        for data in raw_course_data:
+            data_students = []
+            data_teachers = []
+            for dataid in data.students:
+                data_students.append(str(dataid.id))
+            for dataid in data.teachers:
+                data_teachers.append(str(dataid.id))
+            data_push_to_list = {
+                "id":str(data.id),
+                "course_name": data.course_name,
+                "students":data_students,
+                "teachers":data_teachers
+            }
+            api_course_data.append(data_push_to_list)
+        return api_course_data
+
+    def post(self):
+        course_post = request.get_json()
+        course = CourseINIT(course_post["course_name"],
+                            course_post["students"],
+                            course_post["teachers"])
+
+        new_course = Course(course_name = course.course_name,
+                            students = [],
+                            teachers = [])
+        new_course.save()
+
 api.add_resource(UserAPI, '/api/user/') # post
 api.add_resource(UserDelete, '/api/user/delete/') #post
 api.add_resource(UserEdit, '/api/user/edit/') #post
@@ -390,6 +428,8 @@ api.add_resource(GetCurrentID,'/api/getcurid/')
 
 api.add_resource(ExarminerAPI, '/api/exarminer')
 api.add_resource(ExarmineAPI, '/api/exarmine')
+
+api.add_resource(CourseAPI, '/api/course')
 # API________________________________
 
 if __name__ == '__main__':
