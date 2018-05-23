@@ -27,16 +27,16 @@ body{
   <form id="login_form" method='POST'>
     <div class="d-flex flex-column justify-content-center">
       <label class="font-weight-bold" for="usr">Username: </label>
-      <input id="usr" class="form-control" type="text" name="username" value="" placeholder="Tên tài khoản">
+      <input id="usr" class="form-control" type="text" name="username" value="" placeholder="Tên tài khoản" required>
       <label class="font-weight-bold" for="psw">Password: </label>
-      <input id="psw" class="form-control" type="password" name="password" value="" placeholder="Mật khẩu">
+      <input id="psw" class="form-control" type="password" name="password" value="" placeholder="Mật khẩu" required>
     </div>
     <div id="clear">
         <div class="m-2" id="button_login_div">
         </div>
     </div>
     <div id="loading-button" class="d-flex justify-content-center mt-4 pb-4">
-      <button id="button_login" class="btn btn-primary button_effect" type="button" name="button">  Đăng nhập </button>
+      <button id="button_login" class="btn btn-primary button_effect" type="submit" name="button">  Đăng nhập </button>
     </div>
   </form>
 </div>

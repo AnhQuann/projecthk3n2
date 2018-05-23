@@ -92,8 +92,9 @@ const html_QLSV = `
     <th>STT</th>
     <th>Tên Sinh Viên</th>
     <th>Username</th>
-    <th>Tuổi</th>
-    <th>Các bài khóa luận</th>
+    <th>Email</th>
+    <th>Năm Sinh</th>
+    <th>Khoa</th>
     <th>Chức năng</th>
 </thead>
 <tbody id="tbody_data">
@@ -112,11 +113,19 @@ const run = ()=>{
 }
 
 // _____________________________________________________
+const getCourse = async () =>{
+    const _data = await $.ajax({
+        type: 'GET',
+        url: '/api/course',
+    });
+    return _data;
+}
+
 
 const getDataSV = async ()=>{
     const _data = await $.ajax({
         type: 'GET',
-        url: '/api/login/',
+        url: '/api/user/',
     });
     return _data;
 }
@@ -124,7 +133,7 @@ const getDataSV = async ()=>{
 const getDataKL = async () =>{
     const _data = await $.ajax({
         type: 'GET',
-        url: '/api/disser/',
+        url: '/api/dissertation/',
     });
     return _data; 
 }
@@ -163,30 +172,28 @@ const QLSV = async () =>{
     $("#div_left").empty();
     data = getDataSV();
     $("#div_left").html(loading_gif)
+    data_course = await getCourse()
+    course_list = []
+    console.log(course_list);
     data.then((result)=>{
         $("#div_left").html(html_QLSV);
         document.querySelector('#table_SV').insertAdjacentHTML('beforebegin',modal_html_SV)
         let stt = 0;
         result.forEach((el,index) =>{
-            if (el.role > 0){
-                let arr_kl;
-                stt = stt + 1;
-                if (el.disser.length === 0){
-                    arr_kl = 'Không có';
-                }
-                else{
-                    arr_kl = el.disser;
-                }
-                $("#tbody_data").append(`
-                <tr>
-                <td>${stt}</td>
-                <td>${el.name}</td>
-                <td>${el.username}</td>
-                <td>${el.age}</td>
-                <td>${arr_kl}</td>
-                <td><a href="#" onclick="Edit_User('${el.id}','${el.username}', '${el.name}', '${el.age}','${el.role}')">Sửa</a> / <a href="#" onclick="Delete_User('${el.id}')">Xóa</a> </td>
-                </tr>`);
-            };
+                if (el.role > 2){
+                    let arr_kl;
+                    stt = stt + 1;
+                    $("#tbody_data").append(`
+                    <tr>
+                    <td>${stt}</td>
+                    <td>${el.name}</td>
+                    <td>${el.username}</td>
+                    <td>${el.email}</td>
+                    <td>${el.yob}</td>
+                    <td>Toán Tin</td>
+                    <td><a href="#" onclick="Edit_User('${el.id}','${el.username}', '${el.name}', '${el.age}','${el.role}')">Sửa</a> / <a href="#" onclick="Delete_User('${el.id}')">Xóa</a> </td>
+                    </tr>`);
+                };
         });
     });
 }
