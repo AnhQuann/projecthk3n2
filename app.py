@@ -211,17 +211,24 @@ class UserAPI(Resource):
             data_id = []
             for dataid in data.disser:
                 data_id.append(str(dataid.id))
-            data_push_to_list = {
-                "id": str(data.id),
-                "username": data.username,
-                "password": data.password,
-                "name": data.name,
-                "yob": data.yob,
-                "role": data.role,
-                "email":data.email,
-                "disser": data_id
-            }
-            api_user_data.append(data_push_to_list)
+            if data.role == 2:
+                course = Course.objects.filter(teachers__contains = str(data.id))
+            elif data.role == 3:
+                course = Course.objects.filter(students__contains = str(data.id))
+            for i in course:
+                print(i.course_name)
+                data_push_to_list = {
+                    "id": str(data.id),
+                    "username": data.username,
+                    "password": data.password,
+                    "name": data.name,
+                    "yob": data.yob,
+                    "role": data.role,
+                    "email":data.email,
+                    "disser": data_id,
+                    "course": i.course_name
+                }
+                api_user_data.append(data_push_to_list)
         return api_user_data
 
     def post(self):
@@ -415,7 +422,7 @@ class CourseAPI(Resource):
 
 api.add_resource(UserAPI, '/api/user/')
 api.add_resource(UserDelete, '/api/user/delete/')
-api.add_resource(UserEdit, '/api/user/edit/') 
+api.add_resource(UserEdit, '/api/user/edit/')
 
 api.add_resource(DissertationAPI, '/api/dissertation/')
 api.add_resource(DissertationDelete, '/api/dissertation/delete/')
