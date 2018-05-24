@@ -72,10 +72,19 @@ const modal_html_SV = `
       </div>
     </div>
   </div>
-  <input id="search_box" class="mr-2" type="search" placeholder="Search" onkeyup="search_func()" aria-label="Search">`;
+  <input id="search_box" class="mr-2" type="search" placeholder="Search" onkeyup="search_func()" aria-label="Search">
+  <label class="font-weight-bold" for="editRole">Khoa: </label>
+  <select name="editRole" style="margin:0" id="editRole">
+        <option value="0">ALL</option>
+        <option value="Toan_Tin">Toán Tin</option>
+        <option value="Kinh_Te">Kinh Tế</option>
+        <option value="Du_Lich">Du Lịch</option>
+        <option value="Ngoai_Ngu">Ngoại Ngữ</option>
+  </select>`;
+
 
 const html_QLKL = `
-<table id="table_KL" class="table">
+<table id="table_KL" class="table table-hover">
 <thead>
     <th>STT</th>
     <th>Tên Khóa Luận</th>
@@ -87,7 +96,7 @@ const html_QLKL = `
 </table>`
 
 const html_QLSV = `  
-<table id="table_SV" class="table">
+<table id="table_SV" class="table table-hover">
 <thead>
     <th>STT</th>
     <th>Tên Sinh Viên</th>
@@ -102,7 +111,7 @@ const html_QLSV = `
 </table>`
 
 const html_QLGV = `  
-<table id="table_SV" class="table">
+<table id="table_SV" class="table table-hover">
 <thead>
     <th>STT</th>
     <th>Tên Giáo viên</th>
@@ -132,7 +141,7 @@ const run = ()=>{
 const getCourse = async () =>{
     const _data = await $.ajax({
         type: 'GET',
-        url: '/api/course',
+        url: '/api/getcurcourse/',
     });
     return _data;
 }
@@ -187,8 +196,8 @@ const QLSV = async () =>{
     data = getDataSV();
     $("#div_left").html(loading_gif)
     data_course = await getCourse()
-    course_list = []
-    console.log(course_list);
+    current_source = data_course.cur_course;
+    console.log(current_source);
     data.then((result)=>{
         $("#div_left").html(html_QLSV);
         document.querySelector('#table_SV').insertAdjacentHTML('beforebegin',modal_html_SV)

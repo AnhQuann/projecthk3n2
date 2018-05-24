@@ -1,7 +1,7 @@
 from flask import *
 from datetime import datetime
-from flask_login import LoginManager, login_required, login_user, UserMixin, current_user,logout_user
-
+from flask_login import LoginManager, login_required, login_user,confirm_login, current_user,logout_user
+from data_handle import *
 # FLASK RESTFUL API
 from flask_restful import *
 
@@ -51,7 +51,6 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.session_protection = "strong"
 #
-
 class DissertationINIT:
     def __init__(self, disser_name, post_day, status):
         self.disser_name = disser_name
@@ -108,18 +107,25 @@ class UserMixin:
 
     def get_id(self):
         return self.id
+
     def Print(self):
         print("[ {0}-{1}-{2}-{3} ]".format(self.username,self.password,self.role,self.course))
 
 #LOADUSER
+check = True #Vì thằng lồn user_loader chạy 2 lần nên lập điều kiện để nó xuống user_current mới đã thêm course
+user_current = UserMixin('','','',0,'',0,'','','') #Khởi tạo 1 Object User mới
 @login_manager.user_loader
 def get_user(username):
+    global user_current
     all_user = User.objects()
-    print('Chạy qua loader')
-    for user in all_user:
-        if user.username == username:
-            return UserMixin(user.id,user.username,user.password,user.role,user.name,user.yob,user.email,user.disser,"")
-    return None
+    if check:
+        for user in all_user:
+            if user.username == username:
+                user_current = UserMixin(user.id,user.username,user.password,user.role,user.name,user.yob,user.email,user.disser,"?")
+                return user_current
+    else:
+        return user_current            
+    return None 
 
 #UNAUTHORIZED
 @login_manager.unauthorized_handler
@@ -127,16 +133,19 @@ def unauthorized():
     return redirect(url_for('login'))
 
 #ROUTE_______________________________
+cur_course = "Null"
 @app.route('/', methods = ['GET', 'POST'])
 @login_required
 def index():
+    global cur_course
     cur_id = current_user.id_user
     cur_username = current_user.username
     cur_name = current_user.name
     cur_yob = current_user.yob
     cur_email = current_user.email
     cur_disser = current_user.disser
-    print_cur_course = current_user.Print()
+    cur_course = current_user.course
+    print("____cur_course :", cur_course)
     if current_user.role == 0:
         cur_role = "Thư ký"
         return render_template('./homepage/role0.html', cur_id = cur_id,
@@ -145,7 +154,8 @@ def index():
                                                     cur_yob = cur_yob,
                                                     cur_role = cur_role,
                                                     cur_email = cur_email,
-                                                    cur_disser = cur_disser
+                                                    cur_disser = cur_disser,
+                                                    cur_course = cur_course
                                                     )
     elif current_user.role == 1:
         cur_role = "Hội đồng chấm thi"
@@ -155,7 +165,8 @@ def index():
                                                     cur_yob = cur_yob,
                                                     cur_role = cur_role,
                                                     cur_email = cur_email,
-                                                    cur_disser = cur_disser)
+                                                    cur_disser = cur_disser,
+                                                    cur_course = cur_course)
     elif current_user.role == 2:
         cur_role = "Giáo viên"
         return render_template('./homepage/role2.html', cur_id = cur_id,
@@ -164,7 +175,8 @@ def index():
                                                     cur_yob = cur_yob,
                                                     cur_role = cur_role,
                                                     cur_email = cur_email,
-                                                    cur_disser = cur_disser)
+                                                    cur_disser = cur_disser,
+                                                    cur_course = cur_course)
     elif current_user.role == 3:
         cur_role = "Sinh viên"
         return render_template('./homepage/role3.html', cur_id = cur_id,
@@ -173,7 +185,8 @@ def index():
                                                     cur_yob = cur_yob,
                                                     cur_role = cur_role,
                                                     cur_email = cur_email,
-                                                    cur_disser = cur_disser)
+                                                    cur_disser = cur_disser,
+                                                    cur_course = cur_course)
 
 
 #LOGIN
@@ -198,6 +211,8 @@ def login():
 @app.route("/logout")
 @login_required
 def logout():
+    global check
+    check = True
     logout_user()
     return redirect(url_for('login'))
 
@@ -206,6 +221,12 @@ class GetCurrentID(Resource):
     def get(self):
         cur_id = str(current_user.id_user)
         data = {"cur_id" : cur_id}
+        return data
+
+class GetCurrentCourse(Resource):
+    def get(self):
+        global cur_course
+        data = {"cur_course": cur_course}
         return data
 
 class UserAPI(Resource):
@@ -221,7 +242,6 @@ class UserAPI(Resource):
             elif data.role == 3:
                 course = Course.objects.filter(students__contains = str(data.id))
             for i in course:
-                print(i.course_name)
                 data_push_to_list = {
                     "id": str(data.id),
                     "username": data.username,
@@ -237,14 +257,18 @@ class UserAPI(Resource):
         return api_user_data
 
     def post(self):
+        global check
+        global user_current
         user_post = request.get_json()
         username = user_post['username']
         userpass = user_post['password']
         course = user_post['cur_course']
         user = get_user(username)
         user.course = course
-        print(user.Print(),'USER-API')
-        login_user(user,force = True)
+        user_current = user
+        login_user(user)
+        check = swap_True_False(check) #Sau khi login thì đổi lại
+        return "Success"
 
 class UserDelete(Resource):
     def post(self):
@@ -427,9 +451,6 @@ class CourseAPI(Resource):
                             students = [],
                             teachers = [])
         new_course.save()
-class GetCurrentCourse(Resource):
-    def get():
-        return "ahhihi"
 
 api.add_resource(UserAPI, '/api/user/')
 api.add_resource(UserDelete, '/api/user/delete/')
