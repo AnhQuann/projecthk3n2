@@ -136,18 +136,17 @@ def index():
     cur_yob = current_user.yob
     cur_email = current_user.email
     cur_disser = current_user.disser
-    cur_course = current_user.Print()
+    print_cur_course = current_user.Print()
     if current_user.role == 0:
         cur_role = "Thư ký"
-        print(cur_course,'------')
         return render_template('./homepage/role0.html', cur_id = cur_id,
                                                     cur_username = cur_username,
                                                     cur_name = cur_name,
                                                     cur_yob = cur_yob,
                                                     cur_role = cur_role,
                                                     cur_email = cur_email,
-                                                    cur_disser = cur_disser,
-                                                    cur_course = cur_course)
+                                                    cur_disser = cur_disser
+                                                    )
     elif current_user.role == 1:
         cur_role = "Hội đồng chấm thi"
         return render_template('./homepage/role1.html', cur_id = cur_id,
@@ -244,6 +243,7 @@ class UserAPI(Resource):
         course = user_post['cur_course']
         user = get_user(username)
         user.course = course
+        print(user.Print(),'USER-API')
         login_user(user,force = True)
 
 class UserDelete(Resource):
