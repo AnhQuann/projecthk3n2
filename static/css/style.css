@@ -114,6 +114,23 @@ input[type=text]{
   border-radius: 4px;
   margin-left: 12%; 
 }
+
+input[type=email]{
+  padding: 1%;
+  border: 1px solid #ccc;
+  width: 79%;
+  border-radius: 4px;
+  margin-left: 12%; 
+}
+
+input[type=password]{
+  padding: 1%;
+  border: 1px solid #ccc;
+  width: 79%;
+  border-radius: 4px;
+  margin-left: 12%; 
+}
+
 input[type=number], select{
   padding: 1%;
   border: 1px solid #ccc;
@@ -128,9 +145,14 @@ input[type=search] {
   width: 20%;
   border-radius: 4px;
 }
+
+
 #wrap {
   min-height: 100%;
   display: block;
   height: auto;
   padding-bottom: 100px;
+}
+#form_add_SV span{
+  color: red;
 }
