@@ -32,7 +32,7 @@ const modal_html_KL = `
   <input id="search_box" class="mr-2" type="search" placeholder="Search" onkeyup="search_func()" aria-label="Search">`;
 
 const modal_html_SV = `
-<button  type="button" class="btn btn-primary mb-2 button_modal" data-toggle="modal" data-target="#exampleModalLong">
+<button type="button" class="btn btn-primary mb-2 button_modal" data-toggle="modal" data-target="#exampleModalLong">
     Thêm mới
   </button>
   <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
@@ -47,26 +47,26 @@ const modal_html_SV = `
         <div class="modal-body">
           <div>
             <form id="form_add_SV" class="d-flex flex-column" method="POST">
-                <label for="editUsername"><span>*</span>Username: </label>
-                <input id="editUsername" placeholder="Tên tài khoản" name="editUsername" type="text" value="" required>
-                <label for="editPassword"><span>*</span>Password: </label>
-                <input id="editPassword" placeholder="Mật khẩu" name="editPassword" type="password" value="" required>
-                <label for="editName"><span>*</span>Tên: </label>
-                <input id="editName" placeholder="Họ và Tên" name="editName" type="text" value="" required>
-                <label for="editEmail"><span>*</span>Email: </label>
-                <input id="editEmail" name="editEmail" placeholder="abcxyz@gmail.com" type="email" value="" required>
-                <label for="editAge">Năm sinh: </label>
-                <input id="editAge" name="editAge" type="number" value="" required>
-                <label for="editRole">Role: </label>
-                <select name="editRole" id="editRole">
+                <label for="addUsername"><span>*</span>Username: </label>
+                <input id="addUsername" placeholder="Tên tài khoản" name="addUsername" type="text" value="" required>
+                <label for="addPassword"><span>*</span>Password: </label>
+                <input id="addPassword" placeholder="Mật khẩu" name="addPassword" type="password" value="" required>
+                <label for="addName"><span>*</span>Tên: </label>
+                <input id="addName" placeholder="Họ và Tên" name="addName" type="text" value="" required>
+                <label for="addEmail"><span>*</span>Email: </label>
+                <input id="addEmail" name="addEmail" placeholder="abcxyz@gmail.com" type="email" value="" required>
+                <label for="addAge">Năm sinh: </label>
+                <input id="addAge" name="addAge" type="number" value="" required>
+                <label for="addRole">Role: </label>
+                <select name="addRole" id="addRole">
                     <!-- <option value="0">Thư ký</option> -->
                     <!-- <option value="1">Hội đồng chấm thi</option> -->
                     <!-- <option value="2">Giáo Viên</option> -->
                     <option value="3">Học Viên</option>
                 </select>
 
-                <label for="editKhoa">Khoa: </label>
-                <select name="editKhoa" id="editKhoa">
+                <label for="addKhoa">Khoa: </label>
+                <select name="addKhoa" id="addKhoa">
 
                 </select>
               </form>
@@ -88,6 +88,41 @@ const modal_html_SV = `
         <option value="Du Lich">Du Lịch</option>
         <option value="Ngoai Ngu">Ngoại Ngữ</option>
   </select>`;
+
+const modal_edit_SV = `
+        <div class="modal-body">
+          <div>
+           <h1 class="title_edit"></h1>
+            <form id="form_edit_SV" class="d-flex flex-column" method="POST">
+                <label for="editUsername"><span>*</span>Username: </label>
+                <input id="editUsername" placeholder="Tên tài khoản" name="editUsername" type="text" value="" required>
+                <label for="editPassword"><span>*</span>Password: </label>
+                <input id="editPassword" placeholder="Mật khẩu" name="editPassword" type="password" value="" required>
+                <label for="editName"><span>*</span>Tên: </label>
+                <input id="editName" placeholder="Họ và Tên" name="editName" type="text" value="" required>
+                <label for="editEmail"><span>*</span>Email: </label>
+                <input id="editEmail" name="editEmail" placeholder="abcxyz@gmail.com" type="email" value="" required>
+                <label for="editAge">Năm sinh: </label>
+                <input id="editAge" name="editAge" type="number" value="" required>
+                <label for="editRole">Role: </label>
+                <select name="editRole" id="editRole">
+                    <!-- <option value="0">Thư ký</option> -->
+                    <!-- <option value="1">Hội đồng chấm thi</option> -->
+                    <!-- <option value="2">Giáo Viên</option> -->
+                    <option value="3">Học Viên</option>
+                </select>
+
+                <label for="editKhoa">Khoa: </label>
+                <select name="editKhoa" id="editKhoa">
+                </select>
+                <div class="modal-footer">
+                    <button id="close" onclick="back()" type="button" class="btn btn-secondary" data-dismiss="modal">Back</button>
+                    <button id="btn_edit_student" form="form_edit_SV" type="submit" class="btn btn-primary">Lưu</button>
+                </div>
+              </form>
+            </div>
+        </div>`
+
 
 const html_QLKL = `
 <table id="table_KL" class="table table-hover">
@@ -197,6 +232,10 @@ const getCurID = async ()=>{
 }
 
 // __________________________________________________________
+//BackHome 
+const back = ()=>{
+    $('#tag3').click();
+}
 // SEARCH
 const search_func = ()=>{
     let input_value,tbody_data;
@@ -208,18 +247,25 @@ const search_func = ()=>{
       });
 }
 
-// _User
+// STUDENT
 //Get Data User
 const change = async (selectObject)=>{
     let value = selectObject.value
     data = getDataSV();
-    $("#table_SV").html(loading_gif)
+    $("#table_SV").html(loading_gif2)
     data_cur_course = await getCurCourse();
+    data_course = await getCourse();
     current_source = data_cur_course.cur_course;
     data.then((result)=>{
             $("#table_SV").html(html_QLSV);
             let stt = 0;
             result.forEach((el,index) =>{
+                let id_course;
+                    data_course.forEach((element)=>{
+                        if (el.course === element.course_name){
+                            id_course = element.id;
+                        }
+                    });
                 if (el.role > 2 && value === "all"){
                     stt = stt + 1;
                     $("#tbody_data").append(`
@@ -230,7 +276,7 @@ const change = async (selectObject)=>{
                     <td>${el.email}</td>
                     <td>${el.yob}</td>
                     <td>${el.course}</td>
-                    <td><a href="#" onclick="Edit_User('${el.id}', '${el.name}', '${el.yob}','${el.role}','${el.email}')">Sửa</a> / <a href="#" onclick="Delete_User('${el.id}')">Xóa</a> </td>
+                    <td><a href="#" onclick="Edit_User('${el.id}', '${el.name}', '${el.yob}', '${el.role}', '${el.email}', '${id_course}','${el.username}','${el.password}')">Sửa</a> / <a href="#" onclick="Delete_User('${el.id}')">Xóa</a> </td>
                     </tr>`);
                 }
                 else if (el.role > 2 && el.course === value){
@@ -243,7 +289,7 @@ const change = async (selectObject)=>{
                     <td>${el.email}</td>
                     <td>${el.yob}</td>
                     <td>${el.course}</td>
-                    <td><a href="#" onclick="Edit_User('${el.id}', '${el.name}', '${el.yob}','${el.role}','${el.email}')">Sửa</a> / <a href="#" onclick="Delete_User('${el.id}')">Xóa</a> </td>
+                    <td><a href="#" onclick="Edit_User('${el.id}', '${el.name}', '${el.yob}', '${el.role}', '${el.email}', '${id_course}','${el.username}','${el.password}')">Sửa</a> / <a href="#" onclick="Delete_User('${el.id}')">Xóa</a> </td>
                     </tr>`);
                 }
         });
@@ -253,21 +299,27 @@ const change = async (selectObject)=>{
 const QLSV = async () =>{
     $("#div_left").empty();
     data = getDataSV();
-    $("#div_left").html(loading_gif)
+    $("#div_left").html(loading_gif2)
     data_cur_course = await getCurCourse();
     current_source = data_cur_course.cur_course;
     data_course = await getCourse(); 
     data.then((result)=>{
         $("#div_left").html(html_QLSV);
-        document.querySelector('#table_SV').insertAdjacentHTML('beforebegin',modal_html_SV)
+        document.querySelector('#table_SV').insertAdjacentHTML('beforebegin',modal_html_SV);
         data_course.forEach((course,index)=>{
-            $("#editKhoa").append(`<option value="${course.course_name}">${course.course_name}</option>`)
+            $("#addKhoa").append(`<option value="${course.id}">${course.course_name}</option>`)
         })
             let stt = 0;
             result.forEach((el,index) =>{
                 if (el.role > 2){
                     let arr_kl;
                     stt = stt + 1;
+                    let id_course;
+                    data_course.forEach((element)=>{
+                        if (el.course === element.course_name){
+                            id_course = element.id;
+                        }
+                    });
                     $("#tbody_data").append(`
                     <tr>
                     <td>${stt}</td>
@@ -276,80 +328,33 @@ const QLSV = async () =>{
                     <td>${el.email}</td>
                     <td>${el.yob}</td>
                     <td>${el.course}</td>
-                    <td><a href="#" onclick="Edit_User('${el.id}', '${el.name}', '${el.yob}','${el.role}','${el.email}')">Sửa</a> / <a href="#" onclick="Delete_User('${el.id}')">Xóa</a> </td>
+                    <td><a href="#" onclick="Edit_User('${el.id}', '${el.name}', '${el.yob}', '${el.role}', '${el.email}', '${id_course}','${el.username}','${el.password}')">Sửa</a> / <a href="#" onclick="Delete_User('${el.id}')">Xóa</a> </td>
                     </tr>`);
                 }
         });
     });
 }
-const QLGV = async ()=>{
-    $("#div_left").empty();
-    data = getDataSV();
-    $("#div_left").html(loading_gif)
-    data_course = await getCourse()
-    course_list = []
-    console.log(course_list);
-    data.then((result)=>{
-        $("#div_left").html(html_QLSV);
-        document.querySelector('#table_SV').insertAdjacentHTML('beforebegin',modal_html_SV)
-        let stt = 0;
-        result.forEach((el,index) =>{
-                if (el.role === 1){
-                    let arr_kl;
-                    stt = stt + 1;
-                    $("#tbody_data").append(`
-                    <tr>
-                    <td>${stt}</td>
-                    <td>${el.name}</td>
-                    <td>${el.username}</td>
-                    <td>${el.email}</td>
-                    <td>${el.yob}</td>
-                    <td>${el.course}</td>
-                    <td><a href="#" onclick="Edit_User('${el.id}','${el.username}', '${el.name}', '${el.age}','${el.role}')">Sửa</a> / <a href="#" onclick="Delete_User('${el.id}')">Xóa</a> </td>
-                    </tr>`);
-                };
-        });
-    });
-}
 //Add New User Function:
-// const change_add_field = ()=>{
-//     DOMrole = document.getElementById("editRole");
-//     let i = DOMrole.selectedIndex;
-//     console.log(DOMrole.options[i].value);
-//     if (DOMrole.options[i].value == 3){
-//         console.log("Role - 3");
-        
-//     }
-//     else if (DOMrole.options[i].value == 2){ 
-//         console.log("Role - 2");
-//     }
-//     else if (DOMrole.options[i].value == 1){
-//         console.log("Role - 1");
-        
-//     }
-//     else {
-//         console.log("Role - 0");
-//     }
-// };
-
 const add_new_student = () =>{
         $("#form_add_SV").submit(async (e)=>{
             e.preventDefault()
-            DOMusername = document.getElementById("editUsername");
-            DOMpassword = document.getElementById("editUsername");
-            DOMname = document.getElementById("editName");
-            DOMage = document.getElementById("editAge");
-            DOMemail = document.getElementById("editEmail");
+            DOMusername = document.getElementById("addUsername");
+            DOMpassword = document.getElementById("addUsername");
+            DOMname = document.getElementById("addName");
+            DOMage = document.getElementById("addAge");
+            DOMemail = document.getElementById("addEmail");
             // selected Role:
-            DOMrole = document.getElementById("editRole");
+            DOMrole = document.getElementById("addRole");
+            DOMKhoa = document.getElementById("addKhoa");
+            let j = DOMKhoa.selectedIndex;
             let i = DOMrole.selectedIndex;
             // console.log(DOMusername.value);
             // console.log(DOMpassword.value);
             // console.log(DOMname.value);
             // console.log(DOMage.value);
-            console.log(DOMrole.options[i].value);
+            console.log(DOMKhoa.value);
              data_push = {
-                "id_course": "5b04cfae54710a2ad8a491e2",
+                "id_course": DOMKhoa.value,
                 "username" : DOMusername.value,
                 "password" : DOMpassword.value,
                 "name" : DOMname.value,
@@ -395,49 +400,121 @@ const Delete_User = (par_id) =>{
     else{
         return
     }
-    $("#div_left").html(loading_gif)
+    $("#div_left").html(loading_gif2)
 };
 
 //Edit User Function:
-const Editing = async (id)=>{
-    console.log(`Vao Editing`);
-    data_push = {
-        "id" : id,
-        "name": $("#editName").val(),
-        "yob": $("#editAge").val(),
-        "role": $("#editRole").val()
-    }
-    await $.ajax({
-        type: "POST",
-        url: "/api/user/edit/",
-        contentType: "application/json",
-        dataType: "json",
-        data: JSON.stringify(data_push),
-        success:()=>{
-            console.log("Edit Success!");
-            $('#close').click();
-        }
-    });
-    setTimeout(function(){ 
-        $('#tag3').click(); 
-        console.log("chạy Timeout!");
-     }, 200);
+const Editing = (id,cur_khoa)=>{
+        $("#form_edit_SV").submit(async (event)=>{
+            event.preventDefault();
+            console.log(`Vao Editing`);
+            // console.log($("#editName").val());
+            // console.log($("#editAge").val());
+            // console.log($("#editRole").val());
+            // console.log($("#editEmail").val());
+            // console.log(cur_khoa);
+            // console.log($("#editKhoa").val());
+            data_push = {
+                "id" : id,
+                "name": $("#editName").val(),
+                "yob": $("#editAge").val(),
+                "role": $("#editRole").val(),
+                "email":$("#editEmail").val(),
+                "cur_khoa":cur_khoa,
+                "new_khoa":$("#editKhoa").val()
+            }
+            $("#div_left").html(loading_gif2);
+            await $.ajax({
+                type: "POST",
+                url: "/api/user/edit/",
+                contentType: "application/json",
+                dataType: "json",
+                data: JSON.stringify(data_push),
+                success:()=>{
+                    console.log("Edit Success!");
+                    $('#close').click();
+                }
+            });
+            $('#tag3').click(); 
+        })
 }
-
-// ${el.id}', '${el.name}', '${el.yob}','${el.role}','${el.email}
-const Edit_User = (id,name,yob,role,email) =>{
-    $('.button_modal').click();
-    $(".modal-title").html(`Sửa ${name}`);
+//${el.id}', '${el.name}', '${el.yob}','${el.role}','${el.email}','${el.course}
+const Edit_User = async (id,name,yob,role,email,khoa,user,pass) =>{
+    $("#div_left").html(loading_gif2);
+    cur_khoa = khoa;
+    data_course = await getCourse();
+    $("#div_left").html(modal_edit_SV);
+    data_course.forEach((course,index)=>{
+        $("#editKhoa").append(`<option value="${course.id}">${course.course_name}</option>`)
+    })
+    $(".title_edit").html(`Sửa ${name}`);
     $('#editName').val(name);
     $('#editAge').val(yob);
     $('#editEmail').val(email);
     $("select#editRole").val(role);
+    $("select#editKhoa").val(khoa);
+
     $("#editPassword").hide();
+    $("#editPassword").val(pass);
     $("label[for='editPassword']").hide();
     $('#editUsername').hide();
+    $("#editUsername").val(user)
     $("label[for='editUsername']").hide();
-    $("#add_new_student").attr("onclick",`Editing('${id}')`)
+
+    $("#btn_edit_student").attr("onclick",`Editing('${id}','${cur_khoa}')`)
 }
+
+//TEACHER
+const QLGV = async ()=>{
+    $("#div_left").empty();
+    data = getDataSV();
+    $("#div_left").html(loading_gif2)
+    data_course = await getCourse()
+    course_list = []
+    console.log(course_list);
+    data.then((result)=>{
+        $("#div_left").html(html_QLSV);
+        document.querySelector('#table_SV').insertAdjacentHTML('beforebegin',modal_html_SV)
+        let stt = 0;
+        result.forEach((el,index) =>{
+                if (el.role === 1){
+                    let arr_kl;
+                    stt = stt + 1;
+                    $("#tbody_data").append(`
+                    <tr>
+                    <td>${stt}</td>
+                    <td>${el.name}</td>
+                    <td>${el.username}</td>
+                    <td>${el.email}</td>
+                    <td>${el.yob}</td>
+                    <td>${el.course}</td>
+                    <td><a href="#" onclick="Edit_User('${el.id}', '${el.name}', '${el.yob}', '${el.role}', '${el.email}', '${el.course}','${el.username}','${el.password}')">Sửa</a> / <a href="#" onclick="Delete_User('${el.id}')">Xóa</a> </td>
+                    </tr>`);
+                };
+        });
+    });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // _Disser
@@ -446,7 +523,7 @@ const QLKL = async (event) =>{
     event.preventDefault();
     $("#div_left").empty();
     data = getDataKL();
-    $("#div_left").html(loading_gif)
+    $("#div_left").html(loading_gif2)
     data.then((result)=>{
         let stt = 0;
         $("#div_left").html(html_QLKL);
@@ -498,7 +575,7 @@ const add_new_disser = async () =>{
 
 //Delete Disser Function
 const Delete_Disser = (par_id)=>{
-    $("#div_left").html(loading_gif)
+    $("#div_left").html(loading_gif2)
     data_push = {"id": par_id}
     $.ajax({
         type:"POST",
@@ -511,9 +588,6 @@ const Delete_Disser = (par_id)=>{
         }
     });
 }
-
-
-
 //_HDCT
 const HDCT = async(event) =>{
     event.preventDefault();

@@ -283,6 +283,11 @@ class UserEdit(Resource):
                         set__yob = user["yob"],
                         set__role = int(user["role"]),
                         set__email = user["email"])
+        if (user["cur_khoa"] == user["new_khoa"]):
+            return
+        else:
+            Course.objects.with_id(user["cur_khoa"]).update(pull__students = userEdit)
+            Course.objects.with_id(user["new_khoa"]).update(push__students = userEdit)
 
 class RegisterUser(Resource):
     def post(self):
