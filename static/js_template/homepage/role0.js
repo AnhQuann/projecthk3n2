@@ -46,15 +46,17 @@ const modal_html_SV = `
         </div>
         <div class="modal-body">
           <div>
-            <form class="d-flex flex-column" action="">
-                <label for="editUsername"> Username: </label>
-                <input id="editUsername" name="editUsername" type="text" value="">
-                <label for="editPassword">Password: </label>
-                <input id="editPassword" name="editPassword" type="text" value="">
-                <label for="editName">Tên: </label>
-                <input id="editName" name="editName" type="text" value="">
-                <label for="editAge">Tuổi: </label>
-                <input id="editAge" name="editAge" type="number" value="">
+            <form id="form_add_SV" class="d-flex flex-column" method="POST">
+                <label for="editUsername"><span>*</span>Username: </label>
+                <input id="editUsername" placeholder="Tên tài khoản" name="editUsername" type="text" value="" required>
+                <label for="editPassword"><span>*</span>Password: </label>
+                <input id="editPassword" placeholder="Mật khẩu" name="editPassword" type="password" value="" required>
+                <label for="editName"><span>*</span>Tên: </label>
+                <input id="editName" placeholder="Họ và Tên" name="editName" type="text" value="" required>
+                <label for="editEmail"><span>*</span>Email: </label>
+                <input id="editEmail" name="editEmail" placeholder="abcxyz@gmail.com" type="email" value="" required>
+                <label for="editAge">Năm sinh: </label>
+                <input id="editAge" name="editAge" type="number" value="" required>
                 <label for="editRole">Role: </label>
                 <select name="editRole" id="editRole" >
                     <option value="0">Thư ký</option>
@@ -62,20 +64,29 @@ const modal_html_SV = `
                     <option value="2">Giáo Viên</option>
                     <option value="3">Học Viên</option>
                 </select>
+                <div class="modal-footer">
+                    <button id="close" type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    <button id="btn_add_student" type="submit" onclick="add_new_student()" class="btn btn-primary">Lưu</button>
+                </div>
               </form>
             </div>
-        </div>
-        <div class="modal-footer">
-          <button id="close" type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-          <button id="add_new_student" type="button" onclick="add_new_student()" class="btn btn-primary">Lưu</button>
         </div>
       </div>
     </div>
   </div>
-  <input id="search_box" class="mr-2" type="search" placeholder="Search" onkeyup="search_func()" aria-label="Search">`;
+  <input id="search_box" class="mr-2" type="search" placeholder="Search" onkeyup="search_func()" aria-label="Search">
+  <label class="font-weight-bold" for="editRole">Khoa: </label>
+  <select name="editRole" style="margin:0" id="editRole">
+        <option value="0">ALL</option>
+        <option value="Toan_Tin">Toán Tin</option>
+        <option value="Kinh_Te">Kinh Tế</option>
+        <option value="Du_Lich">Du Lịch</option>
+        <option value="Ngoai_Ngu">Ngoại Ngữ</option>
+  </select>`;
+
 
 const html_QLKL = `
-<table id="table_KL" class="table">
+<table id="table_KL" class="table table-hover">
 <thead>
     <th>STT</th>
     <th>Tên Khóa Luận</th>
@@ -87,7 +98,7 @@ const html_QLKL = `
 </table>`
 
 const html_QLSV = `  
-<table id="table_SV" class="table">
+<table id="table_SV" class="table table-hover">
 <thead>
     <th>STT</th>
     <th>Tên Sinh Viên</th>
@@ -102,7 +113,7 @@ const html_QLSV = `
 </table>`
 
 const html_QLGV = `  
-<table id="table_SV" class="table">
+<table id="table_SV" class="table table-hover">
 <thead>
     <th>STT</th>
     <th>Tên Giáo viên</th>
@@ -122,17 +133,21 @@ $(document).ready(()=>{
 });
 
 const run = ()=>{
-    document.querySelector("#tag2").addEventListener('click',QLKL);
-    document.querySelector("#tag3").addEventListener('click',QLSV);
-    document.querySelector("#tag4").addEventListener('click',HDCT);
-    document.querySelector("#tag5").addEventListener('click',QLGV)
+    try {
+        document.querySelector("#tag2").addEventListener('click',QLKL);
+        document.querySelector("#tag3").addEventListener('click',QLSV);
+        document.querySelector("#tag4").addEventListener('click',HDCT);
+        document.querySelector("#tag5").addEventListener('click',QLGV);
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 // _____________________________________________________
 const getCourse = async () =>{
     const _data = await $.ajax({
         type: 'GET',
-        url: '/api/course',
+        url: '/api/getcurcourse/',
     });
     return _data;
 }
@@ -187,8 +202,8 @@ const QLSV = async () =>{
     data = getDataSV();
     $("#div_left").html(loading_gif)
     data_course = await getCourse()
-    course_list = []
-    console.log(course_list);
+    current_source = data_course.cur_course;
+    // console.log(current_source);
     data.then((result)=>{
         $("#div_left").html(html_QLSV);
         document.querySelector('#table_SV').insertAdjacentHTML('beforebegin',modal_html_SV)
@@ -241,58 +256,75 @@ const QLGV = async ()=>{
     });
 }
 //Add New User Function:
-const add_new_student = async () =>{
-    DOMusername = document.getElementById("editUsername");
-    DOMpassword = document.getElementById("editUsername");
-    DOMname = document.getElementById("editName");
-    DOMage = document.getElementById("editAge");
-    // selected Role:
+const add_field = ()=>{
     DOMrole = document.getElementById("editRole");
     let i = DOMrole.selectedIndex;
-    // console.log(DOMusername.value);
-    // console.log(DOMpassword.value);
-    // console.log(DOMname.value);
-    // console.log(DOMage.value);
-    // console.log(DOMrole.options[i].value);
-    data_push = {
-        "username" : DOMusername.value,
-        "password" : DOMpassword.value,
-        "name" : DOMname.value,
-        "age" : DOMage.value,
-        "role" : DOMrole.value,
-        "disser": "",
-    }
-    await $.ajax({
-        type: "POST",
-        contentType: "application/json",
-        dataType:'json',
-        url: "/api/register",
-        data: JSON.stringify(data_push),
-        success: ()=>{
-            console.log("Create Success!");
-            $('#close').click();
-        }
-    });
-    setTimeout(function(){ 
-        $('#tag3').click(); 
-        console.log("chạy Timeout!");
-     }, 200);
+    console.log(DOMrole.options[i].value);
+}
+
+const add_new_student = () =>{
+        $("#form_add_SV").submit(async (e)=>{
+            e.preventDefault()
+            DOMusername = document.getElementById("editUsername");
+            DOMpassword = document.getElementById("editUsername");
+            DOMname = document.getElementById("editName");
+            DOMage = document.getElementById("editAge");
+            DOMemail = document.getElementById("editEmail");
+            // selected Role:
+            DOMrole = document.getElementById("editRole");
+            let i = DOMrole.selectedIndex;
+            // console.log(DOMusername.value);
+            // console.log(DOMpassword.value);
+            // console.log(DOMname.value);
+            // console.log(DOMage.value);
+            console.log(DOMrole.options[i].value);
+             data_push = {
+                "id_course": "5b04cfae54710a2ad8a491e2",
+                "username" : DOMusername.value,
+                "password" : DOMpassword.value,
+                "name" : DOMname.value,
+                "yob" : DOMage.value,
+                "email": DOMemail.value,
+                "role" : DOMrole.value,
+                "disser": "",
+            }
+            await $.ajax({
+                type: "POST",
+                contentType: "application/json",
+                dataType:'json',
+                url: "/api/registeruser",
+                data: JSON.stringify(data_push),
+                success: ()=>{
+                    console.log("Create Success!");
+                    $('#close').click();
+                }
+            });
+            setTimeout(function(){ 
+                $('#tag3').click(); 
+                console.log("chạy Timeout!");
+            }, 200);
+            return false;
+        });
 }
 //Delete User Function:
 const Delete_User = (par_id) =>{
     let ID_post = {"id": par_id};
-    console.log(ID_post);
+    if (confirm("Bạn có muốn xóa không?")){
+        $.ajax({
+            type:"POST",
+            url: "/api/user/delete/",
+            contentType:"application/json",
+            dataType:"json",
+            data: JSON.stringify(ID_post),
+            success: ()=>{
+                $('#tag3').click();
+            }
+        });
+    }
+    else{
+        return
+    }
     $("#div_left").html(loading_gif)
-    $.ajax({
-        type:"POST",
-        url: "/api/login/delete/",
-        contentType:"application/json",
-        dataType:"json",
-        data: JSON.stringify(ID_post),
-        success: ()=>{
-            $('#tag3').click();
-        }
-    });
 };
 
 //Edit User Function:
