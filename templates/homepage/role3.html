@@ -9,7 +9,7 @@
 <div class="container-fluid bg-dark text-light py-2 fixed-top border border-top-0 border-left-0 border-right-0">
   <div class="row">
     <div class="col-md-4 d-flex align-items-center">
-      <p style="margin:0"><a class="text-light" href=".."> Quản lý Khóa Luận Tốt Nghiệp - ADMIN  </a> </p>
+      <p style="margin:0"><a class="text-light" href=".."> Quản lý Khóa Luận Tốt Nghiệp - Student </a> </p>
     </div>
     <div class="col-md-8 d-flex flex-row-reverse align-items-center">
       <a href="{{url_for('logout')}}" class="px-2"> Đăng xuất</a>
@@ -28,20 +28,16 @@
         <nav class="nav flex-column">
              <a href=".."><button id="tag1" type="button" class="btn btn-outline-dark btn-block">Trang chủ</button></a>
              <a href="#"><button id="tag2" type="button" class="btn btn-outline-dark btn-block">Quản lý Khóa Luận</button></a>
-             <a href="#"><button id="tag3" type="button" class="btn btn-outline-dark btn-block">Quản lý Sinh viên</button></a>
-             <a href="#"><button id="tag5" type="button" class="btn btn-outline-dark btn-block">Quản lý Giáo viên</button></a>
-             <a href="#"><button id="tag4" type="button" class="btn btn-outline-dark btn-block">Quản lý Hội đồng</button></a>
+             <a href="#"><button id="tag3" type="button" class="btn btn-outline-dark btn-block">Xem đợt khóa luận</button></a>
+             <a href="#"><button id="tag4" type="button" class="btn btn-outline-dark btn-block">Xem điểm cá nhân</button></a>
           </nav>
-    </div>
+    </div> 
     <div id="div_left" class="absolute cold-md-8 offset-md-1 div_left border border-secondary rounded" style="min-height:100%;height:auto;background-color: white;">
         
         <div class="d-flex ">
           <div><img src="https://via.placeholder.com/200x200" alt=""></div>
-          <div class="pl-3"><h1> Xin Chào {{cur_name}} </h1></div>
+          <div class="pl-3"><h1> Xin Chào {{cur_name}} <br> Khoa: {{cur_course}}</h1></div>
         </div>
-      
-      
-      
       </div>
   </div>
 </div>
@@ -57,7 +53,7 @@
 </footer> -->
    <!-- Endfooter -->
 
-<script type="text/javascript" src="./static/js_template/homepage/role0.js"></script>
+   <script type="text/javascript" src="../../static/js_template/homepage/role3_qlkl.js"></script>
 {% endblock %}
 
 
