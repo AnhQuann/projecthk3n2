@@ -300,6 +300,7 @@ class RegisterUser(Resource):
     def post(self):
         user_post = request.get_json()
         ID = user_post["id_course"]
+        ID2 = user_post["id_exarmine"]
         user = UserINIT(user_post["username"],
                         user_post["password"],
                         user_post["name"],
@@ -322,7 +323,8 @@ class RegisterUser(Resource):
         elif user.role == 2:
             Course.objects.with_id(ID).update(push__teachers = new_user)
         elif user.role == 1:
-            Exarmine.object.with_id(ID).update(push__members = new_user)
+            Course.objects.with_id(ID).update(push__teachers = new_user)
+            Examine.objects.with_id(ID2).update(push__members = new_user)
 
         return {
             "Success": "True"
@@ -516,7 +518,7 @@ api.add_resource(ExarmineAPI, '/api/exarmine')
 
 api.add_resource(CourseAPI, '/api/course')
 
-api.add_resource(CourseWave, 'api/coursewave')
+api.add_resource(CourseWave, '/api/coursewave')
 
 # API________________________________
 

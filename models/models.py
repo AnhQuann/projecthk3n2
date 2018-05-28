@@ -28,7 +28,7 @@ class Exarminer(Document):
 
 class Examine(Document):
     ID = StringField()
-    members = ListField(ReferenceField(Exarminer))
+    members = ListField(ReferenceField(User))
 
 class CourseWave(Document):
     wave_name = StringField()
