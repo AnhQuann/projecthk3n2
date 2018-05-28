@@ -159,3 +159,10 @@ input[type=search] {
 #form_edit_SV span{
   color: red;
 }
+
+#form_add_GV span{
+  color: red;
+}
+#form_edit_GV span{
+  color: red;
+}
