@@ -237,7 +237,7 @@ class UserAPI(Resource):
             data_id = []
             for dataid in data.disser:
                 data_id.append(str(dataid.id))
-            if data.role == 2:
+            if data.role <= 2:
                 course = Course.objects.filter(teachers__contains = str(data.id))
             elif data.role == 3:
                 course = Course.objects.filter(students__contains = str(data.id))
@@ -251,7 +251,8 @@ class UserAPI(Resource):
                     "role": data.role,
                     "email":data.email,
                     "disser": data_id,
-                    "course": i.course_name
+                    "course": i.course_name,
+                    "point": data.point
                 }
                 api_user_data.append(data_push_to_list)
         return api_user_data
@@ -299,15 +300,16 @@ class UserEdit(Resource):
 class RegisterUser(Resource):
     def post(self):
         user_post = request.get_json()
-        ID = user_post["id_course"]
-        ID2 = user_post["id_exarmine"]
+        ID_Khoa = user_post["id_course"]
+        ID_HoiDong = user_post["id_exarmine"]
         user = UserINIT(user_post["username"],
                         user_post["password"],
                         user_post["name"],
                         int(user_post["yob"]),
                         int(user_post["role"]),
                         user_post["email"],
-                        user_post["disser"])
+                        user_post["disser"],
+                        user_post["point"])
 
         new_user = User(username = user.username,
                         password = user.password,
@@ -315,16 +317,16 @@ class RegisterUser(Resource):
                         yob = user.yob,
                         role = user.role,
                         email = user.email,
-                        disser = [])
+                        disser = [],
+                        point = user.point)
+
         new_user.save()
         # print(user.role)
         if user.role == 3:
-            Course.objects.with_id(ID).update(push__students = new_user)
-        elif user.role == 2:
-            Course.objects.with_id(ID).update(push__teachers = new_user)
-        elif user.role == 1:
-            Course.objects.with_id(ID).update(push__teachers = new_user)
-            Examine.objects.with_id(ID2).update(push__members = new_user)
+            Course.objects.with_id(ID_Khoa).update(push__students = new_user)
+        elif user.role <= 2:
+            Course.objects.with_id(ID_Khoa).update(push__teachers = new_user)
+            Examine.objects.with_id(ID_HoiDong).update(push__members = new_user)
 
         return {
             "Success": "True"
@@ -423,15 +425,37 @@ class ExarminerAPI(Resource):
 
 class ExarmineAPI(Resource):
     def get(self):
+        tlu_list = {
+            "Toan Tin": {
+                "TI":"Computer Science",
+                "TE":"Information System",
+                "TC":"Computer Network"
+                },
+            "Ngoai Ngu": {
+                "NE":"English",
+                "NF":"French",
+                "NJ":"Japanese"
+            }
+        }
+
         raw_examine_data = Examine.objects()
         api_examine_data = []
         for data in raw_examine_data:
+            for key, value in tlu_list.items():
+                if data.ID[0] + data.ID[1] in value:
+                    course = key
+                    class_name = value[data.ID[0] + data.ID[1]]
+                    break
+            print(course, class_name)
             data_id = []
             for dataid in data.members:
                 data_id.append(str(dataid.id))
             data_push_to_list = {
                 "id": str(data.id),
                 "ID": data.ID,
+                "course": course,
+                "class": class_name,
+                "school_year": data.ID[2] + data.ID[3],
                 "members": data_id
             }
             api_examine_data.append(data_push_to_list)
@@ -507,18 +531,18 @@ api.add_resource(DissertationAPI, '/api/dissertation/')
 api.add_resource(DissertationDelete, '/api/dissertation/delete/')
 api.add_resource(DissertationEdit, '/api/dissertation/edit/')
 
-api.add_resource(RegisterUser, '/api/registeruser')
-api.add_resource(RegisterExarminer, '/api/registerexaminer')
-api.add_resource(RegisterExarmine, '/api/registerexamine')
+api.add_resource(RegisterUser, '/api/registeruser/')
+api.add_resource(RegisterExarminer, '/api/registerexaminer/')
+api.add_resource(RegisterExarmine, '/api/registerexamine/')
 api.add_resource(GetCurrentID,'/api/getcurid/')
 api.add_resource(GetCurrentCourse,'/api/getcurcourse/')
 
-api.add_resource(ExarminerAPI, '/api/exarminer')
-api.add_resource(ExarmineAPI, '/api/exarmine')
+api.add_resource(ExarminerAPI, '/api/exarminer/')
+api.add_resource(ExarmineAPI, '/api/exarmine/')
 
-api.add_resource(CourseAPI, '/api/course')
+api.add_resource(CourseAPI, '/api/course/')
 
-api.add_resource(CourseWave, '/api/coursewave')
+api.add_resource(CourseWave, '/api/coursewave/')
 
 # API________________________________
 

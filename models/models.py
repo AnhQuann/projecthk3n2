@@ -14,6 +14,7 @@ class User(Document):
     role = IntField()
     email = EmailField()
     disser = ListField(ReferenceField(Dissertation))
+    point = IntField()
 
 class Course(Document):
     course_name = StringField()
