@@ -777,27 +777,6 @@ const Editing_GV = (id,cur_khoa)=>{
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // _Disser
 // Get Data Disser
 const QLKL = async (event) =>{
@@ -831,7 +810,6 @@ const add_new_disser = async () =>{
         id = result.cur_id;
     })
     console.log(id);
-    
     data_push = {
         "id_post" :id,
         "disser_name" : DOMnamedisser.value,

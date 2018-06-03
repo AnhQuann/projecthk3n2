@@ -492,7 +492,7 @@ class CourseAPI(Resource):
                             teachers = [])
         new_course.save()
 
-class CourseWave(Resource):
+class CourseWaveAPI(Resource):
     def get(self):
         raw_wave = CourseWave.objects()
         api_wave = []
@@ -541,8 +541,7 @@ api.add_resource(ExarminerAPI, '/api/exarminer/')
 api.add_resource(ExarmineAPI, '/api/exarmine/')
 
 api.add_resource(CourseAPI, '/api/course/')
-
-api.add_resource(CourseWave, '/api/coursewave/')
+api.add_resource(CourseWaveAPI, '/api/coursewave/')
 
 # API________________________________
 
