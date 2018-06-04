@@ -181,7 +181,7 @@ const modal_html_GV = `
         <option value="Du Lich">Du Lịch</option>
         <option value="Ngoai Ngu">Ngoại Ngữ</option>
   </select>`;
-
+ 
 const modal_edit_GV = `
         <div class="modal-body">
           <div>
@@ -216,6 +216,113 @@ const modal_edit_GV = `
             </div>
         </div>`
     //  
+
+const modal_html_QDBV = `
+    <button type="button" class="btn btn-primary mb-2 button_modal" data-toggle="modal" data-target="#exampleModalLong">
+        Thêm mới
+      </button>
+      <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">Thêm mới giáo viên</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div>
+                <form id="form_add_QDBV" class="d-flex flex-column" method="POST">
+                    <label for="addwavename"><span>*</span>wavename: </label>
+                    <input id="addUsername" placeholder="Tên tài khoản" name="addUsername" type="text" value="" required>
+                    <label for="addPassword"><span>*</span>Password: </label>
+                    <input id="addPassword" placeholder="Mật khẩu" name="addPassword" type="password" value="" required>
+                    <label for="addName"><span>*</span>Tên: </label>
+                    <input id="addName" placeholder="Họ và Tên" name="addName" type="text" value="" required>
+                    <label for="addEmail"><span>*</span>Email: </label>
+                    <input id="addEmail" name="addEmail" placeholder="abcxyz@gmail.com" type="email" value="" required>
+
+                    <label for="addRole">Role: </label>
+                    <select name="addRole" id="addRole">
+                    <option value="0">Thư ký</option> 
+                    <option value="1">Chấm thi</option>
+                    <option value="2">Giáo Viên</option>
+                        <!-- <option value="3">Học Viên</option> -->
+                    </select>
+    
+                    <label for="addKhoa">Khoa: </label>
+                    <select name="addKhoa" id="addKhoa">
+                    </select>
+                  </form>
+                  <div class="modal-footer">
+                        <button id="close" type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                        <button id="btn_add_teachers" form="form_add_GV" type="submit" onclick="add_new_teacher()" class="btn btn-primary">Lưu</button>
+                    </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <input id="search_box" class="mr-2" type="search" placeholder="Search" onkeyup="search_func()" aria-label="Search">
+      <label class="font-weight-bold" for="editRole">Khoa: </label>
+      <select onchange = "change_GV(this)" name="findCourse" style="margin:0" id="findCourse">
+            <option value="all" >ALL</option>
+            <option value="Toan Tin">Toán Tin</option>
+            <option value="Kinh Te">Kinh Tế</option>
+            <option value="Du Lich">Du Lịch</option>
+            <option value="Ngoai Ngu">Ngoại Ngữ</option>
+      </select>`;
+  
+const modal_edit_QDBV = `
+      <div class="modal-body">
+        <div>
+         <h1 class="title_edit"></h1>
+          <form id="form_edit_GV" class="d-flex flex-column" method="POST">
+              <label for="editUsername"><span>*</span>Username: </label>
+              <input id="editUsername" placeholder="Tên tài khoản" name="editUsername" type="text" value="" required>
+              <label for="editPassword"><span>*</span>Password: </label>
+              <input id="editPassword" placeholder="Mật khẩu" name="editPassword" type="password" value="" required>
+              <label for="editName"><span>*</span>Tên: </label>
+              <input id="editName" placeholder="Họ và Tên" name="editName" type="text" value="" required>
+              <label for="editEmail"><span>*</span>Email: </label>
+              <input id="editEmail" name="editEmail" placeholder="abcxyz@gmail.com" type="email" value="" required>
+              <label for="editAge">Năm sinh: </label>
+              <input id="editAge" name="editAge" type="number" value="" required>
+              <label for="editRole">Role: </label>
+              <select name="editRole" id="editRole">
+                  <option value="0">Thư ký</option> 
+                  <option value="1">Chấm thi</option>
+                  <option value="2">Giáo Viên</option>
+                  <!-- <option value="3">Học Viên</option> -->
+              </select>
+  
+              <label for="editKhoa">Khoa: </label>
+              <select name="editKhoa" id="editKhoa">
+              </select>
+              <div class="modal-footer">
+                  <button id="close" onclick="back_GV()" type="button" class="btn btn-secondary" data-dismiss="modal">Back</button>
+                  <button id="btn_edit_teacher" form="form_edit_GV" type="submit" class="btn btn-primary">Lưu</button>
+              </div>
+            </form>
+          </div>
+      </div>`;
+
+
+const html_HDCT = `
+<table id="table_HDCT" class="table table-hover">
+<thead>
+    <th>STT</th>
+    <th>Mã hội đồng</th>
+    <th>Khoa</th>
+    <th>Ngành</th>
+    <th>Khóa</th>
+    <th>Thành viên</th>   
+    <th>Chức năng</th> 
+</thead>
+<tbody id="tbody_data">
+</tbody>
+</table>
+`;
 
 const html_QLKL = `
 <table id="table_KL" class="table table-hover">
@@ -257,7 +364,21 @@ const html_QLGV = `
 </thead>
 <tbody id="tbody_data">
 </tbody>
-</table>`
+</table>`;
+
+const html_QLDBV = `  
+<table id="table_SV" class="table table-hover">
+<thead>
+    <th>STT</th>
+    <th>Tên Đợt bảo vệ</th>
+    <th>Đề tài</th>
+    <th>Danh sách SV</th>
+    <th>Trạng thái</th>
+</thead>
+<tbody id="tbody_data">
+</tbody>
+</table>`;
+
 const loading_gif = `<img style="display: block;margin-left: auto;margin-right: auto;width:5%" class="mt-2" src="../static/images/ajax-loader.gif" alt="">`;
 const loading_gif2 = `<img style="display: block;margin-left: auto;margin-right: auto;" src="../static/images/ajax-loader2.gif" alt="">`;
 
@@ -272,6 +393,7 @@ const run = ()=>{
         document.querySelector("#tag3").addEventListener('click',QLSV);
         document.querySelector("#tag4").addEventListener('click',HDCT);
         document.querySelector("#tag5").addEventListener('click',QLGV);
+        document.querySelector("#tag6").addEventListener('click',QLDBV);
     } catch (error) {
         console.log(error);
     }
@@ -323,6 +445,27 @@ const getCurID = async ()=>{
     });
     return _data
 }
+
+const getCourseWave = async ()=>{
+    const _data = await $.ajax({
+        type: 'GET',
+        url: '/api/coursewave/',
+    });
+    return _data
+}
+//Dot Bao Ve:
+const QLDBV = async ()=>{
+    console.log(`Vao QLDBV`);
+    $("#div_left").empty();
+    $("#div_left").html(loading_gif2)
+    let data = await getCourseWave();
+    console.log(data);
+    $("#div_left").html(html_QLDBV);
+    document.querySelector('#table_SV').insertAdjacentHTML('beforebegin',modal_html_SV);
+   
+}
+
+
 
 // __________________________________________________________
 //BackHome 
@@ -464,7 +607,7 @@ const add_new_student = () =>{
                 type: "POST",
                 contentType: "application/json",
                 dataType:'json',
-                url: "/api/registeruser",
+                url: "/api/registeruser/",
                 data: JSON.stringify(data_push),
                 success: ()=>{
                     console.log("Create Success!");
@@ -682,7 +825,7 @@ const add_new_teacher = () =>{
             type: "POST",
             contentType: "application/json",
             dataType:'json',
-            url: "/api/registeruser",
+            url: "/api/registeruser/",
             data: JSON.stringify(data_push),
             success: ()=>{
                 console.log("Create Success!");
@@ -697,8 +840,10 @@ const add_new_teacher = () =>{
     });
 }
 
-const Delete_User_GV = (par_id) =>{
-    let ID_post = {"id": par_id};
+const Delete_User_GV = (par_id,par_id_course) =>{
+    let ID_post = {"id": par_id,
+                    "id_course": par_id_course};
+                    
     if (confirm("Bạn có muốn xóa không?")){
         $.ajax({
             type:"POST",
@@ -779,27 +924,6 @@ const Editing_GV = (id,cur_khoa)=>{
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // _Disser
 // Get Data Disser
 const QLKL = async (event) =>{
@@ -833,7 +957,6 @@ const add_new_disser = async () =>{
         id = result.cur_id;
     })
     console.log(id);
-    
     data_push = {
         "id_post" :id,
         "disser_name" : DOMnamedisser.value,
@@ -871,8 +994,38 @@ const Delete_Disser = (par_id)=>{
         }
     });
 }
+
+
 //_HDCT
+const getDataExamine = async () =>{
+    const _data = $.ajax({
+        type: 'GET',
+        url: '/api/exarmine/',
+    });
+    return _data;
+}
+
+//ADD 
+
 const HDCT = async(event) =>{
     event.preventDefault();
-    console.log("RUN!");
-}
+    $("#div_left").empty();
+    $("#div_left").html(loading_gif2)
+    data_Examine = await getDataExamine();
+    let stt = 0;
+    $("#div_left").html(html_HDCT);
+    document.querySelector('#table_HDCT').insertAdjacentHTML('beforebegin',modal_html_SV)
+    data_Examine.forEach((el,index)=>{
+        stt = stt + 1;
+        $("#tbody_data").append(`
+            <tr>
+            <td>${stt}</td>
+            <td>${el.ID}</td>
+            <td>${el.course}</td>
+            <td>${el.class}</td>
+            <td>${el.school_year}</td>
+            <td>${el.name}</td>            
+            <td><a href="#">Sửa</a> / <a href="#" onclick="Delete_Disser('${el.id_disser}')">Xóa</a> </td>
+            </tr>`); 
+    });
+};

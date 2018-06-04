@@ -13,7 +13,8 @@ class User(Document):
     yob = IntField()
     role = IntField()
     email = EmailField()
-    disser = ListField(ReferenceField(Dissertation,reverse_delete_rule=CASCADE))
+    disser = ListField(ReferenceField(Dissertation))
+    point = IntField()
 
 class Course(Document):
     course_name = StringField()

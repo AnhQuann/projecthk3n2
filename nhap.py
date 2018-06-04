@@ -1,30 +1,19 @@
-from mongoengine import *
-from datetime import datetime
-import mlab
-
-mlab.mlab_connect()
-
-class Dissertation(Document):
-    disser_name = StringField()
-    post_day = DateTimeField()
-
-class User(Document):
-    username = StringField()
-    password = StringField()
-    name = StringField()
-    age = IntField()
-    role = IntField()
-    disser = ListField(ReferenceField(Dissertation))
-
-class Exarminer(Document):
-    username = StringField()
-    password = StringField()
-    name = StringField()
-    age = IntField()
-    role = IntField()
-    last_point_sys = FloatField()
-    cur_point_sys = FloatField()
-    point = IntField()
-
-print(Exarminer.objects())
-# new_examine.save()
+tlu_list = {
+    "Toan Tin": {
+        "TI":"Computer Science",
+        "TE":"Information System",
+        "TC":"Computer Network"
+        },
+    "Ngoai Ngu": {
+        "NE":"English",
+        "NF":"French",
+        "NJ":"Japanese"
+    }
+}
+iD = "TC29A1"
+for key, value in tlu_list.items():
+    if iD[0] + iD[1] in value:
+        course = key
+        class_name = value[iD[0] + iD[1]]
+        break
+print(course, class_name)
