@@ -13,12 +13,12 @@ class User(Document):
     yob = IntField()
     role = IntField()
     email = EmailField()
-    disser = ListField(ReferenceField(Dissertation))
+    disser = ListField(ReferenceField(Dissertation,reverse_delete_rule=CASCADE))
 
 class Course(Document):
     course_name = StringField()
-    students = ListField(ReferenceField(User))
-    teachers = ListField(ReferenceField(User))
+    students = ListField(ReferenceField(User,reverse_delete_rule=CASCADE))
+    teachers = ListField(ReferenceField(User,reverse_delete_rule=CASCADE))
 
 class Exarminer(Document):
     name = StringField()
@@ -28,4 +28,10 @@ class Exarminer(Document):
 
 class Examine(Document):
     ID = StringField()
-    members = ListField(ReferenceField(Exarminer))
+    members = ListField(ReferenceField(User,reverse_delete_rule=CASCADE))
+
+class CourseWave(Document):
+    wave_name = StringField()
+    title = StringField()
+    students = ListField(ReferenceField(User,reverse_delete_rule=CASCADE))
+    status = BooleanField()

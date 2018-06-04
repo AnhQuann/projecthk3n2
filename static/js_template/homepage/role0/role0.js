@@ -372,7 +372,7 @@ const change = async (selectObject)=>{
                     <td>${el.email}</td>
                     <td>${el.yob}</td>
                     <td>${el.course}</td>
-                    <td><a href="#" onclick="Edit_User('${el.id}', '${el.name}', '${el.yob}', '${el.role}', '${el.email}', '${id_course}','${el.username}','${el.password}')">Sửa</a> / <a href="#" onclick="Delete_User('${el.id}')">Xóa</a> </td>
+                    <td><a href="#" onclick="Edit_User('${el.id}', '${el.name}', '${el.yob}', '${el.role}', '${el.email}', '${id_course}','${el.username}','${el.password}')">Sửa</a> / <a href="#" onclick="Delete_User('${el.id}','${id_course}')">Xóa</a> </td>
                     </tr>`);
                 }
                 else if (el.role > 2 && el.course === value){
@@ -385,7 +385,7 @@ const change = async (selectObject)=>{
                     <td>${el.email}</td>
                     <td>${el.yob}</td>
                     <td>${el.course}</td>
-                    <td><a href="#" onclick="Edit_User('${el.id}', '${el.name}', '${el.yob}', '${el.role}', '${el.email}', '${id_course}','${el.username}','${el.password}')">Sửa</a> / <a href="#" onclick="Delete_User('${el.id}')">Xóa</a> </td>
+                    <td><a href="#" onclick="Edit_User('${el.id}', '${el.name}', '${el.yob}', '${el.role}', '${el.email}', '${id_course}','${el.username}','${el.password}')">Sửa</a> / <a href="#" onclick="Delete_User('${el.id}','${id_course}')">Xóa</a> </td>
                     </tr>`);
                 }
         });
@@ -424,7 +424,7 @@ const QLSV = async () =>{
                     <td>${el.email}</td>
                     <td>${el.yob}</td>
                     <td>${el.course}</td>
-                    <td><a href="#" onclick="Edit_User('${el.id}', '${el.name}', '${el.yob}', '${el.role}', '${el.email}', '${id_course}','${el.username}','${el.password}')">Sửa</a> / <a href="#" onclick="Delete_User('${el.id}')">Xóa</a> </td>
+                    <td><a href="#" onclick="Edit_User('${el.id}', '${el.name}', '${el.yob}', '${el.role}', '${el.email}', '${id_course}','${el.username}','${el.password}')">Sửa</a> / <a href="#" onclick="Delete_User('${el.id}','${id_course}')">Xóa</a> </td>
                     </tr>`);
                 }
         });
@@ -479,8 +479,10 @@ const add_new_student = () =>{
         });
 }
 //Delete User Function:
-const Delete_User = (par_id) =>{
-    let ID_post = {"id": par_id};
+const Delete_User = (par_id, par_id_course) =>{
+    let ID_post = {"id": par_id,
+                    "id_course": par_id_course
+                  };
     if (confirm("Bạn có muốn xóa không?")){
         $.ajax({
             type:"POST",
@@ -588,7 +590,7 @@ const change_GV = async (selectObject)=>{
                     <td>${el.email}</td>
                     <td>${el.yob}</td>
                     <td>${el.course}</td>
-                    <td><a href="#" onclick="Edit_User_GV('${el.id}', '${el.name}', '${el.yob}', '${el.role}', '${el.email}', '${id_course}','${el.username}','${el.password}')">Sửa</a> / <a href="#" onclick="Delete_User_GV('${el.id}')">Xóa</a> </td>
+                    <td><a href="#" onclick="Edit_User_GV('${el.id}', '${el.name}', '${el.yob}', '${el.role}', '${el.email}', '${id_course}','${el.username}','${el.password}')">Sửa</a> / <a href="#" onclick="Delete_User_GV('${el.id}','${id_course}')">Xóa</a> </td>
                     </tr>`);
                 }
                 else if (el.role == 2 && el.course === value){
@@ -601,7 +603,7 @@ const change_GV = async (selectObject)=>{
                     <td>${el.email}</td>
                     <td>${el.yob}</td>
                     <td>${el.course}</td>
-                    <td><a href="#" onclick="Edit_User_GV('${el.id}', '${el.name}', '${el.yob}', '${el.role}', '${el.email}', '${id_course}','${el.username}','${el.password}')">Sửa</a> / <a href="#" onclick="Delete_User_GV('${el.id}')">Xóa</a> </td>
+                    <td><a href="#" onclick="Edit_User_GV('${el.id}', '${el.name}', '${el.yob}', '${el.role}', '${el.email}', '${id_course}','${el.username}','${el.password}')">Sửa</a> / <a href="#" onclick="Delete_User_GV('${el.id}','${id_course}')">Xóa</a> </td>
                     </tr>`);
                 }
         });
@@ -640,7 +642,7 @@ const QLGV = async () =>{
                     <td>${el.email}</td>
                     <td>${el.yob}</td>
                     <td>${el.course}</td>
-                    <td><a href="#" onclick="Edit_User_GV('${el.id}', '${el.name}', '${el.yob}', '${el.role}', '${el.email}', '${id_course}','${el.username}','${el.password}')">Sửa</a> / <a href="#" onclick="Delete_User_GV('${el.id}')">Xóa</a> </td>
+                    <td><a href="#" onclick="Edit_User_GV('${el.id}', '${el.name}', '${el.yob}', '${el.role}', '${el.email}', '${id_course}','${el.username}','${el.password}')">Sửa</a> / <a href="#" onclick="Delete_User_GV('${el.id}','${id_course}')">Xóa</a> </td>
                     </tr>`);
                 }
         });

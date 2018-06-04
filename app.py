@@ -18,34 +18,34 @@ app.config['SECRET_KEY'] = 'c4e'
 db = MongoEngine()
 db.init_app(app)
 
-class Dissertation(db.Document):
-    disser_name = db.StringField()
-    post_day = db.DateTimeField()
-    status = db.BooleanField()
-
-class User(db.Document):
-    username = db.StringField()
-    password = db.StringField()
-    name = db.StringField()
-    yob = db.IntField()
-    role = db.IntField()
-    email = db.EmailField()
-    disser = db.ListField(db.ReferenceField(Dissertation))
-
-class Course(db.Document):
-    course_name = db.StringField()
-    students = db.ListField(db.ReferenceField(User))
-    teachers = db.ListField(db.ReferenceField(User))
-
-class Exarminer(db.Document):
-    name = db.StringField()
-    yob = db.IntField()
-    role = db.IntField()
-    point = db.IntField()
-
-class Examine(db.Document):
-    ID = db.StringField()
-    members = db.ListField(db.ReferenceField(Exarminer))
+# class Dissertation(db.Document):
+#     disser_name = db.StringField()
+#     post_day = db.DateTimeField()
+#     status = db.BooleanField()
+#
+# class User(db.Document):
+#     username = db.StringField()
+#     password = db.StringField()
+#     name = db.StringField()
+#     yob = db.IntField()
+#     role = db.IntField()
+#     email = db.EmailField()
+#     disser = db.ListField(db.ReferenceField(Dissertation))
+#
+# class Course(db.Document):
+#     course_name = db.StringField()
+#     students = db.ListField(db.ReferenceField(User))
+#     teachers = db.ListField(db.ReferenceField(User))
+#
+# class Exarminer(db.Document):
+#     name = db.StringField()
+#     yob = db.IntField()
+#     role = db.IntField()
+#     point = db.IntField()
+#
+# class Examine(db.Document):
+#     ID = db.StringField()
+#     members = db.ListField(db.ReferenceField(Exarminer))
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -124,8 +124,8 @@ def get_user(username):
                 user_current = UserMixin(user.id,user.username,user.password,user.role,user.name,user.yob,user.email,user.disser,"?")
                 return user_current
     else:
-        return user_current            
-    return None 
+        return user_current
+    return None
 
 #UNAUTHORIZED
 @login_manager.unauthorized_handler
@@ -273,7 +273,9 @@ class UserAPI(Resource):
 class UserDelete(Resource):
     def post(self):
         user = request.get_json()
-        User.objects().with_id(user["id"]).delete()
+        a = User.objects().with_id(user["id"])
+        Course.objects().with_id(user["id_course"]).update(pull__students = a)
+        a.delete()
 
 class UserEdit(Resource):
     def post(self):
@@ -299,7 +301,7 @@ class UserEdit(Resource):
 class RegisterUser(Resource):
     def post(self):
         user_post = request.get_json()
-        ID = user_post["id_course"]
+        ID = user_post["id_course"]    
         user = UserINIT(user_post["username"],
                         user_post["password"],
                         user_post["name"],
@@ -319,8 +321,12 @@ class RegisterUser(Resource):
         # print(user.role)
         if user.role == 3:
             Course.objects.with_id(ID).update(push__students = new_user)
-        elif user.role <= 2:
+        elif user.role == 2:
             Course.objects.with_id(ID).update(push__teachers = new_user)
+        elif user.role == 1:
+            ID2 = user_post["id_examine"]
+            Course.objects.with_id(ID).update(push__teachers = new_user)
+            Examine.objects.with_id(ID2).update(push__members = new_user)
 
         return {
             "Success": "True"
@@ -464,6 +470,37 @@ class CourseAPI(Resource):
                             teachers = [])
         new_course.save()
 
+class CourseWave(Resource):
+    def get(self):
+        raw_wave = CourseWave.objects()
+        api_wave = []
+        for data in raw_wave:
+            students = []
+            for dataid in data.students:
+                students.append(str(dataid.id))
+            data_push_to_list = {
+                "id":str(data.id),
+                "wave_name": data.wave_name,
+                "title":data.title,
+                "students": students,
+                "status":data.status
+            }
+            api_wave.append(data_push_to_list)
+        return api_wave
+    def post(self):
+        wave_post = request.get_json()
+
+        new_wave = CourseWave(wave_name = wave_post['wave_name'],
+                              title = wave_post['title'],
+                              students = [],
+                              status = wave_post['status'])
+        new_wave.save()
+
+class RegisterCourseWave(Resource):
+    def post(self):
+        id_user_hientai = "123"
+
+
 api.add_resource(UserAPI, '/api/user/')
 api.add_resource(UserDelete, '/api/user/delete/')
 api.add_resource(UserEdit, '/api/user/edit/')
@@ -482,6 +519,9 @@ api.add_resource(ExarminerAPI, '/api/exarminer')
 api.add_resource(ExarmineAPI, '/api/exarmine')
 
 api.add_resource(CourseAPI, '/api/course')
+
+api.add_resource(CourseWave, '/api/coursewave')
+
 # API________________________________
 
 if __name__ == '__main__':
