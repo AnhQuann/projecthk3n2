@@ -1,5 +1,6 @@
 from mongoengine import *
 from datetime import datetime
+from mlab import mlab_connect
 
 class Dissertation(Document):
     disser_name = StringField()
@@ -9,12 +10,14 @@ class Dissertation(Document):
 class User(Document):
     username = StringField()
     password = StringField()
+    student_code = StringField()
     name = StringField()
     yob = IntField()
     role = IntField()
     email = EmailField()
     disser = ListField(ReferenceField(Dissertation))
     point = IntField()
+    status = BooleanField()
 
 class Course(Document):
     course_name = StringField()
@@ -36,3 +39,6 @@ class CourseWave(Document):
     title = StringField()
     students = ListField(ReferenceField(User,reverse_delete_rule=CASCADE))
     status = BooleanField()
+
+class Test_class(Document):
+    a = ListField(ReferenceField(Exarminer,reverse_delete_rule=CASCADE))

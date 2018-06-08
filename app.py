@@ -2,6 +2,8 @@ from flask import *
 from datetime import datetime
 from flask_login import LoginManager, login_required, login_user,confirm_login, current_user,logout_user
 from data_handle import *
+from random import choice, randint
+
 # FLASK RESTFUL API
 from flask_restful import *
 
@@ -232,31 +234,62 @@ class GetCurrentCourse(Resource):
 class UserAPI(Resource):
     def get(self):
         raw_user_data = User.objects()
-        print(raw_user_data.count())
         api_user_data = []
         for data in raw_user_data:
             data_id = []
             for dataid in data.disser:
                 data_id.append(str(dataid.id))
-            if data.role <= 2:
-                course = Course.objects.filter(teachers__contains = str(data.id))
-            elif data.role == 3:
-                course = Course.objects.filter(students__contains = str(data.id))
-            for i in course:
+            if data.role == 0:
                 data_push_to_list = {
-                    "id": str(data.id),
-                    "username": data.username,
-                    "password": data.password,
-                    "name": data.name,
-                    "yob": data.yob,
-                    "role": data.role,
-                    "email":data.email,
-                    "disser": data_id,
-                    "course": i.course_name,
-                    "point": data.point
-                }
+                        "id": str(data.id),
+                        "username": data.username,
+                        "password": data.password,
+                        "name": data.name,
+                        "yob": data.yob,
+                        "role": data.role,
+                        "email":data.email,
+                        "disser": data_id,
+                        "course": "admin",
+                        "point": data.point
+                    }
                 api_user_data.append(data_push_to_list)
-        print(len(api_user_data))
+            elif data.role == 1:
+                course = Examine.objects.filter(members__contains = str(data.id))
+                for i in course:
+                    data_push_to_list = {
+                            "id": str(data.id),
+                            "username": data.username,
+                            "password": data.password,
+                            "name": data.name,
+                            "yob": data.yob,
+                            "role": data.role,
+                            "email":data.email,
+                            "disser": data_id,
+                            "course": i.ID,
+                            "point": data.point
+                        }
+                    api_user_data.append(data_push_to_list)
+            else:
+                if data.role == 2:
+                    course = Course.objects.filter(teachers__contains = str(data.id))
+                elif data.role == 3:
+                    course = Course.objects.filter(students__contains = str(data.id))
+                for i in course:
+                    data_push_to_list = {
+                            "id": str(data.id),
+                            "username": data.username,
+                            "password": data.password,
+                            "student_code": "{0}{1}".format("A", randint(12345, 30985)),
+                            "name": data.name,
+                            "yob": data.yob,
+                            "role": data.role,
+                            "email":data.email,
+                            "disser": data_id,
+                            "course": i.course_name,
+                            "point": data.point,
+                            "status": choice([True, False])
+                        }
+                    api_user_data.append(data_push_to_list)
         return api_user_data
 
     def post(self):
@@ -275,10 +308,15 @@ class UserAPI(Resource):
 
 class UserDelete(Resource):
     def post(self):
-        user = request.get_json()
-        a = User.objects().with_id(user["id"])
-        Course.objects().with_id(user["id_course"]).update(pull__students = a)
-        a.delete()
+        raw_user = request.get_json()
+        user = User.objects().with_id(raw_user["id"])
+        if user.role == 3:
+            Course.objects().with_id(raw_user["id_course"]).update(pull__students = user)
+        elif user.role == 2:
+            Course.objects().with_id(raw_user["id_course"]).update(pull__teachers = user)
+        elif user.role == 1:
+            Examine.objects().with_id(raw_user["id_exarmine"]).update(pull_members = user)
+        user.delete()
 
 class UserEdit(Resource):
     def post(self):
@@ -305,7 +343,7 @@ class RegisterUser(Resource):
     def post(self):
         user_post = request.get_json()
         ID_Khoa = user_post["id_course"]
-        # ID_HoiDong = user_post["id_exarmine"]
+        ID_HoiDong = user_post["id_exarmine"]
         user = UserINIT(user_post["username"],
                         user_post["password"],
                         user_post["name"],
@@ -324,12 +362,12 @@ class RegisterUser(Resource):
                         point = 0)
 
         new_user.save()
-        # print(user.role)
         if user.role == 3:
             Course.objects.with_id(ID_Khoa).update(push__students = new_user)
-        elif user.role <= 2:
+        elif user.role == 2:
             Course.objects.with_id(ID_Khoa).update(push__teachers = new_user)
-            # Examine.objects.with_id(ID_HoiDong).update(push__members = new_user)
+        elif user.role == 1:
+            Examine.objects.with_id(ID_HoiDong).update(push__members = new_user)
 
         return {
             "Success": "True"
@@ -360,6 +398,17 @@ class RegisterExarmine(Resource):
         examine = ExamineINIT(examine_post["ID"], examine_post["members"])
         new_examine = Examine(ID = examine.ID, members = [])
         new_examine.save()
+
+class ExarmineDelete(Resource):
+    def post(self):
+        ex = request.get_json()
+        exarmine = Examine.objects().with_id(ex["id"]).delete()
+
+class ExarmineEdit(Resource):
+    def post(self):
+        ex = request.get_json()
+        exEdit = Examine.objects().with_id(ex['id'])
+        exEdit.update(set__ID = ex['ID'])
 
 class DissertationAPI(Resource):
     def get(self):
@@ -393,7 +442,6 @@ class DissertationDelete(Resource):
     def post(self):
         disser_get = request.get_json()
         user = User.objects.filter(disser__contains = disser_get['id'])
-        print(user)
         if user == []:
             _disser = Dissertation.objects().with_id(disser_get['id'])
             _disser.delete()
@@ -449,7 +497,6 @@ class ExarmineAPI(Resource):
                     course = key
                     class_name = value[data.ID[0] + data.ID[1]]
                     break
-            print(course, class_name)
             data_id = []
             data_name = []
             for dataid in data.members:
@@ -543,7 +590,10 @@ api.add_resource(GetCurrentID,'/api/getcurid/')
 api.add_resource(GetCurrentCourse,'/api/getcurcourse/')
 
 api.add_resource(ExarminerAPI, '/api/exarminer/')
+
 api.add_resource(ExarmineAPI, '/api/exarmine/')
+api.add_resource(ExarmineDelete, '/api/exarmine/delete/')
+api.add_resource(ExarmineEdit, '/api/exarmine/edit')
 
 api.add_resource(CourseAPI, '/api/course/')
 api.add_resource(CourseWaveAPI, '/api/coursewave/')
