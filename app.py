@@ -244,13 +244,15 @@ class UserAPI(Resource):
                         "id": str(data.id),
                         "username": data.username,
                         "password": data.password,
+                        "student_code": data.student_code,
                         "name": data.name,
                         "yob": data.yob,
                         "role": data.role,
                         "email":data.email,
                         "disser": data_id,
                         "course": "admin",
-                        "point": data.point
+                        "point": data.point,
+                        "status": data.status
                     }
                 api_user_data.append(data_push_to_list)
             elif data.role == 1:
@@ -260,13 +262,15 @@ class UserAPI(Resource):
                             "id": str(data.id),
                             "username": data.username,
                             "password": data.password,
+                            "student_code": data.student_code,
                             "name": data.name,
                             "yob": data.yob,
                             "role": data.role,
                             "email":data.email,
                             "disser": data_id,
                             "course": i.ID,
-                            "point": data.point
+                            "point": data.point,
+                            "status": data.status
                         }
                     api_user_data.append(data_push_to_list)
             else:
@@ -279,7 +283,7 @@ class UserAPI(Resource):
                             "id": str(data.id),
                             "username": data.username,
                             "password": data.password,
-                            "student_code": "{0}{1}".format("A", randint(12345, 30985)),
+                            "student_code": data.student_code,
                             "name": data.name,
                             "yob": data.yob,
                             "role": data.role,
@@ -287,7 +291,7 @@ class UserAPI(Resource):
                             "disser": data_id,
                             "course": i.course_name,
                             "point": data.point,
-                            "status": choice([True, False])
+                            "status": data.status
                         }
                     api_user_data.append(data_push_to_list)
         return api_user_data
@@ -354,6 +358,7 @@ class RegisterUser(Resource):
 
         new_user = User(username = user.username,
                         password = user.password,
+                        # student_code =
                         name = user.name,
                         yob = user.yob,
                         role = user.role,
