@@ -166,3 +166,11 @@ input[type=search] {
 #form_edit_GV span{
   color: red;
 }
+
+#form_add_HDCT span{
+  color: red;
+}
+#form_edit_HDCT span{
+  color: red;
+}
+

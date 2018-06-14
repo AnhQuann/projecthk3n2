@@ -343,7 +343,6 @@ class RegisterUser(Resource):
     def post(self):
         user_post = request.get_json()
         ID_Khoa = user_post["id_course"]
-        ID_HoiDong = user_post["id_exarmine"]
         user = UserINIT(user_post["username"],
                         user_post["password"],
                         user_post["name"],
@@ -367,6 +366,7 @@ class RegisterUser(Resource):
         elif user.role == 2:
             Course.objects.with_id(ID_Khoa).update(push__teachers = new_user)
         elif user.role == 1:
+            ID_HoiDong = user_post["id_exarmine"]
             Examine.objects.with_id(ID_HoiDong).update(push__members = new_user)
 
         return {
