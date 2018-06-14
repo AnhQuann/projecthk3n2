@@ -152,8 +152,8 @@ const modal_html_GV = `
                 <input id="addAge" name="addAge" type="number" value="" required>
                 <label for="addRole">Role: </label>
                 <select name="addRole" id="addRole">
-                <option value="0">Thư ký</option> 
-                <option value="1">Chấm thi</option>
+                    <!-- <option value="0">Thư ký</option> -->
+                    <!-- <option value="1">Chấm thi</option> -->
                 <option value="2">Giáo Viên</option>
                     <!-- <option value="3">Học Viên</option> -->
                 </select>
@@ -306,6 +306,77 @@ const modal_edit_QDBV = `
             </form>
           </div>
       </div>`;
+
+const modal_html_HDCT = `
+      <button id="add_hdct" onclick="add_new_examine()" type="button" class="btn btn-primary mb-2 button_modal" data-toggle="modal" data-target="#exampleModalLong">
+          Thêm mới
+        </button>
+        <input id="search_box" class="mr-2" type="search" placeholder="Search" onkeyup="search_func()" aria-label="Search">
+        <label class="font-weight-bold" for="editRole">Khoa: </label>
+        <select onchange = "change_HDCT(this)" name="findCourse" style="margin:0" id="findCourse">
+              <option value="all" >ALL</option>
+              <option value="Toan Tin">Toán Tin</option>
+              <option value="Kinh Te">Kinh Tế</option>
+              <option value="Du Lich">Du Lịch</option>
+              <option value="Ngoai Ngu">Ngoại Ngữ</option>
+        </select>`;
+
+const html_add_HDCT = `
+        <div class="modal-body">
+        <div>
+        <h1 class="title_edit"></h1>
+        <form id="form_add_HDCT" class="d-flex flex-column" method="POST">
+            <label for="addHDCT"><span>*</span>Mã Hội Đồng: </label>
+            <input id="addHDCT" placeholder="Mã Hội Đồng" name="addHDCT" type="text" value="" required>
+            <label for="editKhoa">Khoa: </label>
+            <select name="editKhoa" id="editKhoa">
+            </select>
+            <div>
+                aloalo
+            </div>
+            
+        </form>
+        <div class="modal-footer">
+                <button id="close" onclick="back_HDCT()" type="button" class="btn btn-secondary" data-dismiss="modal">Back</button>
+                <button id="btn_edit_HDCT" form="form_add_HDCT" type="submit" class="btn btn-primary">Lưu</button>
+            </div>
+        </div>
+        </div>`;
+
+
+const modal_edit_HDCT = `
+        <div class="modal-body">
+          <div>
+           <h1 class="title_edit"></h1>
+            <form id="form_edit_HDCT" class="d-flex flex-column" method="POST">
+                <label for="editUsername"><span>*</span>Username: </label>
+                <input id="editUsername" placeholder="Tên tài khoản" name="editUsername" type="text" value="" required>
+                <label for="editPassword"><span>*</span>Password: </label>
+                <input id="editPassword" placeholder="Mật khẩu" name="editPassword" type="password" value="" required>
+                <label for="editName"><span>*</span>Tên: </label>
+                <input id="editName" placeholder="Họ và Tên" name="editName" type="text" value="" required>
+                <label for="editEmail"><span>*</span>Email: </label>
+                <input id="editEmail" name="editEmail" placeholder="abcxyz@gmail.com" type="email" value="" required>
+                <label for="editAge">Năm sinh: </label>
+                <input id="editAge" name="editAge" type="number" value="" required>
+                <label for="editRole">Role: </label>
+                <select name="editRole" id="editRole">
+                    <option value="0">Thư ký</option> 
+                    <option value="1">Chấm thi</option>
+                    <option value="2">Giáo Viên</option>
+                    <!-- <option value="3">Học Viên</option> -->
+                </select>
+    
+                <label for="editKhoa">Khoa: </label>
+                <select name="editKhoa" id="editKhoa">
+                </select>
+                <div class="modal-footer">
+                    <button id="close" onclick="back_GV()" type="button" class="btn btn-secondary" data-dismiss="modal">Back</button>
+                    <button id="btn_edit_teacher" form="form_edit_HDCT" type="submit" class="btn btn-primary">Lưu</button>
+                </div>
+              </form>
+            </div>
+        </div>`;
 
 
 const html_HDCT = `
@@ -475,6 +546,12 @@ const back = ()=>{
 const back_GV = ()=>{
     $('#tag5').click();
 }
+const back_HDCT = ()=>{
+    $('#tag4').click();
+}
+const back_QDBV = ()=>{
+    $('#tag6').click();
+}
 // SEARCH
 const search_func = ()=>{
     let input_value,tbody_data;
@@ -591,6 +668,8 @@ const add_new_student = () =>{
             // console.log(DOMpassword.value);
             // console.log(DOMname.value);
             // console.log(DOMage.value);
+         
+            
             console.log(DOMKhoa.value);
              data_push = {
                 "id_course": DOMKhoa.value,
@@ -601,6 +680,7 @@ const add_new_student = () =>{
                 "email": DOMemail.value,
                 "role" : DOMrole.value,
                 "disser": "",
+                "id_exarmine":DOMKhoa.value
             }
             document.getElementById("form_add_SV").insertAdjacentHTML('afterbegin',loading_gif2);
             await $.ajax({
@@ -705,7 +785,7 @@ const Edit_User = async (id,name,yob,role,email,khoa,user,pass) =>{
     $("#btn_edit_student").attr("onclick",`Editing('${id}','${cur_khoa}')`)
 }
 
-//TEACHER
+//TEACHER => Done
 const change_GV = async (selectObject)=>{
     let value = selectObject.value
     data = getDataSV();
@@ -866,13 +946,13 @@ const Delete_User_GV = (par_id,par_id_course) =>{
 const Editing_GV = (id,cur_khoa)=>{
     $("#form_edit_GV").submit(async (event)=>{
         event.preventDefault();
-        console.log(`Vao Editing`);
-        console.log($("#editName").val());
-        console.log($("#editAge").val());
-        console.log($("#editRole").val());
-        console.log($("#editEmail").val());
-        console.log(cur_khoa);
-        console.log($("#editKhoa").val());
+        // console.log(`Vao Editing`);
+        // console.log($("#editName").val());
+        // console.log($("#editAge").val());
+        // console.log($("#editRole").val());
+        // console.log($("#editEmail").val());
+        // console.log(cur_khoa);
+        // console.log($("#editKhoa").val());
         data_push = {
             "id" : id,
             "name": $("#editName").val(),
@@ -898,7 +978,7 @@ const Editing_GV = (id,cur_khoa)=>{
     })
 }
 //${el.id}', '${el.name}', '${el.yob}','${el.role}','${el.email}','${el.course}
-    const Edit_User_GV = async (id,name,yob,role,email,khoa,user,pass) =>{
+const Edit_User_GV = async (id,name,yob,role,email,khoa,user,pass) =>{
     $("#div_left").html(loading_gif2);
     cur_khoa = khoa;
     data_course = await getCourse();
@@ -996,7 +1076,7 @@ const Delete_Disser = (par_id)=>{
 }
 
 
-//_HDCT
+//HDCT_Button
 const getDataExamine = async () =>{
     const _data = $.ajax({
         type: 'GET',
@@ -1005,16 +1085,85 @@ const getDataExamine = async () =>{
     return _data;
 }
 
-//ADD 
+//Add
+const add_new_examine = async ()=>{
+    $("#div_left").html(loading_gif2);
+    data_course = await getCourse();
+    $("#div_left").html(html_add_HDCT);
+    data_course.forEach((course,index)=>{
+        $("#editKhoa").append(`<option value="${course.id}">${course.course_name}</option>`)
+    });
+    $("#form_add_HDCT").submit(async (event)=>{
+        event.preventDefault();
+        console.log($("select#editKhoa").val());
+        document.querySelector("#")
+
+        return false ;
+    });
+    
+     
+}
+
+//Read => Done
+const change_HDCT = async (selectObject)=>{
+    let value = selectObject.value
+    console.log(value);
+    
+    $("#table_HDCT").html(loading_gif2)
+    data = getDataExamine();
+    data_course = await getCourse();
+    data.then((result)=>{
+            $("#table_HDCT").html(html_HDCT);
+            let stt = 0;
+            result.forEach((el,index) =>{
+                let id_course;
+                    data_course.forEach((element)=>{
+                        if (el.course === element.course_name){
+                            id_course = element.id;
+                        }
+                    });
+                if (value === "all"){
+                    stt = stt + 1;
+                    $("#tbody_data").append(`
+                    <tr>
+                    <td>${stt}</td>
+                    <td>${el.ID}</td>
+                    <td>${el.course}</td>
+                    <td>${el.class}</td>
+                    <td>${el.school_year}</td>
+                    <td>${el.name}</td>            
+                    <td><a href="#">Sửa</a> / <a href="#" onclick="Delete_Examine('${el.id}')">Xóa</a> </td>
+                    </tr>`);    
+                }
+                else if (value === el.course){
+                    stt = stt + 1;
+                    $("#tbody_data").append(`
+                    <tr>
+                    <td>${stt}</td>
+                    <td>${el.ID}</td>
+                    <td>${el.course}</td>
+                    <td>${el.class}</td>
+                    <td>${el.school_year}</td>
+                    <td>${el.name}</td>            
+                    <td><a href="#">Sửa</a> / <a href="#" onclick="Delete_Examine('${el.id}')">Xóa</a> </td>
+                    </tr>`);    
+                }
+        });
+    });
+}
 
 const HDCT = async(event) =>{
     event.preventDefault();
     $("#div_left").empty();
     $("#div_left").html(loading_gif2)
     data_Examine = await getDataExamine();
+    data_course = await getCourse(); 
     let stt = 0;
     $("#div_left").html(html_HDCT);
-    document.querySelector('#table_HDCT').insertAdjacentHTML('beforebegin',modal_html_SV)
+    document.querySelector('#table_HDCT').insertAdjacentHTML('beforebegin',modal_html_HDCT)
+    data_course.forEach((course)=>{
+        $("#addKhoa").append(`<option value="${course.id}">${course.course_name}</option>`)
+    })
     data_Examine.forEach((el,index)=>{
         stt = stt + 1;
         $("#tbody_data").append(`
@@ -1025,7 +1174,29 @@ const HDCT = async(event) =>{
             <td>${el.class}</td>
             <td>${el.school_year}</td>
             <td>${el.name}</td>            
-            <td><a href="#">Sửa</a> / <a href="#" onclick="Delete_Disser('${el.id_disser}')">Xóa</a> </td>
+            <td><a href="#">Sửa</a> / <a href="#" onclick="Delete_Examine('${el.id}')">Xóa</a> </td>
             </tr>`); 
     });
 };
+
+//Delete => Done
+const Delete_Examine = (par_id)=>{
+    data_push = {"id": par_id};
+    if (confirm("Bạn có muốn xóa không?")){
+        console.log("confirm");
+        $.ajax({
+            type:"POST",
+            contentType:"application/json",
+            dataType: "json",
+            url: "/api/exarmine/delete/",
+            data: JSON.stringify(data_push),
+            success: ()=>{
+                $('#tag4').click();
+            }
+        });
+    }
+    else{
+        return
+    }
+    $("#div_left").html(loading_gif2)
+}
