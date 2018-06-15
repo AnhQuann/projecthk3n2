@@ -465,6 +465,7 @@ const run = ()=>{
         document.querySelector("#tag4").addEventListener('click',HDCT);
         document.querySelector("#tag5").addEventListener('click',QLGV);
         document.querySelector("#tag6").addEventListener('click',QLDBV);
+        document.querySelector("#tag7").addEventListener('click',QLD)
     } catch (error) {
         console.log(error);
     }
@@ -1199,4 +1200,61 @@ const Delete_Examine = (par_id)=>{
         return
     }
     $("#div_left").html(loading_gif2)
+}
+
+//QL_DIEM
+html_QLD = `
+<form action="" method="POST">
+            <div class="form-group row">
+                <div class="col-md-3 d-flex justify-content-between align-items-center">
+                    <div>
+                        <label for="QLdiem_khoa">Khoa </label>
+                    </div>
+
+                    <div>
+                        <select class="form-control" name="QLdiem_khoa" id="QLdiem_khoa">
+                            <option value="">1123123123123</option>
+                            <option value="">2</option>
+                        </select>
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="form-group row">
+                    <div class="col-md-3 d-flex justify-content-between align-items-center">
+                        <div>
+                            <label for="QLdiem_nganh">Ngành </label>
+                        </div>
+    
+                        <div>
+                            <select class="form-control" name="QLdiem_nganh" id="QLdiem_nganh">
+                                <option value="">1123123123123</option>
+                                <option value="">2</option>
+                            </select>
+                        </div>             
+                    </div>
+                </div>
+            <!-- Point of Teacher -->
+            <div id="giaovien_chamdiem" class="d-flex justify-content-center flex-column">
+                <div class="mb-2">
+                    <label for="111"> Nguyen Lam Tung </label> <input id="111" type="number" value="">
+                </div>
+                <div>
+                    <label for="111"> Nguyen Lam Tung </label> <input id="111" type="number" value="">
+                </div>
+            </div>
+            <!-- Submit Button -->
+            <div class="d-flex justify-content-center mt-5">
+                <button class="btn btn-primary" type="submit">Submit</button>
+            </div>
+    </form>
+`;
+
+const QLD = async ()=>{
+    event.preventDefault();
+    let stt = 0;
+    $("#div_left").empty();
+    $("#div_left").html(loading_gif2)
+    $("#div_left").html(html_QLD);
 }
