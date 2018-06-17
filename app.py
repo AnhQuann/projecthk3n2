@@ -150,6 +150,7 @@ def index():
     print("____cur_course :", cur_course)
     if current_user.role == 0:
         cur_role = "Thư ký"
+        username = "1234556"
         return render_template('./homepage/role0.html', cur_id = cur_id,
                                                     cur_username = cur_username,
                                                     cur_name = cur_name,
@@ -157,7 +158,8 @@ def index():
                                                     cur_role = cur_role,
                                                     cur_email = cur_email,
                                                     cur_disser = cur_disser,
-                                                    cur_course = cur_course
+                                                    cur_course = cur_course,     
+                                                    username = username      
                                                     )
     elif current_user.role == 1:
         cur_role = "Hội đồng chấm thi"
@@ -433,13 +435,14 @@ class DissertationAPI(Resource):
         disser_post = request.get_json()
         ID = disser_post['id_post']
         post_day = datetime.now()
+        false = False
         disser = DissertationINIT(disser_post["disser_name"],
                                 post_day,
-                                disser_post["status"])
+                                false)
 
         new_disser = Dissertation(disser_name = disser.disser_name,
                                 post_day = disser.post_day,
-                                status = disser.status)
+                                status = false)
         new_disser.save()
         User.objects.with_id(ID).update(push__disser = new_disser)
 
@@ -461,8 +464,7 @@ class DissertationEdit(Resource):
     def post(self):
         disser = request.get_json()
         disserEdit = Dissertation.objects().with_id(disser['id'])
-        disserEdit.update(set__disser_name = disser['disser_name'],
-                        set__status = disser['status'])
+        disserEdit.update(set__disser_name = disser['disser_name'])
 
 class ExarminerAPI(Resource):
     def get(self):
@@ -485,7 +487,8 @@ class ExarmineAPI(Resource):
             "Toan Tin": {
                 "TI":"Computer Science",
                 "TE":"Information System",
-                "TC":"Computer Network"
+                "TC":"Computer Network",
+                "TM":"Math Technology"
                 },
             "Ngoai Ngu": {
                 "NE":"English",
@@ -585,8 +588,8 @@ api.add_resource(UserDelete, '/api/user/delete/')
 api.add_resource(UserEdit, '/api/user/edit/')
 
 api.add_resource(DissertationAPI, '/api/dissertation/')
-api.add_resource(DissertationDelete, '/api/dissertation/delete/')
-api.add_resource(DissertationEdit, '/api/dissertation/edit/')
+api.add_resource(DissertationDelete, '/api/disser/delete/')
+api.add_resource(DissertationEdit, '/api/disser/edit/')
 
 api.add_resource(RegisterUser, '/api/registeruser/')
 api.add_resource(RegisterExarminer, '/api/registerexaminer/')

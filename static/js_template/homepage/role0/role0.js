@@ -30,6 +30,22 @@ const modal_html_KL = `
     </div>
   </div>
   <input id="search_box" class="mr-2" type="search" placeholder="Search" onkeyup="search_func()" aria-label="Search">`;
+//#1
+  const modal_edit_KL = `
+  <div class="modal-body">
+    <div>
+     <h1 class="title_edit"></h1>
+      <form id="form_edit_KL" class="d-flex flex-column" method="POST">
+          <label for="editUsername"><span>*</span>Username: </label>
+          <input id="editUsername" placeholder="Tên tài khoản" name="editUsername" type="text" value="" required>
+          <div class="modal-footer">
+              <button id="close" onclick="back_KL()" type="button" class="btn btn-secondary" data-dismiss="modal">Back</button>
+              <button id="btn_edit_disser" form="form_edit_KL" type="submit" class="btn btn-primary">Lưu</button>
+          </div>
+        </form>
+      </div>
+  </div>`
+  ////////////////////////////////////////
 
 const modal_html_SV = `
 <button type="button" class="btn btn-primary mb-2 button_modal" data-toggle="modal" data-target="#exampleModalLong">
@@ -330,10 +346,11 @@ const html_add_HDCT = `
             <input id="addHDCT" placeholder="Mã Hội Đồng" name="addHDCT" type="text" value="" required>
             <label for="editKhoa">Khoa: </label>
             <select name="editKhoa" id="editKhoa">
+            <option value="All" selected></option>
             </select>
-            <div>
-                aloalo
-            </div>
+            <label for="editKhoas">Khoá: </label>
+            <select name="editKhoas" id="editKhoas">
+            </select>
             
         </form>
         <div class="modal-footer">
@@ -552,6 +569,9 @@ const back_HDCT = ()=>{
 }
 const back_QDBV = ()=>{
     $('#tag6').click();
+}
+const back_KL = ()=>{
+    $('#tag2').click();
 }
 // SEARCH
 const search_func = ()=>{
@@ -1015,7 +1035,7 @@ const QLKL = async (event) =>{
     data.then((result)=>{
         let stt = 0;
         $("#div_left").html(html_QLKL);
-        document.querySelector('#table_KL').insertAdjacentHTML('beforebegin',modal_html_KL)
+        document.querySelector('#table_KL').insertAdjacentHTML('beforebegin',modal_html_KL);
         result.forEach((el,index) => {
             stt = stt + 1;
             $("#tbody_data").append(`
@@ -1023,7 +1043,7 @@ const QLKL = async (event) =>{
             <td>${stt}</td>
             <td>${el.disser_name}</td>
             <td>${el.post_day}</td>
-            <td><a href="#">Sửa</a> / <a href="#" onclick="Delete_Disser('${el.id_disser}')">Xóa</a> </td>
+            <td><a href="#" onclick="Edit_User_KL('${el.id_disser}','${el.disser_name}','${el.post_day}')">Sửa</a> / <a href="#" onclick="Delete_Disser('${el.id_disser}')">Xóa</a> </td>
             </tr>`)
         });
     });
@@ -1047,7 +1067,7 @@ const add_new_disser = async () =>{
         type: "POST",
         contentType: "application/json",
         dataType:'json',
-        url: "/api/disser/",
+        url: "/api/dissertation/",
         data: JSON.stringify(data_push),
         success: ()=>{
             console.log("Create Success!");
@@ -1058,6 +1078,39 @@ const add_new_disser = async () =>{
         $('#tag2').click(); 
         console.log("chạy Timeout!");
      }, 200);
+}
+//Edit Disser Function
+//${el.id}', '${el.name}', '${el.yob}','${el.role}','${el.email}','${el.course}
+const Edit_User_KL = async (id,disser_name,post_day) =>{
+    $("#div_left").html(loading_gif2);
+    $("#div_left").html(modal_edit_KL);
+    
+    $(".title_edit").html(`Sửa ${disser_name}`);
+    $("label[for='editPassword']").hide();
+    $('#editUsername').val(disser_name);
+    
+    
+    document.querySelector("#btn_edit_disser").addEventListener('click', async (e)=>{
+        e.preventDefault();
+        data_push = {
+            "id" : id,
+            "disser_name": $("#editUsername").val()
+        }
+        $("#div_left").html(loading_gif2);
+        await $.ajax({
+            type: "POST",
+            url: "/api/disser/edit/",
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify(data_push),
+            success:()=>{
+                console.log("Edit Success!");
+                $('#close').click();
+            }
+        });
+        $('#tag2').click(); 
+    });
+    return false;
 }
 
 //Delete Disser Function
@@ -1077,6 +1130,7 @@ const Delete_Disser = (par_id)=>{
 }
 
 
+
 //HDCT_Button
 const getDataExamine = async () =>{
     const _data = $.ajax({
@@ -1087,18 +1141,42 @@ const getDataExamine = async () =>{
 }
 
 //Add
+// const cur_select = (selectObject) =>{
+//     console.log(selectObject);
+    
+//     console.log(selectObject.html);
+    
+// }
+
 const add_new_examine = async ()=>{
     $("#div_left").html(loading_gif2);
+    data_Examine = await getDataExamine();
     data_course = await getCourse();
     $("#div_left").html(html_add_HDCT);
     data_course.forEach((course,index)=>{
         $("#editKhoa").append(`<option value="${course.id}">${course.course_name}</option>`)
     });
+    $("#editKhoas").hide();
+    $("label[for='editKhoas']").hide();
+    let clone_strChoose
+    $("#editKhoa").change(function(){
+        strChoose = this.options[this.selectedIndex].text;
+        clone_strChoose = strChoose
+        $("#editKhoas").show();
+        $("label[for='editKhoas']").show();
+        $("#editKhoas").empty();
+        data_Examine.forEach((el)=>{
+            if (strChoose === el.course){  
+                console.log(`Query...`);
+                $("#editKhoas").append(`<option value="${el.id}">${el.class}</option>`);
+            }
+        });
+    });
+    console.log("a "+ clone_strChoose);
+    
     $("#form_add_HDCT").submit(async (event)=>{
         event.preventDefault();
-        console.log($("select#editKhoa").val());
-        document.querySelector("#")
-
+        // console.log($("select#editKhoa").val());
         return false ;
     });
     
@@ -1176,7 +1254,7 @@ const HDCT = async(event) =>{
             <td>${el.school_year}</td>
             <td>${el.name}</td>            
             <td><a href="#">Sửa</a> / <a href="#" onclick="Delete_Examine('${el.id}')">Xóa</a> </td>
-            </tr>`); 
+            </tr>`);
     });
 };
 

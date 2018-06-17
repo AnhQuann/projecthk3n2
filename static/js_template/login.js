@@ -34,6 +34,7 @@ const login = ()=>{
     let string_alert;
     let current_course;
     let data = await getData();
+    
     if (data.length < 1){
       string_alert = `* Không có dữ liệu`
     }
