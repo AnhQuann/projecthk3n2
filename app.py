@@ -402,7 +402,7 @@ class RegisterExarminer(Resource):
 class RegisterExarmine(Resource):
     def post(self):
         examine_post = request.get_json()
-        examine = ExamineINIT(examine_post["ID"], examine_post["members"])
+        examine = ExamineINIT(examine_post["ID"],members = examine_post["members"])
         new_examine = Examine(ID = examine.ID, members = [])
         new_examine.save()
 
@@ -415,7 +415,7 @@ class ExarmineEdit(Resource):
     def post(self):
         ex = request.get_json()
         exEdit = Examine.objects().with_id(ex['id'])
-        exEdit.update(set__ID = ex['ID'])
+        exEdit.update(set__ID = ex['id'])
 
 class DissertationAPI(Resource):
     def get(self):
@@ -480,6 +480,27 @@ class ExarminerAPI(Resource):
             }
             api_examine_data.append(data_push_to_list)
         return api_examine_data
+
+class ExarmineInfo(Resource):
+    def get(self):
+        tlu_list = [
+            {
+            "Toan Tin": {
+                    "TI":"Computer Science",
+                    "TE":"Information System",
+                    "TC":"Computer Network",
+                    "TM":"Math Technology"
+                        }
+            },
+            {
+            "Ngoai Ngu": {
+                    "NE":"English",
+                    "NF":"French",
+                    "NJ":"Japanese"
+                        }
+            }
+            ]
+        return tlu_list
 
 class ExarmineAPI(Resource):
     def get(self):
@@ -605,6 +626,8 @@ api.add_resource(ExarmineEdit, '/api/exarmine/edit')
 
 api.add_resource(CourseAPI, '/api/course/')
 api.add_resource(CourseWaveAPI, '/api/coursewave/')
+
+api.add_resource(ExarmineInfo, '/api/exarmineinfo/')
 
 # API________________________________
 
