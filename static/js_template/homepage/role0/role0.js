@@ -468,9 +468,8 @@ const html_QLDBV = `
 <table id="table_SV" class="table table-hover">
 <thead>
     <th>STT</th>
-    <th>Tên Đợt bảo vệ</th>
+    <th>Tên sinh viên</th>
     <th>Đề tài</th>
-    <th>Danh sách SV</th>
     <th>Trạng thái</th>
 </thead>
 <tbody id="tbody_data">
@@ -562,10 +561,26 @@ const QLDBV = async ()=>{
     console.log(`Vao QLDBV`);
     $("#div_left").empty();
     $("#div_left").html(loading_gif2)
-    let data = await getCourseWave();
-    console.log(data);
+    let data = await getDataSV();
     $("#div_left").html(html_QLDBV);
     document.querySelector('#table_SV').insertAdjacentHTML('beforebegin',modal_html_SV);
+    console.log(data);
+    let stt = 0;
+    data.forEach((el)=>{
+        if (el.role === 3){
+            stt = stt + 1;
+        $("#tbody_data").append(`
+        <tr>
+        <td>${stt}</td>
+        <td>${el.name}</td>
+        <td>${el.disser_name}</td>
+        <td>${el.email}</td>
+        <td>${el.yob}</td>
+        <td>${el.course}</td>
+        <td><a href="#">Xóa</a></td>
+        </tr>`);
+        }
+    })
    
 }
 
