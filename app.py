@@ -239,8 +239,12 @@ class UserAPI(Resource):
         api_user_data = []
         for data in raw_user_data:
             data_id = []
+            data_id_name = []
             for dataid in data.disser:
                 data_id.append(str(dataid.id))
+                a = Dissertation.objects().with_id(dataid.id)
+                data_id_name.append(a.disser_name)
+                
             if data.role == 0:
                 data_push_to_list = {
                         "id": str(data.id),
@@ -291,6 +295,7 @@ class UserAPI(Resource):
                             "role": data.role,
                             "email":data.email,
                             "disser": data_id,
+                            "disser_name": data_id_name,
                             "course": i.course_name,
                             "point": data.point,
                             "status": data.status
@@ -586,6 +591,15 @@ class CourseAPI(Resource):
                             teachers = [])
         new_course.save()
 
+class SavePoint(Resource):
+    def post(self):
+        raw_ex = request.get_json()['id']
+        print(raw_ex)
+        ex = Examine.objects().with_id(raw_ex)
+        list_mem = ex.members
+        for mem in list_mem:
+            print(mem.id)
+
 class CourseWaveAPI(Resource):
     def get(self):
         raw_wave = CourseWave.objects()
@@ -640,6 +654,7 @@ api.add_resource(CourseAPI, '/api/course/')
 api.add_resource(CourseWaveAPI, '/api/coursewave/')
 
 api.add_resource(ExarmineInfo, '/api/exarmineinfo/')
+api.add_resource(SavePoint, '/api/savepoint/')
 
 # API________________________________
 
