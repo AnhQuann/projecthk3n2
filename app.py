@@ -498,6 +498,12 @@ class ExarmineInfo(Resource):
                     "NF":"French",
                     "NJ":"Japanese"
                         }
+            },
+            {
+            "Kinh Te": {
+                    "QM":"Marketing",
+                    "QA":"Finance and Banking"
+                        }
             }
             ]
         return tlu_list
@@ -515,7 +521,13 @@ class ExarmineAPI(Resource):
                 "NE":"English",
                 "NF":"French",
                 "NJ":"Japanese"
-            }
+            },
+            
+            "Kinh Te": {
+                    "QM":"Marketing",
+                    "QA":"Finance and Banking"
+                        }
+            
         }
 
         raw_examine_data = Examine.objects()
