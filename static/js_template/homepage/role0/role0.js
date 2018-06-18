@@ -1368,9 +1368,7 @@ const Member =  async (id,course,ID)=>{
     $(".title_edit").html(ID +" "+ course + " - "+ " Danh sách Giáo Viên");
     let stt = 0
     data_user.forEach((element)=>{
-        flag = false
-        array_member_select.map((mem)=>{
-            if (element.role === 2 && element.course === course && element.id == mem){
+            if (element.role === 2 && element.course === course){
                 stt = stt + 1;
                 $("#tbody_data").append(`
                 <tr>
@@ -1382,19 +1380,19 @@ const Member =  async (id,course,ID)=>{
                 <td><button id="btn_member_remove" class="btn btn-danger">Remove</button></td>
                 </tr>`);
             }
-            else if (element.role === 2 && element.course === course && element.id !== mem) {
-                stt = stt + 1;
-                $("#tbody_data").append(`
-                <tr>
-                <td>${stt}</td>
-                <td>${element.username}</td>
-                <td>${element.yob}</td>
-                <td>${element.email}</td>
-                <td>${element.course}</td>       
-                <td><button id="btn_member_add" class="btn btn-success">Add</button></td>
-                </tr>`);
-            }
-        })
+            // else if (element.role === 2 && element.course === course && element.id !== mem) {
+            //     stt = stt + 1;
+            //     $("#tbody_data").append(`
+            //     <tr>
+            //     <td>${stt}</td>
+            //     <td>${element.username}</td>
+            //     <td>${element.yob}</td>
+            //     <td>${element.email}</td>
+            //     <td>${element.course}</td>       
+            //     <td><button id="btn_member_add" class="btn btn-success">Add</button></td>
+            //     </tr>`);
+            // }
+  
     });
 
     
@@ -1563,6 +1561,7 @@ const QLD = async ()=>{
     event.preventDefault();
     let stt = 0;
     $("#div_left").empty();
-    $("#div_left").html(loading_gif2)
+    loading();
+    left_show(html_QLD);
     $("#div_left").html(html_QLD);
 }
