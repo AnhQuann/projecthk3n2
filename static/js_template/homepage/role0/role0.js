@@ -471,6 +471,7 @@ const html_QLDBV = `
     <th>Tên sinh viên</th>
     <th>Đề tài</th>
     <th>Trạng thái</th>
+    <th>Chức năng</th>
 </thead>
 <tbody id="tbody_data">
 </tbody>
@@ -568,19 +569,30 @@ const QLDBV = async ()=>{
     let stt = 0;
     data.forEach((el)=>{
         if (el.role === 3){
-            stt = stt + 1;
-        $("#tbody_data").append(`
-        <tr>
-        <td>${stt}</td>
-        <td>${el.name}</td>
-        <td>${el.disser_name}</td>
-        <td>${el.email}</td>
-        <td>${el.yob}</td>
-        <td>${el.course}</td>
-        <td><a href="#">Xóa</a></td>
-        </tr>`);
+            if (el.status === true){
+                stt = stt + 1;
+                $("#tbody_data").append(`
+                <tr>
+                <td>${stt}</td>
+                <td>${el.name}</td>
+                <td>${el.disser_name}</td>
+                <td><i class="fas fa-check"></i></td>
+                <td><a href="#">Remove</a></td>
+                </tr>`);
+            }
+            else {
+                stt = stt + 1;
+                $("#tbody_data").append(`
+                <tr>
+                <td>${stt}</td>
+                <td>${el.name}</td>
+                <td>${el.disser_name}</td>
+                <td><i class="fas fa-times"></i></td>
+                <td><a href="#">Check</a></td>
+                </tr>`);
+            }
         }
-    })
+    });
    
 }
 
