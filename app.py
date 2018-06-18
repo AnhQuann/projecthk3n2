@@ -150,6 +150,7 @@ def index():
     print("____cur_course :", cur_course)
     if current_user.role == 0:
         cur_role = "Thư ký"
+        username = "1234556"
         return render_template('./homepage/role0.html', cur_id = cur_id,
                                                     cur_username = cur_username,
                                                     cur_name = cur_name,
@@ -157,7 +158,8 @@ def index():
                                                     cur_role = cur_role,
                                                     cur_email = cur_email,
                                                     cur_disser = cur_disser,
-                                                    cur_course = cur_course
+                                                    cur_course = cur_course,     
+                                                    username = username      
                                                     )
     elif current_user.role == 1:
         cur_role = "Hội đồng chấm thi"
@@ -244,13 +246,15 @@ class UserAPI(Resource):
                         "id": str(data.id),
                         "username": data.username,
                         "password": data.password,
+                        "student_code": data.student_code,
                         "name": data.name,
                         "yob": data.yob,
                         "role": data.role,
                         "email":data.email,
                         "disser": data_id,
                         "course": "admin",
-                        "point": data.point
+                        "point": data.point,
+                        "status": data.status
                     }
                 api_user_data.append(data_push_to_list)
             elif data.role == 1:
@@ -260,13 +264,15 @@ class UserAPI(Resource):
                             "id": str(data.id),
                             "username": data.username,
                             "password": data.password,
+                            "student_code": data.student_code,
                             "name": data.name,
                             "yob": data.yob,
                             "role": data.role,
                             "email":data.email,
                             "disser": data_id,
                             "course": i.ID,
-                            "point": data.point
+                            "point": data.point,
+                            "status": data.status
                         }
                     api_user_data.append(data_push_to_list)
             else:
@@ -279,7 +285,7 @@ class UserAPI(Resource):
                             "id": str(data.id),
                             "username": data.username,
                             "password": data.password,
-                            "student_code": "{0}{1}".format("A", randint(12345, 30985)),
+                            "student_code": data.student_code,
                             "name": data.name,
                             "yob": data.yob,
                             "role": data.role,
@@ -287,7 +293,7 @@ class UserAPI(Resource):
                             "disser": data_id,
                             "course": i.course_name,
                             "point": data.point,
-                            "status": choice([True, False])
+                            "status": data.status
                         }
                     api_user_data.append(data_push_to_list)
         return api_user_data
@@ -353,6 +359,7 @@ class RegisterUser(Resource):
 
         new_user = User(username = user.username,
                         password = user.password,
+                        # student_code =
                         name = user.name,
                         yob = user.yob,
                         role = user.role,
@@ -395,7 +402,7 @@ class RegisterExarminer(Resource):
 class RegisterExarmine(Resource):
     def post(self):
         examine_post = request.get_json()
-        examine = ExamineINIT(examine_post["ID"], examine_post["members"])
+        examine = ExamineINIT(examine_post["ID"],members = examine_post["members"])
         new_examine = Examine(ID = examine.ID, members = [])
         new_examine.save()
 
@@ -428,13 +435,14 @@ class DissertationAPI(Resource):
         disser_post = request.get_json()
         ID = disser_post['id_post']
         post_day = datetime.now()
+        false = False
         disser = DissertationINIT(disser_post["disser_name"],
                                 post_day,
-                                disser_post["status"])
+                                false)
 
         new_disser = Dissertation(disser_name = disser.disser_name,
                                 post_day = disser.post_day,
-                                status = disser.status)
+                                status = false)
         new_disser.save()
         User.objects.with_id(ID).update(push__disser = new_disser)
 
@@ -456,8 +464,7 @@ class DissertationEdit(Resource):
     def post(self):
         disser = request.get_json()
         disserEdit = Dissertation.objects().with_id(disser['id'])
-        disserEdit.update(set__disser_name = disser['disser_name'],
-                        set__status = disser['status'])
+        disserEdit.update(set__disser_name = disser['disser_name'])
 
 class ExarminerAPI(Resource):
     def get(self):
@@ -474,13 +481,35 @@ class ExarminerAPI(Resource):
             api_examine_data.append(data_push_to_list)
         return api_examine_data
 
+class ExarmineInfo(Resource):
+    def get(self):
+        tlu_list = [
+            {
+            "Toan Tin": {
+                    "TI":"Computer Science",
+                    "TE":"Information System",
+                    "TC":"Computer Network",
+                    "TM":"Math Technology"
+                        }
+            },
+            {
+            "Ngoai Ngu": {
+                    "NE":"English",
+                    "NF":"French",
+                    "NJ":"Japanese"
+                        }
+            }
+            ]
+        return tlu_list
+
 class ExarmineAPI(Resource):
     def get(self):
         tlu_list = {
             "Toan Tin": {
                 "TI":"Computer Science",
                 "TE":"Information System",
-                "TC":"Computer Network"
+                "TC":"Computer Network",
+                "TM":"Math Technology"
                 },
             "Ngoai Ngu": {
                 "NE":"English",
@@ -580,8 +609,8 @@ api.add_resource(UserDelete, '/api/user/delete/')
 api.add_resource(UserEdit, '/api/user/edit/')
 
 api.add_resource(DissertationAPI, '/api/dissertation/')
-api.add_resource(DissertationDelete, '/api/dissertation/delete/')
-api.add_resource(DissertationEdit, '/api/dissertation/edit/')
+api.add_resource(DissertationDelete, '/api/disser/delete/')
+api.add_resource(DissertationEdit, '/api/disser/edit/')
 
 api.add_resource(RegisterUser, '/api/registeruser/')
 api.add_resource(RegisterExarminer, '/api/registerexaminer/')
@@ -597,6 +626,8 @@ api.add_resource(ExarmineEdit, '/api/exarmine/edit')
 
 api.add_resource(CourseAPI, '/api/course/')
 api.add_resource(CourseWaveAPI, '/api/coursewave/')
+
+api.add_resource(ExarmineInfo, '/api/exarmineinfo/')
 
 # API________________________________
 

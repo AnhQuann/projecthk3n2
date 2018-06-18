@@ -30,6 +30,22 @@ const modal_html_KL = `
     </div>
   </div>
   <input id="search_box" class="mr-2" type="search" placeholder="Search" onkeyup="search_func()" aria-label="Search">`;
+//#1
+  const modal_edit_KL = `
+  <div class="modal-body">
+    <div>
+     <h1 class="title_edit"></h1>
+      <form id="form_edit_KL" class="d-flex flex-column" method="POST">
+          <label for="editUsername"><span>*</span>Username: </label>
+          <input id="editUsername" placeholder="Tên tài khoản" name="editUsername" type="text" value="" required>
+          <div class="modal-footer">
+              <button id="close" onclick="back_KL()" type="button" class="btn btn-secondary" data-dismiss="modal">Back</button>
+              <button id="btn_edit_disser" form="form_edit_KL" type="submit" class="btn btn-primary">Lưu</button>
+          </div>
+        </form>
+      </div>
+  </div>`
+  ////////////////////////////////////////
 
 const modal_html_SV = `
 <button type="button" class="btn btn-primary mb-2 button_modal" data-toggle="modal" data-target="#exampleModalLong">
@@ -326,14 +342,15 @@ const html_add_HDCT = `
         <div>
         <h1 class="title_edit"></h1>
         <form id="form_add_HDCT" class="d-flex flex-column" method="POST">
-            <label for="addHDCT"><span>*</span>Mã Hội Đồng: </label>
-            <input id="addHDCT" placeholder="Mã Hội Đồng" name="addHDCT" type="text" value="" required>
+            <label for="addHDCT"><span>*</span>Khóa: </label>
+            <input id="addHDCT" placeholder="Khóa" name="addHDCT" type="number" value="" required>
             <label for="editKhoa">Khoa: </label>
             <select name="editKhoa" id="editKhoa">
+            <option value="All" selected></option>
             </select>
-            <div>
-                aloalo
-            </div>
+            <label for="editKhoas">Ngành: </label>
+            <select name="editKhoas" id="editKhoas">
+            </select>
             
         </form>
         <div class="modal-footer">
@@ -345,38 +362,48 @@ const html_add_HDCT = `
 
 
 const modal_edit_HDCT = `
-        <div class="modal-body">
-          <div>
-           <h1 class="title_edit"></h1>
-            <form id="form_edit_HDCT" class="d-flex flex-column" method="POST">
-                <label for="editUsername"><span>*</span>Username: </label>
-                <input id="editUsername" placeholder="Tên tài khoản" name="editUsername" type="text" value="" required>
-                <label for="editPassword"><span>*</span>Password: </label>
-                <input id="editPassword" placeholder="Mật khẩu" name="editPassword" type="password" value="" required>
-                <label for="editName"><span>*</span>Tên: </label>
-                <input id="editName" placeholder="Họ và Tên" name="editName" type="text" value="" required>
-                <label for="editEmail"><span>*</span>Email: </label>
-                <input id="editEmail" name="editEmail" placeholder="abcxyz@gmail.com" type="email" value="" required>
-                <label for="editAge">Năm sinh: </label>
-                <input id="editAge" name="editAge" type="number" value="" required>
-                <label for="editRole">Role: </label>
-                <select name="editRole" id="editRole">
-                    <option value="0">Thư ký</option> 
-                    <option value="1">Chấm thi</option>
-                    <option value="2">Giáo Viên</option>
-                    <!-- <option value="3">Học Viên</option> -->
-                </select>
-    
-                <label for="editKhoa">Khoa: </label>
-                <select name="editKhoa" id="editKhoa">
-                </select>
-                <div class="modal-footer">
-                    <button id="close" onclick="back_GV()" type="button" class="btn btn-secondary" data-dismiss="modal">Back</button>
-                    <button id="btn_edit_teacher" form="form_edit_HDCT" type="submit" class="btn btn-primary">Lưu</button>
-                </div>
-              </form>
-            </div>
-        </div>`;
+<div class="modal-body">
+  <div>
+   <h1 class="title_edit"></h1>
+    <form id="form_edit_KL" class="d-flex flex-column" method="POST">
+            <label for="editKhoa">Khoa: </label>
+            <select name="editKhoa" id="editKhoa"></select>
+            <label for="editNganh">Ngành: </label>
+            <select name="editNganh" id="editNganh"></select>
+            <label for="editKhoas">Khóa </label>
+            <input id="editKhoas" placeholder="Khóa" name="editKhoas" type="number" value="" required>
+        <div class="modal-footer">
+            <button id="close" onclick="back_HDCT()" type="button" class="btn btn-secondary" data-dismiss="modal">Back</button>
+            <button id="btn_edit_disser" form="form_edit_KL" type="submit" class="btn btn-primary">Lưu</button>
+        </div>
+      </form>
+    </div>
+</div>`
+
+const add_member_HDCT = `
+<div class="modal-body">
+  <div>
+   <h1 class="title_edit"></h1>
+        <table id="table_HDCT" class="table table-hover">
+        <thead>
+            <th>STT</th>
+            <th>Tên Giáo Viên</th>
+            <th>Năm sinh</th>
+            <th>Email</th>
+            <th>Khoa</th>
+            <th>Chức năng</th>
+        </thead>
+        <tbody id="tbody_data">
+        </tbody>
+        </table>
+
+        <div class="modal-footer">
+            <button id="close" onclick="back_HDCT()" type="button" class="btn btn-secondary" data-dismiss="modal">Back</button>
+            <button id="btn_add_member" type="button" class="btn btn-primary">Lưu</button>
+        </div>
+
+    </div>
+</div>`
 
 
 const html_HDCT = `
@@ -452,7 +479,12 @@ const html_QLDBV = `
 
 const loading_gif = `<img style="display: block;margin-left: auto;margin-right: auto;width:5%" class="mt-2" src="../static/images/ajax-loader.gif" alt="">`;
 const loading_gif2 = `<img style="display: block;margin-left: auto;margin-right: auto;" src="../static/images/ajax-loader2.gif" alt="">`;
-
+const loading = ()=>{
+    $("#div_left").html(loading_gif2);
+}
+const left_show = (par)=>{
+    $("#div_left").html(par);
+}
 // ________________________________
 $(document).ready(()=>{
     run();
@@ -465,6 +497,7 @@ const run = ()=>{
         document.querySelector("#tag4").addEventListener('click',HDCT);
         document.querySelector("#tag5").addEventListener('click',QLGV);
         document.querySelector("#tag6").addEventListener('click',QLDBV);
+        document.querySelector("#tag7").addEventListener('click',QLD)
     } catch (error) {
         console.log(error);
     }
@@ -551,6 +584,9 @@ const back_HDCT = ()=>{
 }
 const back_QDBV = ()=>{
     $('#tag6').click();
+}
+const back_KL = ()=>{
+    $('#tag2').click();
 }
 // SEARCH
 const search_func = ()=>{
@@ -1014,7 +1050,7 @@ const QLKL = async (event) =>{
     data.then((result)=>{
         let stt = 0;
         $("#div_left").html(html_QLKL);
-        document.querySelector('#table_KL').insertAdjacentHTML('beforebegin',modal_html_KL)
+        document.querySelector('#table_KL').insertAdjacentHTML('beforebegin',modal_html_KL);
         result.forEach((el,index) => {
             stt = stt + 1;
             $("#tbody_data").append(`
@@ -1022,7 +1058,7 @@ const QLKL = async (event) =>{
             <td>${stt}</td>
             <td>${el.disser_name}</td>
             <td>${el.post_day}</td>
-            <td><a href="#">Sửa</a> / <a href="#" onclick="Delete_Disser('${el.id_disser}')">Xóa</a> </td>
+            <td><a href="#" onclick="Edit_User_KL('${el.id_disser}','${el.disser_name}','${el.post_day}')">Sửa</a> / <a href="#" onclick="Delete_Disser('${el.id_disser}')">Xóa</a> </td>
             </tr>`)
         });
     });
@@ -1046,7 +1082,7 @@ const add_new_disser = async () =>{
         type: "POST",
         contentType: "application/json",
         dataType:'json',
-        url: "/api/disser/",
+        url: "/api/dissertation/",
         data: JSON.stringify(data_push),
         success: ()=>{
             console.log("Create Success!");
@@ -1057,6 +1093,39 @@ const add_new_disser = async () =>{
         $('#tag2').click(); 
         console.log("chạy Timeout!");
      }, 200);
+}
+//Edit Disser Function
+//${el.id}', '${el.name}', '${el.yob}','${el.role}','${el.email}','${el.course}
+const Edit_User_KL = async (id,disser_name,post_day) =>{
+    $("#div_left").html(loading_gif2);
+    $("#div_left").html(modal_edit_KL);
+    
+    $(".title_edit").html(`Sửa ${disser_name}`);
+    $("label[for='editPassword']").hide();
+    $('#editUsername').val(disser_name);
+    
+    
+    document.querySelector("#btn_edit_disser").addEventListener('click', async (e)=>{
+        e.preventDefault();
+        data_push = {
+            "id" : id,
+            "disser_name": $("#editUsername").val()
+        }
+        $("#div_left").html(loading_gif2);
+        await $.ajax({
+            type: "POST",
+            url: "/api/disser/edit/",
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify(data_push),
+            success:()=>{
+                console.log("Edit Success!");
+                $('#close').click();
+            }
+        });
+        $('#tag2').click(); 
+    });
+    return false;
 }
 
 //Delete Disser Function
@@ -1076,6 +1145,7 @@ const Delete_Disser = (par_id)=>{
 }
 
 
+
 //HDCT_Button
 const getDataExamine = async () =>{
     const _data = $.ajax({
@@ -1086,22 +1156,77 @@ const getDataExamine = async () =>{
 }
 
 //Add
+// const cur_select = (selectObject) =>{
+//     console.log(selectObject);
+    
+//     console.log(selectObject.html);
+    
+// }
+const get_Nganh = () =>{
+    _data = $.ajax({
+        type: 'GET',
+        url: 'api/exarmineinfo/'
+    })
+    return _data
+}
+
 const add_new_examine = async ()=>{
     $("#div_left").html(loading_gif2);
+    data_nganh = await get_Nganh();
+    data_Examine = await getDataExamine();
     data_course = await getCourse();
     $("#div_left").html(html_add_HDCT);
     data_course.forEach((course,index)=>{
         $("#editKhoa").append(`<option value="${course.id}">${course.course_name}</option>`)
     });
+    $("#editKhoas").hide();
+    $("label[for='editKhoas']").hide();
+
+    let clone_strChoose
+    let clone_nganh
+    $("#editKhoa").change(function(){
+        strChoose = this.options[this.selectedIndex].text;
+        $("#editKhoas").show();
+        $("label[for='editKhoas']").show();
+        $("#editKhoas").empty();
+        data_nganh.forEach((el)=>{
+            ten_khoa_cua_nganh = Object.keys(el)[0];
+            if (strChoose === ten_khoa_cua_nganh){  
+                console.log(`Query...`);
+                Object.keys(el[ten_khoa_cua_nganh]).forEach((e)=>{
+                    $("#editKhoas").append(`<option value="${e}">${e}</option>`);
+                });
+            }
+        });
+        clone_strChoose = strChoose
+    });
+
     $("#form_add_HDCT").submit(async (event)=>{
         event.preventDefault();
-        console.log($("select#editKhoa").val());
-        document.querySelector("#")
-
-        return false ;
+        let clone_input_khoa = document.getElementById("addHDCT").value
+        clone_nganh = document.getElementById("editKhoas").value
+        console.log(clone_strChoose);
+        console.log(clone_input_khoa);
+        console.log(clone_nganh);
+        arrayEmpty = []
+        join_string = clone_nganh + clone_input_khoa;
+        data_to_push = {
+            "ID": join_string,
+            "members": arrayEmpty
+        }
+        $.ajax({
+            type: 'POST',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify(data_to_push),
+            url: '/api/registerexamine/',
+            success: ()=>{
+                $('#tag4').click();
+            }
+        });
+        console.log("SUBMIT!!");
+        return false;
     });
-    
-     
 }
 
 //Read => Done
@@ -1123,30 +1248,58 @@ const change_HDCT = async (selectObject)=>{
                         }
                     });
                 if (value === "all"){
-                    stt = stt + 1;
-                    $("#tbody_data").append(`
-                    <tr>
-                    <td>${stt}</td>
-                    <td>${el.ID}</td>
-                    <td>${el.course}</td>
-                    <td>${el.class}</td>
-                    <td>${el.school_year}</td>
-                    <td>${el.name}</td>            
-                    <td><a href="#">Sửa</a> / <a href="#" onclick="Delete_Examine('${el.id}')">Xóa</a> </td>
-                    </tr>`);    
+                    stt +=1;
+                    if (el.name.length > 0){
+                        $("#tbody_data").append(`
+                            <tr>
+                            <td>${stt}</td>
+                            <td>${el.ID}</td>
+                            <td>${el.course}</td>
+                            <td>${el.class}</td>
+                            <td>${el.school_year}</td>
+                            <td>${el.name}</td>            
+                            <td><a href="#" onclick="Member('${el.id}','${el.course}','${el.ID}')"> Member</a> / <a onclick="Edit_HDCT('${el.id}','${el.ID}','${el.course}','${el.class}','${el.school_year}','${el.members}');" href="#">Sửa</a> / <a href="#" onclick="Delete_Examine('${el.id}')">Xóa</a> </td>
+                            </tr>`);
+                        }
+                        else {
+                            $("#tbody_data").append(`
+                            <tr>
+                            <td>${stt}</td>
+                            <td>${el.ID}</td>
+                            <td>${el.course}</td>
+                            <td>${el.class}</td>
+                            <td>${el.school_year}</td>
+                            <td style="color:red">Chưa có thành viên nào</td>            
+                            <td><a href="#" onclick="Member('${el.id}','${el.course}','${el.ID}')"> Member</a> / <a onclick="Edit_HDCT('${el.id}','${el.ID}','${el.course}','${el.class}','${el.school_year}','${el.members}');" href="#">Sửa</a> / <a href="#" onclick="Delete_Examine('${el.id}')">Xóa</a> </td>
+                            </tr>`);
+                        }   
                 }
                 else if (value === el.course){
-                    stt = stt + 1;
-                    $("#tbody_data").append(`
-                    <tr>
-                    <td>${stt}</td>
-                    <td>${el.ID}</td>
-                    <td>${el.course}</td>
-                    <td>${el.class}</td>
-                    <td>${el.school_year}</td>
-                    <td>${el.name}</td>            
-                    <td><a href="#">Sửa</a> / <a href="#" onclick="Delete_Examine('${el.id}')">Xóa</a> </td>
-                    </tr>`);    
+                    if (el.name.length > 0){
+                        stt = stt + 1;
+                        $("#tbody_data").append(`
+                            <tr>
+                            <td>${stt}</td>
+                            <td>${el.ID}</td>
+                            <td>${el.course}</td>
+                            <td>${el.class}</td>
+                            <td>${el.school_year}</td>
+                            <td>${el.name}</td>            
+                            <td><a href="#" onclick="Member('${el.id}','${el.course}','${el.ID}')"> Member</a> / <a onclick="Edit_HDCT('${el.id}','${el.ID}','${el.course}','${el.class}','${el.school_year}','${el.members}');" href="#">Sửa</a> / <a href="#" onclick="Delete_Examine('${el.id}')">Xóa</a> </td>
+                            </tr>`);
+                        }
+                        else {
+                            $("#tbody_data").append(`
+                            <tr>
+                            <td>${stt}</td>
+                            <td>${el.ID}</td>
+                            <td>${el.course}</td>
+                            <td>${el.class}</td>
+                            <td>${el.school_year}</td>
+                            <td style="color:red">Chưa có thành viên nào</td>            
+                            <td><a href="#" onclick="Member('${el.id}','${el.course}','${el.ID}')"> Member</a> / <a onclick="Edit_HDCT('${el.id}','${el.ID}','${el.course}','${el.class}','${el.school_year}','${el.members}');" href="#">Sửa</a> / <a href="#" onclick="Delete_Examine('${el.id}')">Xóa</a> </td>
+                            </tr>`);
+                        }  
                 }
         });
     });
@@ -1166,6 +1319,7 @@ const HDCT = async(event) =>{
     })
     data_Examine.forEach((el,index)=>{
         stt = stt + 1;
+        if (el.name.length > 0){
         $("#tbody_data").append(`
             <tr>
             <td>${stt}</td>
@@ -1174,10 +1328,89 @@ const HDCT = async(event) =>{
             <td>${el.class}</td>
             <td>${el.school_year}</td>
             <td>${el.name}</td>            
-            <td><a href="#">Sửa</a> / <a href="#" onclick="Delete_Examine('${el.id}')">Xóa</a> </td>
-            </tr>`); 
+            <td><a href="#" onclick="Member('${el.id}','${el.course}','${el.ID}')"> Member</a> / <a onclick="Edit_HDCT('${el.id}','${el.ID}','${el.course}','${el.class}','${el.school_year}','${el.members}');" href="#">Sửa</a> / <a href="#" onclick="Delete_Examine('${el.id}')">Xóa</a> </td>
+            </tr>`);
+        }
+        else {
+            $("#tbody_data").append(`
+            <tr>
+            <td>${stt}</td>
+            <td>${el.ID}</td>
+            <td>${el.course}</td>
+            <td>${el.class}</td>
+            <td>${el.school_year}</td>
+            <td style="color:red">Chưa có thành viên nào</td>            
+            <td><a href="#" onclick="Member('${el.id}','${el.course}','${el.ID}')"> Member</a> / <a onclick="Edit_HDCT('${el.id}','${el.ID}','${el.course}','${el.class}','${el.school_year}','${el.members}');" href="#">Sửa</a> / <a href="#" onclick="Delete_Examine('${el.id}')">Xóa</a> </td>
+            </tr>`);
+        }
     });
 };
+
+
+
+//#2
+const Member =  async (id,course,ID)=>{
+    console.log(id);
+    console.log(course);
+    console.log(ID);
+    
+    loading();
+    data_Examine = await getDataExamine();
+    data_nganh = await get_Nganh();
+    data_user = await getDataSV();
+    query_Examine = data_Examine.map((el)=>{
+        if (el.id === id){
+            return el;
+        }
+    })
+    array_member_select = query_Examine[0].members
+    left_show(add_member_HDCT);
+    $(".title_edit").html(ID +" "+ course + " - "+ " Danh sách Giáo Viên");
+    let stt = 0
+    data_user.forEach((element)=>{
+        flag = false
+        array_member_select.map((mem)=>{
+            if (element.role === 2 && element.course === course && element.id == mem){
+                stt = stt + 1;
+                $("#tbody_data").append(`
+                <tr>
+                <td>${stt}</td>
+                <td>${element.username}</td>
+                <td>${element.yob}</td>
+                <td>${element.email}</td>
+                <td>${element.course}</td>       
+                <td><button id="btn_member_remove" class="btn btn-danger">Remove</button></td>
+                </tr>`);
+            }
+            else if (element.role === 2 && element.course === course && element.id !== mem) {
+                stt = stt + 1;
+                $("#tbody_data").append(`
+                <tr>
+                <td>${stt}</td>
+                <td>${element.username}</td>
+                <td>${element.yob}</td>
+                <td>${element.email}</td>
+                <td>${element.course}</td>       
+                <td><button id="btn_member_add" class="btn btn-success">Add</button></td>
+                </tr>`);
+            }
+        })
+    });
+
+    
+    let data_empty = []
+    
+    
+    
+}
+
+
+
+
+
+
+
+
 
 //Delete => Done
 const Delete_Examine = (par_id)=>{
@@ -1199,4 +1432,137 @@ const Delete_Examine = (par_id)=>{
         return
     }
     $("#div_left").html(loading_gif2)
+}
+//Edit HDCT:
+//${el.id},${el.ID}','${el.course}','${el.class}','${el.school_year}','${el.members}
+const Edit_HDCT = async (id,ID,course,_class,school_year,members) =>{
+    loading();
+    data_course = await getCourse();
+    data_nganh = await get_Nganh(); 
+    // console.log(id);
+    // console.log(ID);
+    // console.log(course);
+    // console.log(_class);
+    // console.log(school_year);
+    // console.log(members);
+    $("#div_left").html(modal_edit_HDCT);
+    $(".title_edit").html(`Sửa ${course} - ${ID} - ${_class}`);
+    data_course.forEach((course,index)=>{
+        $("#editKhoa").append(`<option value="${course.course_name}">${course.course_name}</option>`)
+    });
+    $('#editKhoa').val(course);
+
+    data_nganh.forEach((el)=>{
+        ten_khoa_cua_nganh = Object.keys(el)[0];
+        if (document.getElementById("editKhoa").value === ten_khoa_cua_nganh){
+            console.log(`Query... ${ten_khoa_cua_nganh}`);
+            console.log(Object.keys(el[ten_khoa_cua_nganh]));
+            Object.keys(el[ten_khoa_cua_nganh]).forEach((e)=>{
+                $("#editNganh").append(`<option value="${e}">${e}</option>`);
+            });
+        }   
+    });
+    
+    $("#editKhoa").change(function(){
+        strChoose = this.options[this.selectedIndex].text;
+        $("#editKhoas").show();
+        $("label[for='editKhoas']").show();
+        $("#editNganh").empty();
+        data_nganh.forEach((el)=>{
+            ten_khoa_cua_nganh = Object.keys(el)[0];
+            if (strChoose === ten_khoa_cua_nganh){  
+                console.log(`Query...`);
+                Object.keys(el[ten_khoa_cua_nganh]).forEach((e)=>{
+                    $("#editNganh").append(`<option value="${e}">${e}</option>`);
+                });
+            }
+        });
+    });
+    let split_str = ID.split('',2)
+    let join_str = split_str.join('');
+    $('#editNganh').val(join_str);
+    $('#editKhoas').val(school_year);
+    
+
+    //Push_data
+    document.querySelector("#btn_edit_disser").addEventListener('click', async (e)=>{
+        e.preventDefault();
+        select_value_nganh = document.getElementById("editNganh").value
+        select_value_khoas = document.getElementById("editKhoas").value;
+        result_to_push = select_value_nganh+select_value_khoas
+        data_push = {
+            "id": id,
+            "ID" : result_to_push,
+        }
+        $("#div_left").html(loading_gif2);
+        await $.ajax({
+            type: "POST",
+            url: "/api/exarmine/edit",
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify(data_push),
+            success:()=>{
+                console.log("Edit Success!");
+            }
+        });
+        back_HDCT();
+    });
+    return false;
+}
+
+//QL_DIEM
+html_QLD = `
+<form action="" method="POST">
+            <div class="form-group row">
+                <div class="col-md-3 d-flex justify-content-between align-items-center">
+                    <div>
+                        <label for="QLdiem_khoa">Khoa </label>
+                    </div>
+
+                    <div>
+                        <select class="form-control" name="QLdiem_khoa" id="QLdiem_khoa">
+                            <option value="">1123123123123</option>
+                            <option value="">2</option>
+                        </select>
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="form-group row">
+                    <div class="col-md-3 d-flex justify-content-between align-items-center">
+                        <div>
+                            <label for="QLdiem_nganh">Ngành </label>
+                        </div>
+    
+                        <div>
+                            <select class="form-control" name="QLdiem_nganh" id="QLdiem_nganh">
+                                <option value="">1123123123123</option>
+                                <option value="">2</option>
+                            </select>
+                        </div>             
+                    </div>
+                </div>
+            <!-- Point of Teacher -->
+            <div id="giaovien_chamdiem" class="d-flex justify-content-center flex-column">
+                <div class="mb-2">
+                    <label for="111"> Nguyen Lam Tung </label> <input id="111" type="number" value="">
+                </div>
+                <div>
+                    <label for="111"> Nguyen Lam Tung </label> <input id="111" type="number" value="">
+                </div>
+            </div>
+            <!-- Submit Button -->
+            <div class="d-flex justify-content-center mt-5">
+                <button class="btn btn-primary" type="submit">Submit</button>
+            </div>
+    </form>
+`;
+
+const QLD = async ()=>{
+    event.preventDefault();
+    let stt = 0;
+    $("#div_left").empty();
+    $("#div_left").html(loading_gif2)
+    $("#div_left").html(html_QLD);
 }
